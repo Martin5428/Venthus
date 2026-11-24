@@ -1148,28 +1148,20 @@ select.form-input { cursor: pointer; }
       <div class="ob-title">¿Cuánto tiempo tienes por sesión?</div>
       <div class="ob-sub">Tu plan se adaptará a este tiempo real. No es "cuánto quieres" — es cuánto tienes disponible en un día normal de tu semana.</div>
       <div class="ob-time-grid">
-        <button class="ob-time-btn" data-val="20" onclick="selectTime(this)">
-          <div class="ob-time-min">20'</div>
+        <button class="ob-time-btn" data-val="38" onclick="selectTime(this)">
+          <div class="ob-time-min">30–45'</div>
           <div class="ob-time-label">Sesión express</div>
         </button>
-        <button class="ob-time-btn" data-val="30" onclick="selectTime(this)">
-          <div class="ob-time-min">30'</div>
-          <div class="ob-time-label">Sesión corta</div>
-        </button>
-        <button class="ob-time-btn" data-val="45" onclick="selectTime(this)">
-          <div class="ob-time-min">45'</div>
+        <button class="ob-time-btn" data-val="52" onclick="selectTime(this)">
+          <div class="ob-time-min">45–60'</div>
           <div class="ob-time-label">Sesión estándar</div>
         </button>
-        <button class="ob-time-btn" data-val="60" onclick="selectTime(this)">
-          <div class="ob-time-min">60'</div>
+        <button class="ob-time-btn" data-val="75" onclick="selectTime(this)">
+          <div class="ob-time-min">60–90'</div>
           <div class="ob-time-label">Sesión completa</div>
         </button>
-        <button class="ob-time-btn" data-val="75" onclick="selectTime(this)">
-          <div class="ob-time-min">75'</div>
-          <div class="ob-time-label">Sesión larga</div>
-        </button>
-        <button class="ob-time-btn" data-val="90" onclick="selectTime(this)">
-          <div class="ob-time-min">90'</div>
+        <button class="ob-time-btn" data-val="100" onclick="selectTime(this)">
+          <div class="ob-time-min">+90'</div>
           <div class="ob-time-label">Sesión extendida</div>
         </button>
       </div>
@@ -3284,13 +3276,29 @@ function checkObPersonal() {
 
 // ── Paso 2: Lugar de entrenamiento ──
 var GYMS_CL = [
+  // Cadenas nacionales
   { name: 'SmartFit', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell','bandas'] },
-  { name: 'Óptimus', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
-  { name: 'SportLife', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  { name: 'Óptimus', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  { name: 'SportLife', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell','trx'] },
   { name: 'World Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
-  { name: 'Bodytech', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','trx'] },
+  { name: 'Bodytech', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','trx','kettlebell'] },
   { name: 'Iron Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Muevete', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco','bandas'] },
+  { name: 'Enjoy Fitness', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Wellness', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco','bandas'] },
+  { name: 'Fit House', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  // Bravo Sport / Body Fit
+  { name: 'Bravo Sport', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  { name: 'Body Fit', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  // Regionales conocidos
+  { name: 'El Pino Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Maximus Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Fitness One', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco'] },
+  { name: 'Orange Fitness', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco','bandas','trx'] },
+  { name: 'Club Hípico Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  // Opciones especiales
   { name: 'En casa', equip: null },
+  { name: 'Al aire libre / parque', equip: ['barra_dominadas','peso_corporal','bandas'] },
   { name: 'Gym local / otro', equip: null },
 ];
 
