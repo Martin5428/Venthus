@@ -2572,6 +2572,7 @@ select.form-input { cursor: pointer; }
 // ══ SUPABASE REST CLIENT ══
 var SB_URL = 'https://fvvnsugcwvvnmvrusoqe.supabase.co';
 var SB_KEY = 'sb_publishable_eoqjtU-vBrQHywdsp3sZGA_Yqvmt56z';
+var OPENAI_KEY = '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';
 var currentUser = null;
 var currentProfile = null;
 var sbToken = null;
@@ -3703,16 +3704,21 @@ function selectTime(btn) {
   document.getElementById('ob-next-6').disabled = false;
 }
 
-// Lógica científica de prescripción (basada en NSCA, Schoenfeld, Israetel)
-function buildPlanFromOb() {
+// Llamada a OpenAI para generar plan completo con ejercicios
+async function generatePlanWithAI() {
   var g = obData.goal;
   var e = obData.exp;
   var da = obData.daysAvail;
   var t = obData.time;
+  var equip = obData.equip || [];
+  var gym = obData.gym || '';
+  var weight = obData.weight || null;
+  var height = obData.height || null;
+  var hrt = obData.hrt;
 
-  // Si objetivo es "otro", mapear al más cercano según texto
+  // Resolver objetivo "otro"
   if (g === 'otro') {
-    var txt = (document.getElementById('ob-goal-text').value || '').toLowerCase();
+    var txt = (document.getElementById('ob-goal-text') ? document.getElementById('ob-goal-text').value || '' : '').toLowerCase();
     if (txt.match(/fuerza|levantar|pesad/)) g = 'fuerza';
     else if (txt.match(/definir|grasa|bajar|adelgaz|marcar|cortar/)) g = 'definicion';
     else if (txt.match(/músculo|masa|volum|grande|crecer/)) g = 'hipertrofia';
@@ -3720,58 +3726,85 @@ function buildPlanFromOb() {
     obData.goalResolved = g;
   }
 
-  // Días recomendados por la IA según evidencia (Israetel et al.)
-  var recDays = da;
-  if (e === 'principiante') {
-    if (da > 4) recDays = 3; // principiantes: 3 días óptimo
-    else if (da > 3) recDays = 3;
-  } else if (e === 'intermedio') {
-    if (da > 5) recDays = 4;
-  } else if (e === 'avanzado' || e === 'atleta') {
-    recDays = Math.min(da, 6);
-  }
-  if (g === 'salud') recDays = Math.min(recDays, 3);
+  var equipDesc = equip.length ? equip.join(', ') : 'sin equipo específico';
+  var hrtNote = hrt === 'si' ? ' El usuario está en terapia hormonal (HRT), considerar mayor capacidad de recuperación y potencial de hipertrofia.' : '';
 
-  // Splits según días
-  var split = '';
-  var dias = [];
-  if (recDays <= 2) {
-    split = 'Full Body';
-    dias = [{ label: 'Día A', focus: 'Full Body' }, { label: 'Día B', focus: 'Full Body' }].slice(0, recDays);
-  } else if (recDays === 3) {
-    split = 'Full Body 3x';
-    dias = [{ label: 'Día A', focus: 'Full Body' }, { label: 'Día B', focus: 'Full Body' }, { label: 'Día C', focus: 'Full Body' }];
-  } else if (recDays === 4) {
-    split = 'Upper / Lower';
-    dias = [
-      { label: 'Día A', focus: 'Tren Superior — Empuje' },
-      { label: 'Día B', focus: 'Tren Inferior' },
-      { label: 'Día C', focus: 'Tren Superior — Jalar' },
-      { label: 'Día D', focus: 'Tren Inferior' },
-    ];
-  } else {
-    split = 'Push / Pull / Legs';
-    dias = [
-      { label: 'Día A', focus: 'Empuje — Pecho · Hombros · Tríceps' },
-      { label: 'Día B', focus: 'Jalón — Espalda · Bíceps' },
-      { label: 'Día C', focus: 'Piernas — Cuádriceps · Glúteos · Isquios' },
-      { label: 'Día D', focus: 'Empuje — variante' },
-      { label: 'Día E', focus: 'Jalón — variante' },
-      { label: 'Día F', focus: 'Piernas — variante' },
-    ].slice(0, recDays);
-  }
+  var prompt = `Eres un entrenador personal experto certificado por NSCA. Genera un plan de entrenamiento personalizado en JSON.
 
-  // Semanas según objetivo y experiencia
-  var weeks = 8;
-  if (g === 'fuerza') weeks = 12;
-  else if (g === 'definicion') weeks = 10;
-  if (e === 'principiante') weeks = Math.min(weeks, 8);
+DATOS DEL USUARIO:
+- Objetivo: ${g}
+- Nivel: ${e}
+- Días disponibles por semana: ${da}
+- Tiempo por sesión: ${t} minutos
+- Equipo disponible: ${equipDesc}
+- Gimnasio: ${gym || 'no especificado'}
+${weight ? '- Peso: ' + weight + ' kg' : ''}
+${height ? '- Altura: ' + height + ' cm' : ''}${hrtNote}
 
-  // Nombre del plan
-  var goalNames = { hipertrofia:'Hipertrofia', fuerza:'Fuerza', definicion:'Definición', salud:'Acondicionamiento' };
-  var planName = 'Fase 1 — ' + (goalNames[g] || 'Base') + ' · ' + split;
+INSTRUCCIONES:
+1. Determina los días óptimos de entrenamiento (puede ser menor a días disponibles si el nivel lo requiere)
+2. Selecciona el split más adecuado según días y objetivo
+3. Para CADA día de entrenamiento, genera 5-7 ejercicios con calentamiento específico
+4. Usa SOLO el equipo disponible
+5. Incluye series, reps y peso inicial sugerido (en kg, basado en nivel)
+6. Para principiantes: pesos conservadores, enfocarse en técnica
+7. Para intermedios/avanzados: cargas progresivas con esquemas periodizados
 
-  return { planName: planName, split: split, dias: dias, weeks: weeks, recDays: recDays, goal: g, exp: e, time: t, daysAvail: da };
+Responde ÚNICAMENTE con este JSON (sin markdown, sin explicaciones):
+{
+  "planName": "nombre descriptivo del plan",
+  "split": "nombre del split",
+  "weeks": número de semanas (8-16),
+  "recDays": número de días de entrenamiento,
+  "goal": "${g}",
+  "dias": [
+    {
+      "label": "Día A",
+      "focus": "grupos musculares principales",
+      "emoji": "emoji representativo",
+      "calentamiento": [
+        { "nombre": "ejercicio", "dosis": "5 min / 2×15 reps" }
+      ],
+      "ejercicios": [
+        {
+          "nombre": "nombre del ejercicio",
+          "series": 4,
+          "reps": "6-8",
+          "peso_inicial_kg": 80,
+          "musculo_principal": "pecho",
+          "implemento": "barra olímpica + banco plano + rack",
+          "tecnica": "descripción breve de técnica correcta en 1-2 oraciones"
+        }
+      ],
+      "estiramientos": ["estiramiento 1", "estiramiento 2"]
+    }
+  ],
+  "fases": [
+    { "numero": 1, "nombre": "Base", "semanas": "1-4", "descripcion": "descripción" },
+    { "numero": 2, "nombre": "Intensidad", "semanas": "5-8", "descripcion": "descripción" }
+  ]
+}`;
+
+  var response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + OPENAI_KEY
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.7,
+      max_tokens: 4000
+    })
+  });
+
+  if (!response.ok) throw new Error('OpenAI error: ' + response.status);
+  var data = await response.json();
+  var content = data.choices[0].message.content.trim();
+  // Limpiar posible markdown
+  content = content.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(content);
 }
 
 var GEN_MSGS = [
@@ -3788,7 +3821,6 @@ async function obGenerate() {
   obData.birthDate = document.getElementById('ob-birth').value;
   obData.height = parseFloat(document.getElementById('ob-height').value);
   obData.weight = parseFloat(document.getElementById('ob-weight').value);
-  var plan = buildPlanFromOb();
 
   // Animar mensajes
   var idx = 0;
@@ -3799,14 +3831,13 @@ async function obGenerate() {
     idx++;
   }
   nextMsg();
-  var msgInterval = setInterval(nextMsg, 1200);
+  var msgInterval = setInterval(nextMsg, 1800);
 
   try {
     // 1. Guardar datos en el perfil
-    var goalFinal = obData.goalResolved || obData.goal;
     var expMap = { principiante:'principiante', intermedio:'intermedio', avanzado:'avanzado', atleta:'avanzado' };
     await sbPatch('/rest/v1/profiles?id=eq.' + currentUser.id, {
-      goal: goalFinal,
+      goal: obData.goal,
       experience: expMap[obData.exp] || 'principiante',
       onboarding_done: true,
       onboarding_days_avail: obData.daysAvail,
@@ -3826,7 +3857,11 @@ async function obGenerate() {
       days_selected: obData.daysSelected.length ? obData.daysSelected.join(',') : null,
     });
 
-    // 2. Crear plan en Supabase
+    // 2. Generar plan con OpenAI
+    var plan = await generatePlanWithAI();
+    var goalFinal = obData.goalResolved || obData.goal || plan.goal;
+
+    // 3. Crear plan en Supabase
     var planRes = await sbPostAuth('/rest/v1/plans', {
       user_id: currentUser.id,
       name: plan.planName,
@@ -3837,19 +3872,54 @@ async function obGenerate() {
       current_week: 1,
       sessions_done: 0,
       started_at: new Date().toISOString().split('T')[0],
-      notes: 'Plan generado automáticamente. Experiencia: ' + obData.exp + '. Split: ' + plan.split + '. Sesión: ' + plan.time + ' min.',
+      notes: 'Plan generado por IA. Experiencia: ' + obData.exp + '. Split: ' + plan.split + '. Sesión: ' + obData.time + ' min.',
     });
 
-    // 3. Crear días del plan
+    // 4. Crear días del plan con ejercicios completos
     if (planRes && planRes[0] && planRes[0].id) {
       var planId = planRes[0].id;
       for (var i = 0; i < plan.dias.length; i++) {
-        await sbPostAuth('/rest/v1/plan_days', {
+        var dia = plan.dias[i];
+        var dayRes = await sbPostAuth('/rest/v1/plan_days', {
           plan_id: planId,
-          day_label: plan.dias[i].label,
-          focus: plan.dias[i].focus,
+          day_label: dia.label,
+          focus: dia.focus,
+          emoji: dia.emoji || null,
           sort_order: i,
+          calentamiento: dia.calentamiento ? JSON.stringify(dia.calentamiento) : null,
+          estiramientos: dia.estiramientos ? JSON.stringify(dia.estiramientos) : null,
         });
+        // 5. Guardar ejercicios de cada día
+        if (dayRes && dayRes[0] && dayRes[0].id && dia.ejercicios) {
+          var dayId = dayRes[0].id;
+          for (var j = 0; j < dia.ejercicios.length; j++) {
+            var ex = dia.ejercicios[j];
+            await sbPostAuth('/rest/v1/plan_exercises', {
+              plan_day_id: dayId,
+              plan_id: planId,
+              nombre: ex.nombre,
+              series: ex.series,
+              reps: ex.reps,
+              peso_inicial_kg: ex.peso_inicial_kg || null,
+              musculo_principal: ex.musculo_principal || null,
+              implemento: ex.implemento || null,
+              tecnica: ex.tecnica || null,
+              sort_order: j,
+            });
+          }
+        }
+      }
+      // 6. Guardar fases del plan
+      if (plan.fases) {
+        for (var f = 0; f < plan.fases.length; f++) {
+          await sbPostAuth('/rest/v1/plan_phases', {
+            plan_id: planId,
+            numero: plan.fases[f].numero,
+            nombre: plan.fases[f].nombre,
+            semanas: plan.fases[f].semanas,
+            descripcion: plan.fases[f].descripcion,
+          });
+        }
       }
     }
 
@@ -3865,12 +3935,13 @@ async function obGenerate() {
 
   } catch(err) {
     clearInterval(msgInterval);
-    document.getElementById('ob-gen-title').textContent = 'Algo salió mal';
-    document.getElementById('ob-gen-sub').textContent = 'No se pudo guardar el plan. Entrando a la app de todas formas...';
+    console.error('Error en generación:', err);
+    document.getElementById('ob-gen-title').textContent = 'Error al generar';
+    document.getElementById('ob-gen-sub').textContent = 'No se pudo conectar con la IA. Revisa tu conexión e intenta de nuevo.';
     setTimeout(function() {
       document.getElementById('onboarding-screen').style.display = 'none';
       showApp();
-    }, 2000);
+    }, 3000);
   }
 }
 
