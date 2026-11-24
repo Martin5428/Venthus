@@ -892,6 +892,7 @@ select.form-input { cursor: pointer; }
       <div class="ob-progress-step" id="ob-prog-4"></div>
       <div class="ob-progress-step" id="ob-prog-5"></div>
       <div class="ob-progress-step" id="ob-prog-6"></div>
+      <div class="ob-progress-step" id="ob-prog-7"></div>
     </div>
 
     <!-- PASO 1: Datos personales -->
@@ -961,8 +962,59 @@ select.form-input { cursor: pointer; }
       </div>
     </div>
 
-    <!-- PASO 2: Objetivo -->
+    <!-- PASO 2: Lugar de entrenamiento -->
     <div class="ob-step" id="ob-step-2">
+      <div class="ob-emoji">🏋️</div>
+      <div class="ob-title">¿Dónde entrenas?</div>
+      <div class="ob-sub">Esto permite generar ejercicios solo con el equipamiento que realmente tienes disponible.</div>
+
+      <!-- Búsqueda de gimnasio conocido -->
+      <div style="margin-bottom:16px;">
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">Busca tu gimnasio</label>
+        <input id="ob-gym-search" type="text" placeholder="Ej: SmartFit, Óptimus, SportLife..." autocomplete="off"
+          style="width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--fg);font-family:var(--ff-body);font-size:14px;outline:none;box-sizing:border-box;"
+          oninput="filterGyms(this.value)">
+        <div id="ob-gym-results" style="display:none;border:1.5px solid var(--border);border-radius:10px;background:var(--card);margin-top:4px;overflow:hidden;"></div>
+      </div>
+
+      <!-- Gym seleccionado -->
+      <div id="ob-gym-selected" style="display:none;padding:12px 14px;background:var(--accent-bg);border:1.5px solid var(--accent2);border-radius:10px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--accent-fg);" id="ob-gym-name-display"></div>
+            <div style="font-size:11px;color:var(--fg2);margin-top:2px;" id="ob-gym-equip-display"></div>
+          </div>
+          <button onclick="clearGym()" style="background:none;border:none;color:var(--fg2);font-size:18px;cursor:pointer;padding:4px;">✕</button>
+        </div>
+      </div>
+
+      <!-- Equipamiento manual (para gym local / casa) -->
+      <div id="ob-equip-manual" style="display:none;">
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">¿Qué equipamiento tienes disponible?</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="ob-equip-grid">
+          <button class="ob-equip-btn" data-val="barra_olimpica" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🏋️ Barra olímpica</button>
+          <button class="ob-equip-btn" data-val="mancuernas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">💪 Mancuernas</button>
+          <button class="ob-equip-btn" data-val="maquinas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🔧 Máquinas guiadas</button>
+          <button class="ob-equip-btn" data-val="poleas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🔁 Poleas / cables</button>
+          <button class="ob-equip-btn" data-val="barra_dominadas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🧱 Barra dominadas</button>
+          <button class="ob-equip-btn" data-val="banco" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🛋️ Banco ajustable</button>
+          <button class="ob-equip-btn" data-val="rack" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🏗️ Rack / jaula</button>
+          <button class="ob-equip-btn" data-val="kettlebell" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🫙 Kettlebell</button>
+          <button class="ob-equip-btn" data-val="trx" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🪢 TRX / suspensión</button>
+          <button class="ob-equip-btn" data-val="bandas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🎽 Bandas elásticas</button>
+          <button class="ob-equip-btn" data-val="peso_corporal" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🤸 Solo peso corporal</button>
+          <button class="ob-equip-btn" data-val="otro_equip" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">➕ Otro</button>
+        </div>
+      </div>
+
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(1)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-2" onclick="obNext(3)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 3: Objetivo -->
+    <div class="ob-step" id="ob-step-3">
       <div class="ob-emoji">🎯</div>
       <div class="ob-title">¿Cuál es tu objetivo?</div>
       <div class="ob-sub">Sé honesto — no hay respuesta mala. Con esto tu plan se diseña desde cero para ti.</div>
@@ -1008,13 +1060,13 @@ select.form-input { cursor: pointer; }
         <textarea id="ob-goal-text" placeholder="Ej: Quiero verme bien en la playa, o quiero poder jugar fútbol sin cansarme..."></textarea>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(1)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-2" onclick="obNext(3)" disabled>Continuar →</button>
+        <button class="ob-btn-back" onclick="obBack(2)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-3" onclick="obNext(4)" disabled>Continuar →</button>
       </div>
     </div>
 
-    <!-- PASO 3: Experiencia -->
-    <div class="ob-step" id="ob-step-3">
+    <!-- PASO 4: Experiencia -->
+    <div class="ob-step" id="ob-step-4">
       <div class="ob-emoji">📊</div>
       <div class="ob-title">¿Cuánta experiencia tienes?</div>
       <div class="ob-sub">Las categorías están basadas en evidencia científica (NSCA / Schoenfeld, 2010). Tu respuesta determina el volumen, intensidad y densidad de tu plan.</div>
@@ -1049,13 +1101,13 @@ select.form-input { cursor: pointer; }
         </button>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(2)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-3" onclick="obNext(4)" disabled>Continuar →</button>
+        <button class="ob-btn-back" onclick="obBack(3)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-4" onclick="obNext(5)" disabled>Continuar →</button>
       </div>
     </div>
 
-    <!-- PASO 4: Días disponibles -->
-    <div class="ob-step" id="ob-step-4">
+    <!-- PASO 5: Días disponibles -->
+    <div class="ob-step" id="ob-step-5">
       <div class="ob-emoji">📅</div>
       <div class="ob-title">¿Cuántos días puedes entrenar?</div>
       <div class="ob-sub">Sé realista. Es mejor comprometerse con 3 días y cumplirlos que planear 6 y fallar. La IA puede recomendarte menos días de los que indiques si tu nivel o tu objetivo lo justifican.</div>
@@ -1085,13 +1137,13 @@ select.form-input { cursor: pointer; }
         </div>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(3)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-4" onclick="obNext(5)" disabled>Continuar →</button>
+        <button class="ob-btn-back" onclick="obBack(4)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-5" onclick="obNext(6)" disabled>Continuar →</button>
       </div>
     </div>
 
-    <!-- PASO 5: Tiempo por sesión -->
-    <div class="ob-step" id="ob-step-5">
+    <!-- PASO 6: Tiempo por sesión -->
+    <div class="ob-step" id="ob-step-6">
       <div class="ob-emoji">⏱️</div>
       <div class="ob-title">¿Cuánto tiempo tienes por sesión?</div>
       <div class="ob-sub">Tu plan se adaptará a este tiempo real. No es "cuánto quieres" — es cuánto tienes disponible en un día normal de tu semana.</div>
@@ -1122,13 +1174,13 @@ select.form-input { cursor: pointer; }
         </button>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(4)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-5" onclick="obGenerate()" disabled>Generar mi plan 🚀</button>
+        <button class="ob-btn-back" onclick="obBack(5)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-6" onclick="obGenerate()" disabled>Generar mi plan 🚀</button>
       </div>
     </div>
 
-    <!-- PASO 6: Generando -->
-    <div class="ob-step" id="ob-step-6">
+    <!-- PASO 7: Generando -->
+    <div class="ob-step" id="ob-step-7">
       <div class="ob-generating">
         <div class="ob-gen-spinner"></div>
         <div class="ob-gen-title" id="ob-gen-title">Analizando tu perfil...</div>
@@ -3136,7 +3188,7 @@ try {
 // Iniciar auth
 // ══ ONBOARDING ══
 
-var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null };
+var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null, gym: null, equip: [] };
 
 function showOnboarding() {
   document.getElementById('auth-screen').style.display = 'none';
@@ -3147,7 +3199,7 @@ function showOnboarding() {
 }
 
 function obGoTo(step) {
-  for (var i = 1; i <= 6; i++) {
+  for (var i = 1; i <= 7; i++) {
     var s = document.getElementById('ob-step-' + i);
     if (s) s.classList.toggle('active', i === step);
     var p = document.getElementById('ob-prog-' + i);
@@ -3230,7 +3282,80 @@ function checkObPersonal() {
   document.getElementById('ob-next-1').disabled = !ok;
 }
 
-// ── Paso 2: Objetivo ──
+// ── Paso 2: Lugar de entrenamiento ──
+var GYMS_CL = [
+  { name: 'SmartFit', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell','bandas'] },
+  { name: 'Óptimus', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'SportLife', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  { name: 'World Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Bodytech', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','trx'] },
+  { name: 'Iron Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'En casa', equip: null },
+  { name: 'Gym local / otro', equip: null },
+];
+
+function filterGyms(val) {
+  var box = document.getElementById('ob-gym-results');
+  var q = val.trim().toLowerCase();
+  if (!q) { box.style.display = 'none'; return; }
+  var matches = GYMS_CL.filter(function(g){ return g.name.toLowerCase().includes(q); });
+  if (!matches.length) { box.style.display = 'none'; return; }
+  box.innerHTML = matches.map(function(g){
+    return '<div onclick="selectGym(\'' + g.name + '\')" style="padding:11px 14px;cursor:pointer;font-size:14px;font-weight:600;color:var(--fg);border-bottom:1px solid var(--border);transition:background 0.1s;" onmouseover="this.style.background=\'var(--accent-bg)\'" onmouseout="this.style.background=\'\'">🏋️ ' + g.name + '</div>';
+  }).join('');
+  box.style.display = 'block';
+}
+
+function selectGym(name) {
+  var gym = GYMS_CL.find(function(g){ return g.name === name; });
+  obData.gym = name;
+  document.getElementById('ob-gym-search').value = name;
+  document.getElementById('ob-gym-results').style.display = 'none';
+  document.getElementById('ob-gym-name-display').textContent = name;
+  var manual = document.getElementById('ob-equip-manual');
+  if (gym && gym.equip) {
+    obData.equip = gym.equip;
+    document.getElementById('ob-gym-equip-display').textContent = gym.equip.length + ' tipos de equipamiento detectados automáticamente';
+    manual.style.display = 'none';
+    document.getElementById('ob-gym-selected').style.display = 'block';
+    document.getElementById('ob-next-2').disabled = false;
+  } else {
+    obData.equip = [];
+    document.getElementById('ob-gym-equip-display').textContent = 'Selecciona el equipamiento disponible';
+    manual.style.display = 'block';
+    document.getElementById('ob-gym-selected').style.display = 'block';
+    document.getElementById('ob-next-2').disabled = true;
+  }
+}
+
+function clearGym() {
+  obData.gym = null; obData.equip = [];
+  document.getElementById('ob-gym-search').value = '';
+  document.getElementById('ob-gym-selected').style.display = 'none';
+  document.getElementById('ob-equip-manual').style.display = 'none';
+  document.getElementById('ob-next-2').disabled = true;
+}
+
+function toggleEquip(btn) {
+  var val = btn.getAttribute('data-val');
+  var active = btn.style.borderColor === 'var(--accent)' || btn.getAttribute('data-active') === '1';
+  if (active) {
+    btn.style.borderColor = 'var(--border)';
+    btn.style.background = 'var(--card)';
+    btn.style.color = 'var(--fg2)';
+    btn.setAttribute('data-active','0');
+    obData.equip = obData.equip.filter(function(e){ return e !== val; });
+  } else {
+    btn.style.borderColor = 'var(--accent)';
+    btn.style.background = 'var(--accent-bg)';
+    btn.style.color = 'var(--accent-fg)';
+    btn.setAttribute('data-active','1');
+    if (!obData.equip.includes(val)) obData.equip.push(val);
+  }
+  document.getElementById('ob-next-2').disabled = obData.equip.length === 0;
+}
+
+// ── Paso 3: Objetivo ──
 function selectOb(btn, type) {
   var parent = btn.parentElement;
   parent.querySelectorAll('.ob-option').forEach(function(b){ b.classList.remove('selected'); });
@@ -3240,10 +3365,10 @@ function selectOb(btn, type) {
     obData.goal = val;
     var customBox = document.getElementById('ob-goal-custom');
     customBox.style.display = val === 'otro' ? 'block' : 'none';
-    document.getElementById('ob-next-2').disabled = false;
+    document.getElementById('ob-next-3').disabled = false;
   } else if (type === 'exp') {
     obData.exp = val;
-    document.getElementById('ob-next-3').disabled = false;
+    document.getElementById('ob-next-4').disabled = false; // paso 4 = experiencia
   }
 }
 
@@ -3256,16 +3381,16 @@ function selectDay(btn, type) {
   if (type === 'avail') obData.daysAvail = val;
   else obData.daysCurr = val;
   if (obData.daysAvail !== null && obData.daysCurr !== null) {
-    document.getElementById('ob-next-4').disabled = false;
+    document.getElementById('ob-next-5').disabled = false;
   }
 }
 
-// ── Paso 5: Tiempo ──
+// ── Paso 6: Tiempo ──
 function selectTime(btn) {
   document.querySelectorAll('.ob-time-btn').forEach(function(b){ b.classList.remove('selected'); });
   btn.classList.add('selected');
   obData.time = parseInt(btn.getAttribute('data-val'));
-  document.getElementById('ob-next-5').disabled = false;
+  document.getElementById('ob-next-6').disabled = false;
 }
 
 // Lógica científica de prescripción (basada en NSCA, Schoenfeld, Israetel)
@@ -3348,7 +3473,7 @@ var GEN_MSGS = [
 ];
 
 async function obGenerate() {
-  obGoTo(6);
+  obGoTo(7);
   // Capturar datos personales del formulario antes de generar
   obData.birthDate = document.getElementById('ob-birth').value;
   obData.height = parseFloat(document.getElementById('ob-height').value);
@@ -3385,6 +3510,8 @@ async function obGenerate() {
       birth_date: obData.birthDate || null,
       height_cm: obData.height || null,
       weight_kg: obData.weight || null,
+      gym_name: obData.gym || null,
+      equipment: obData.equip.length ? obData.equip.join(',') : null,
     });
 
     // 2. Crear plan en Supabase
