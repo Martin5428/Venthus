@@ -1,0 +1,2688 @@
+<title>Venthus</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* ══ TOKENS ══ */
+:root {
+  --bg:#F7F5F2; --bg2:#EFEDE9; --bg3:#E8E5DF; --card:#FFFFFF;
+  --fg:#1C1917; --fg2:#78716C; --fg3:#A8A29E;
+  --accent:#0D9488; --accent2:#14B8A6; --accent-bg:#CCFBF1; --accent-fg:#0F766E;
+  --warm:#D97706; --warm-bg:#FEF3C7; --warm-fg:#92400E;
+  --indigo:#4F46E5; --indigo-bg:#EDE9FE; --indigo-fg:#3730A3;
+  --green:#059669; --green-bg:#D1FAE5; --green-fg:#065F46;
+  --red:#DC2626; --red-bg:#FEE2E2;
+  --deload:#7C3AED;
+  --border:#E5E0D8; --shadow:rgba(28,25,23,0.08);
+  --ff-head:'Plus Jakarta Sans',system-ui,sans-serif;
+  --ff-body:'DM Sans',system-ui,sans-serif;
+  --sidebar-w: 240px;
+  --topbar-h: 64px;
+  --nav-h: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#141210; --bg2:#1C1917; --bg3:#292524; --card:#1C1917;
+    --fg:#F5F3F0; --fg2:#A8A29E; --fg3:#57534E;
+    --accent:#14B8A6; --accent2:#0D9488; --accent-bg:#134E4A; --accent-fg:#5EEAD4;
+    --warm:#F59E0B; --warm-bg:#451A03; --warm-fg:#FDE68A;
+    --indigo:#818CF8; --indigo-bg:#1E1B4B; --indigo-fg:#C7D2FE;
+    --green:#34D399; --green-bg:#064E3B; --green-fg:#A7F3D0;
+    --border:#292524; --shadow:rgba(0,0,0,0.3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#141210; --bg2:#1C1917; --bg3:#292524; --card:#1C1917;
+  --fg:#F5F3F0; --fg2:#A8A29E; --fg3:#57534E;
+  --accent:#14B8A6; --accent2:#0D9488; --accent-bg:#134E4A; --accent-fg:#5EEAD4;
+  --warm:#F59E0B; --warm-bg:#451A03; --warm-fg:#FDE68A;
+  --indigo:#818CF8; --indigo-bg:#1E1B4B; --indigo-fg:#C7D2FE;
+  --green:#34D399; --green-bg:#064E3B; --green-fg:#A7F3D0;
+  --border:#292524; --shadow:rgba(0,0,0,0.3);
+  color-scheme: dark;
+}
+
+/* ══ RESET ══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--ff-body);
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  padding-left: max(0px, env(safe-area-inset-left,0px));
+  padding-right: max(0px, env(safe-area-inset-right,0px));
+}
+
+/* ══ LAYOUT SHELL ══ */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ══ SIDEBAR (desktop) ══ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 50;
+  overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--accent), #0A5F58);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon svg { width: 20px; height: 20px; }
+.logo-name {
+  font-family: var(--ff-head);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--fg);
+  letter-spacing: -0.3px;
+}
+.logo-sub {
+  font-size: 11px;
+  color: var(--fg3);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--fg2);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.nav-link:hover { background: var(--bg2); color: var(--fg); }
+.nav-link.active {
+  background: var(--accent-bg);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+.nav-link.active svg { stroke: var(--accent); }
+.nav-link svg { width: 18px; height: 18px; stroke: var(--fg3); flex-shrink: 0; }
+.nav-link.active .nav-badge { background: var(--accent); color: #fff; }
+.nav-badge {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg3);
+  color: var(--fg2);
+  border-radius: 20px;
+  padding: 2px 7px;
+}
+
+.sidebar-footer {
+  padding: 16px 12px;
+  border-top: 1px solid var(--border);
+}
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.user-card:hover { background: var(--bg2); }
+.user-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--indigo));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.user-info { min-width: 0; }
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-plan {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ══ MAIN CONTENT ══ */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ══ TOP BAR (mobile) ══ */
+.topbar {
+  display: none;
+  height: var(--topbar-h);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  gap: 12px;
+}
+.topbar-logo {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1;
+}
+.topbar-logo-name {
+  font-family: var(--ff-head);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--fg);
+}
+.topbar-actions { display: flex; gap: 8px; }
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: var(--bg2);
+  color: var(--fg2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.icon-btn:hover { background: var(--bg3); }
+.icon-btn svg { width: 18px; height: 18px; }
+
+/* ══ PAGE CONTENT ══ */
+.page {
+  display: none;
+  flex: 1;
+  padding: 32px 32px 40px;
+  max-width: 1100px;
+}
+.page.active { display: block; }
+
+/* ══ BOTTOM NAV (mobile) ══ */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  z-index: 40;
+  padding: 0 8px;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--fg3);
+  transition: all 0.15s;
+  border: none;
+  background: none;
+  font-family: var(--ff-body);
+}
+.bottom-nav-item:hover { background: var(--bg2); }
+.bottom-nav-item.active { color: var(--accent); }
+.bottom-nav-item svg { width: 22px; height: 22px; stroke: currentColor; }
+.bottom-nav-item span {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.bottom-nav-fab {
+  width: 50px; height: 50px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), #0A5F58);
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(13,148,136,0.4);
+  margin-bottom: 4px;
+  transition: transform 0.15s;
+}
+.bottom-nav-fab:active { transform: scale(0.95); }
+.bottom-nav-fab svg { width: 22px; height: 22px; stroke: #fff; }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom,0px)); }
+  .topbar { display: flex; }
+  .bottom-nav { display: flex; }
+  .page { padding: 20px 16px 24px; }
+}
+
+/* ══ PAGE HEADER ══ */
+.page-header {
+  margin-bottom: 28px;
+}
+.page-title {
+  font-family: var(--ff-head);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--fg);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.page-subtitle {
+  font-size: 14px;
+  color: var(--fg2);
+  margin-top: 4px;
+}
+@media (max-width: 768px) {
+  .page-title { font-size: 22px; }
+}
+
+/* ══ CARDS ══ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.card-sm { padding: 14px 16px; }
+.card-title {
+  font-family: var(--ff-head);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg2);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 14px;
+}
+
+/* ══ GRID HELPERS ══ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+@media (max-width: 900px) {
+  .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .grid-3 { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 540px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ══ STAT TILES ══ */
+.stat-tile {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat-label { font-size: 12px; color: var(--fg3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { font-family: var(--ff-head); font-size: 28px; font-weight: 800; color: var(--fg); line-height: 1; }
+.stat-value span { font-size: 14px; font-weight: 500; color: var(--fg2); margin-left: 2px; }
+.stat-change { font-size: 12px; font-weight: 600; }
+.stat-change.up { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+/* ══ BADGE ══ */
+.badge {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.badge-green { background: var(--green-bg); color: var(--green-fg); }
+.badge-warm { background: var(--warm-bg); color: var(--warm-fg); }
+.badge-indigo { background: var(--indigo-bg); color: var(--indigo-fg); }
+.badge-accent { background: var(--accent-bg); color: var(--accent-fg); }
+.badge-red { background: var(--red-bg); color: var(--red); }
+
+/* ══ PROGRESS BAR ══ */
+.progress-bar {
+  height: 8px; border-radius: 4px;
+  background: var(--bg3);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.6s ease;
+}
+.progress-fill.warm { background: linear-gradient(90deg, var(--warm), #F59E0B); }
+.progress-fill.indigo { background: linear-gradient(90deg, var(--indigo), #818CF8); }
+
+/* ══ BUTTONS ══ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: var(--ff-body);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: all 0.15s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.3);
+}
+.btn-primary:hover { background: var(--accent-fg); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--bg2);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--bg3); }
+.btn-sm { padding: 7px 14px; font-size: 13px; }
+.btn-full { width: 100%; }
+
+/* ══ SECTION DIVIDER ══ */
+.section-gap { margin-top: 28px; }
+.section-label {
+  font-family: var(--ff-head);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-label a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ══ AVATAR CIRCLE ══ */
+.avatar {
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+
+/* ══ TABS ══ */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  background: var(--bg2);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none;
+  background: none;
+  color: var(--fg2);
+  font-family: var(--ff-body);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: var(--card);
+  color: var(--fg);
+  box-shadow: 0 1px 4px var(--shadow);
+}
+
+/* ══ LIST ITEMS ══ */
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.list-item:last-child { border-bottom: none; padding-bottom: 0; }
+.list-item:first-child { padding-top: 0; }
+.list-item-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.list-item-body { flex: 1; min-width: 0; }
+.list-item-title { font-size: 14px; font-weight: 600; color: var(--fg); }
+.list-item-sub { font-size: 12px; color: var(--fg2); margin-top: 2px; }
+.list-item-right { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.chevron svg { width: 16px; height: 16px; stroke: var(--fg3); }
+
+/* ══ EXERCISE CARD ══ */
+.exercise-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 10px;
+}
+.exercise-card:hover { border-color: var(--accent); box-shadow: 0 2px 10px var(--shadow); }
+.exercise-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  color: var(--fg2);
+  flex-shrink: 0;
+}
+.exercise-info { flex: 1; min-width: 0; }
+.exercise-name { font-size: 14px; font-weight: 600; color: var(--fg); }
+.exercise-detail { font-size: 12px; color: var(--fg2); margin-top: 2px; }
+.exercise-sets {
+  font-family: var(--ff-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ══ CHART PLACEHOLDER ══ */
+.chart-area {
+  width: 100%;
+  height: 160px;
+  background: var(--bg2);
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 8px 0;
+  gap: 6px;
+  overflow: hidden;
+}
+.chart-bar {
+  flex: 1;
+  border-radius: 6px 6px 0 0;
+  min-height: 10px;
+  transition: height 0.4s ease;
+}
+
+/* ══ FORM ELEMENTS ══ */
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 13px; font-weight: 600; color: var(--fg2); margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--fg);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus { border-color: var(--accent); }
+select.form-input { cursor: pointer; }
+
+/* ══ MODAL / DRAWER ══ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+#modal-ex { z-index: 200; }
+.modal-backdrop.open { display: flex; }
+.modal-sheet {
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal-handle {
+  width: 40px; height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+.modal-title { font-family: var(--ff-head); font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.modal-sub { font-size: 13px; color: var(--fg2); margin-bottom: 20px; }
+
+/* ══ RING PROGRESS ══ */
+.ring-wrap { position: relative; display: inline-flex; }
+.ring-label {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.ring-val { font-family: var(--ff-head); font-size: 22px; font-weight: 800; color: var(--fg); line-height: 1; }
+.ring-unit { font-size: 11px; color: var(--fg3); margin-top: 2px; }
+
+/* ══ WEEK STRIP ══ */
+.week-strip { display: flex; gap: 6px; }
+.day-pill {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.day-pill:hover { background: var(--bg2); }
+.day-pill.done { background: var(--accent-bg); }
+.day-pill.today { background: var(--accent); }
+.day-pill .day-name { font-size: 10px; font-weight: 600; color: var(--fg3); letter-spacing: 0.3px; text-transform: uppercase; }
+.day-pill.today .day-name, .day-pill.today .day-num { color: #fff; }
+.day-pill.done .day-name { color: var(--accent-fg); }
+.day-pill.done .day-num { color: var(--accent-fg); }
+.day-pill .day-num { font-family: var(--ff-head); font-size: 15px; font-weight: 700; color: var(--fg); margin-top: 3px; }
+.day-pill .day-dot { width: 5px; height: 5px; border-radius: 50%; background: transparent; margin-top: 4px; }
+.day-pill.done .day-dot { background: var(--accent); }
+.day-pill.today .day-dot { background: rgba(255,255,255,0.7); }
+
+/* ══ NOTIFICATION DOT ══ */
+.notif-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ══ CHAT ══ */
+#page-asistente.active { display: flex; }
+.chat-sugg {
+  font-size: 12px; font-weight: 600;
+  padding: 6px 12px; border-radius: 20px;
+  border: 1.5px solid var(--accent);
+  background: var(--accent-bg); color: var(--accent-fg);
+  cursor: pointer; font-family: var(--ff-body);
+  transition: all 0.15s; flex-shrink: 0;
+}
+.chat-sugg:hover { background: var(--accent); color: #fff; }
+.chat-msg-ia { display: flex; flex-direction: column; align-items: flex-start; max-width: 85%; }
+.chat-msg-user { display: flex; flex-direction: column; align-items: flex-end; max-width: 85%; align-self: flex-end; }
+.chat-bubble-ia {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px 16px 16px 16px;
+  padding: 12px 14px;
+  font-size: 14px; line-height: 1.6; color: var(--fg);
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.chat-bubble-user {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 16px 4px 16px 16px;
+  padding: 12px 14px;
+  font-size: 14px; line-height: 1.6;
+}
+.chat-time { font-size: 11px; color: var(--fg3); margin-top: 4px; padding: 0 4px; }
+.chat-typing {
+  display: flex; gap: 4px; padding: 14px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 4px 16px 16px 16px;
+}
+.chat-typing span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--fg3); animation: typingDot 1.2s infinite;
+}
+.chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingDot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ══ EMPTY STATE ══ */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--fg3);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state-title { font-family: var(--ff-head); font-size: 16px; font-weight: 700; color: var(--fg2); margin-bottom: 6px; }
+.empty-state-text { font-size: 13px; line-height: 1.6; }
+</style>
+
+<!-- ══ AUTH SCREEN ══ -->
+<div id="auth-screen" style="display:none; min-height:100vh; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:24px;">
+  <div style="width:100%; max-width:400px;">
+    <!-- Logo -->
+    <div style="text-align:center; margin-bottom:40px;">
+      <div style="width:56px; height:56px; background:var(--accent); border-radius:16px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <h1 style="font-family:var(--ff-head); font-size:28px; font-weight:800; color:var(--fg); margin-bottom:4px;">Venthus</h1>
+      <p style="color:var(--fg2); font-size:14px;">Tu entrenamiento, en serio.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex; background:var(--bg2); border-radius:12px; padding:4px; margin-bottom:24px;">
+      <button id="auth-tab-login" onclick="switchAuthTab('login')" style="flex:1; padding:10px; border:none; border-radius:9px; font-family:var(--ff-body); font-size:14px; font-weight:600; cursor:pointer; background:var(--card); color:var(--fg); box-shadow:0 1px 3px var(--shadow);">Iniciar sesión</button>
+      <button id="auth-tab-register" onclick="switchAuthTab('register')" style="flex:1; padding:10px; border:none; border-radius:9px; font-family:var(--ff-body); font-size:14px; font-weight:600; cursor:pointer; background:transparent; color:var(--fg2);">Registrarse</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="auth-form-login">
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:var(--fg2); margin-bottom:6px;">Correo electrónico</label>
+        <input id="login-email" type="email" placeholder="tu@email.com" style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--card); color:var(--fg); font-family:var(--ff-body); font-size:15px; outline:none;">
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:var(--fg2); margin-bottom:6px;">Contraseña</label>
+        <input id="login-password" type="password" placeholder="••••••••" style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--card); color:var(--fg); font-family:var(--ff-body); font-size:15px; outline:none;">
+      </div>
+      <div id="login-error" style="display:none; background:var(--red-bg); color:var(--red); padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px;"></div>
+      <button onclick="doLogin()" style="width:100%; padding:14px; background:var(--accent); color:white; border:none; border-radius:12px; font-family:var(--ff-head); font-size:16px; font-weight:700; cursor:pointer; letter-spacing:-0.3px;">Entrar</button>
+    </div>
+
+    <!-- Register form -->
+    <div id="auth-form-register" style="display:none;">
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:var(--fg2); margin-bottom:6px;">Nombre completo</label>
+        <input id="reg-name" type="text" placeholder="Tu nombre" style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--card); color:var(--fg); font-family:var(--ff-body); font-size:15px; outline:none;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:var(--fg2); margin-bottom:6px;">Correo electrónico</label>
+        <input id="reg-email" type="email" placeholder="tu@email.com" style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--card); color:var(--fg); font-family:var(--ff-body); font-size:15px; outline:none;">
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:var(--fg2); margin-bottom:6px;">Contraseña</label>
+        <input id="reg-password" type="password" placeholder="Mínimo 6 caracteres" style="width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; background:var(--card); color:var(--fg); font-family:var(--ff-body); font-size:15px; outline:none;">
+      </div>
+      <div id="reg-error" style="display:none; background:var(--red-bg); color:var(--red); padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px;"></div>
+      <div id="reg-success" style="display:none; background:var(--green-bg); color:var(--green-fg); padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px;"></div>
+      <button onclick="doRegister()" style="width:100%; padding:14px; background:var(--accent); color:white; border:none; border-radius:12px; font-family:var(--ff-head); font-size:16px; font-weight:700; cursor:pointer; letter-spacing:-0.3px;">Crear cuenta</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ APP SHELL ══ -->
+<div class="app-shell" id="app-shell" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-name">Venthus</div>
+          <div class="logo-sub">Training</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-link active" id="snav-inicio" onclick="navTo('inicio')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Inicio
+      </button>
+      <button class="nav-link" id="snav-plan" onclick="navTo('plan')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Mi Plan
+      </button>
+      <button class="nav-link" id="snav-registrar" onclick="navTo('registrar')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Registrar
+      </button>
+      <button class="nav-link" id="snav-progreso" onclick="navTo('progreso')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Progreso
+      </button>
+      <button class="nav-link" id="snav-asistente" onclick="navTo('asistente')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Asistente IA
+      </button>
+      <button class="nav-link" id="snav-perfil" onclick="navTo('perfil')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card" onclick="navTo('perfil')">
+        <div class="user-avatar" id="sidebar-user-avatar">?</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-user-name">Cargando...</div>
+          <div class="user-plan" id="sidebar-user-email" style="font-size:11px;"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- TOPBAR (mobile) -->
+    <header class="topbar">
+      <div class="topbar-logo">
+        <div class="logo-icon" style="width:30px;height:30px;border-radius:8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <span class="topbar-logo-name">Venthus</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ══ INICIO ══ -->
+    <div class="page active" id="page-inicio">
+      <div class="page-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div class="page-title">¡Hola, Juan! 👋</div>
+            <div class="page-subtitle">Martes 24 · Semana 3 de tu plan de Fuerza</div>
+          </div>
+          <span class="badge badge-accent">Semana 3 de 4</span>
+        </div>
+      </div>
+
+      <!-- Semana -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-title">Esta semana</div>
+        <div class="week-strip">
+          <div class="day-pill done"><span class="day-name">Lun</span><span class="day-num">18</span><span class="day-dot"></span></div>
+          <div class="day-pill done"><span class="day-name">Mar</span><span class="day-num">19</span><span class="day-dot"></span></div>
+          <div class="day-pill done"><span class="day-name">Mié</span><span class="day-num">20</span><span class="day-dot"></span></div>
+          <div class="day-pill today"><span class="day-name">Jue</span><span class="day-num">21</span><span class="day-dot"></span></div>
+          <div class="day-pill"><span class="day-name">Vie</span><span class="day-num">22</span><span class="day-dot"></span></div>
+          <div class="day-pill"><span class="day-name">Sáb</span><span class="day-num">23</span><span class="day-dot"></span></div>
+          <div class="day-pill"><span class="day-name">Dom</span><span class="day-num">24</span><span class="day-dot"></span></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid-4" style="margin-bottom:20px;">
+        <div class="stat-tile">
+          <div class="stat-label">💪 Sesiones</div>
+          <div class="stat-value">12<span>/ 16</span></div>
+          <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" style="width:75%"></div></div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">📅 Semana</div>
+          <div class="stat-value">3<span>/ 4</span></div>
+          <div class="stat-change up">↑ Buen ritmo</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">✅ Esta semana</div>
+          <div class="stat-value">3<span>días</span></div>
+          <div class="stat-change up">↑ 1 sesión más</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">🎯 Próximo día</div>
+          <div class="stat-value" style="font-size:16px;">Día A</div>
+          <div class="stat-change" style="color:var(--accent);">Empuje</div>
+        </div>
+      </div>
+
+      <!-- Entrenamiento hoy -->
+      <div class="section-label">
+        Entrenamiento de hoy
+        <a onclick="navTo('plan')">Ver plan completo →</a>
+      </div>
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <div>
+            <div style="font-family:var(--ff-head);font-size:17px;font-weight:800;color:var(--fg);">Empuje — Pecho & Hombros</div>
+            <div style="font-size:13px;color:var(--fg2);margin-top:3px;">6 ejercicios · ~55 min estimado</div>
+          </div>
+          <button class="btn btn-primary" onclick="navTo('registrar')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Iniciar
+          </button>
+        </div>
+        <div>
+          <div class="exercise-card" onclick="openExModal('Press banca plano','4 × 6-8 · 85kg','Mantén escapulas retraídas y arco lumbar natural. Bajar controlado en 3 segundos.')">
+            <div class="exercise-num">1</div>
+            <div class="exercise-info"><div class="exercise-name">Press banca plano</div><div class="exercise-detail">4 series · 6-8 reps</div></div>
+            <div class="exercise-sets">85 kg</div>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="exercise-card" onclick="openExModal('Press inclinado mancuernas','3 × 10-12 · 24kg','Ángulo de 30-45°. Codos a 45° del torso.')">
+            <div class="exercise-num">2</div>
+            <div class="exercise-info"><div class="exercise-name">Press inclinado mancuernas</div><div class="exercise-detail">3 series · 10-12 reps</div></div>
+            <div class="exercise-sets">24 kg</div>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="exercise-card" onclick="openExModal('Press militar barra','4 × 6-8 · 60kg','De pie o sentado. Barra frente a la cara, codos debajo de las muñecas.')">
+            <div class="exercise-num">3</div>
+            <div class="exercise-info"><div class="exercise-name">Press militar barra</div><div class="exercise-detail">4 series · 6-8 reps</div></div>
+            <div class="exercise-sets">60 kg</div>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div style="text-align:center;padding:10px 0 2px;">
+            <a onclick="navTo('plan')" style="font-size:13px;color:var(--accent);cursor:pointer;font-weight:600;">Ver 3 ejercicios más →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkin semanal -->
+      <div class="card" style="background:linear-gradient(135deg,var(--accent-bg),var(--indigo-bg));border-color:var(--accent);">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="font-size:28px;">📋</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Check-in semanal pendiente</div>
+            <div style="font-size:13px;color:var(--fg2);margin-bottom:12px;">¿Cómo te fue esta semana? Registra tu sensación, peso y energía.</div>
+            <button class="btn btn-primary btn-sm" onclick="openCheckin()">Completar check-in</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /inicio -->
+
+    <!-- ══ MI PLAN ══ -->
+    <div class="page" id="page-plan">
+      <div class="page-header">
+        <div class="page-title">Mi Plan</div>
+        <div class="page-subtitle">Hipertrofia · Intermedio · 4 días/semana</div>
+      </div>
+
+      <!-- Semana info -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+        <span class="badge badge-accent">Semana 3 de 8</span>
+        <span class="badge badge-warm">Microciclo de carga</span>
+        <span class="badge badge-indigo">Fase 1: Base</span>
+      </div>
+
+      <!-- Progreso del plan -->
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-title">Progreso del mesociclo</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:13px;color:var(--fg2);">Semana 3 / 8</span>
+          <span style="font-size:13px;font-weight:700;color:var(--accent);">37%</span>
+        </div>
+        <div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:37%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <span style="font-size:11px;color:var(--fg3);">Inicio</span>
+          <span style="font-size:11px;color:var(--fg3);">Deload sem. 7</span>
+          <span style="font-size:11px;color:var(--fg3);">Fin</span>
+        </div>
+      </div>
+
+      <!-- Días de entrenamiento -->
+      <div class="section-label">Días de entrenamiento</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+        <div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal('Día A — Empuje','Pecho, Hombros & Tríceps')">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏋️</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--fg);">Día A — Empuje</div>
+              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Pecho, Hombros & Tríceps · 6 ejercicios</div>
+            </div>
+            <span class="badge badge-green">Lun / Jue</span>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+        <div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal('Día B — Jalar','Espalda & Bíceps')">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--indigo-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💪</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--fg);">Día B — Jalar</div>
+              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Espalda & Bíceps · 6 ejercicios</div>
+            </div>
+            <span class="badge badge-indigo">Mar / Vie</span>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+        <div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal('Día C — Pierna','Cuádriceps, Femorales & Glúteos')">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--warm-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🦵</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--fg);">Día C — Pierna</div>
+              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Cuádriceps, Femorales & Glúteos · 7 ejercicios</div>
+            </div>
+            <span class="badge badge-warm">Mié</span>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+        <div class="card card-sm" style="opacity:0.6;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">😴</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:var(--fg);">Días de Descanso</div>
+              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Recuperación activa · Sáb & Dom</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fases -->
+      <div class="section-label">Fases del plan</div>
+      <div class="grid-3">
+        <div class="card" style="border-left:3px solid var(--accent);">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:8px;">Fase 1</div>
+          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Base</div>
+          <div style="font-size:12px;color:var(--fg2);">Semanas 1-4 · Construir base de volumen e intensidad</div>
+          <div style="margin-top:10px;"><span class="badge badge-accent">Activa</span></div>
+        </div>
+        <div class="card" style="opacity:0.6;border-left:3px solid var(--indigo);">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--indigo);margin-bottom:8px;">Fase 2</div>
+          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Intensidad</div>
+          <div style="font-size:12px;color:var(--fg2);">Semanas 5-6 · Aumentar cargas y reducir reps</div>
+        </div>
+        <div class="card" style="opacity:0.6;border-left:3px solid var(--deload);">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--deload);margin-bottom:8px;">Fase 3</div>
+          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Deload</div>
+          <div style="font-size:12px;color:var(--fg2);">Semana 7 · Reducir volumen 40% para recuperar</div>
+        </div>
+      </div>
+    </div><!-- /plan -->
+
+    <!-- ══ REGISTRAR ══ -->
+    <div class="page" id="page-registrar">
+
+      <!-- Selector de sesión -->
+      <div id="reg-selector">
+        <div class="page-header">
+          <div class="page-title">Nueva sesión</div>
+          <div class="page-subtitle">¿Qué vas a registrar hoy?</div>
+        </div>
+
+        <div class="section-label">Días de tu rutina</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+          <button class="card" style="text-align:left;cursor:pointer;border:none;width:100%;padding:16px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;transition:border-color 0.15s;" onclick="startRegSession('Día A — Empuje','💪','Pecho · Hombros · Tríceps')">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:44px;height:44px;border-radius:12px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💪</div>
+              <div style="flex:1;">
+                <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);">Día A — Empuje</div>
+                <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Pecho · Hombros · Tríceps</div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--fg3);flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+          <button class="card" style="text-align:left;cursor:pointer;border:none;width:100%;padding:16px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;transition:border-color 0.15s;" onclick="startRegSession('Día B — Jalar','🏋️','Espalda · Bíceps · Romboides')">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:44px;height:44px;border-radius:12px;background:var(--indigo-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏋️</div>
+              <div style="flex:1;">
+                <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);">Día B — Jalar</div>
+                <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Espalda · Bíceps · Romboides</div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--fg3);flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+          <button class="card" style="text-align:left;cursor:pointer;border:none;width:100%;padding:16px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;transition:border-color 0.15s;" onclick="startRegSession('Día C — Pierna','🦵','Cuádriceps · Isquios · Glúteos')">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:44px;height:44px;border-radius:12px;background:var(--warm-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🦵</div>
+              <div style="flex:1;">
+                <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);">Día C — Pierna</div>
+                <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Cuádriceps · Isquios · Glúteos</div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--fg3);flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+        </div>
+
+        <div class="section-label">Actividad libre</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+          <button style="cursor:pointer;border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color 0.15s;" onclick="startFreeSession('Correr','🏃','Cardio · Resistencia')">
+            <span style="font-size:28px;">🏃</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);">Correr</span>
+          </button>
+          <button style="cursor:pointer;border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color 0.15s;" onclick="startFreeSession('Tenis','🎾','Deporte · Cardio')">
+            <span style="font-size:28px;">🎾</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);">Tenis</span>
+          </button>
+          <button style="cursor:pointer;border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color 0.15s;" onclick="startFreeSession('Fútbol','⚽','Deporte · Equipo')">
+            <span style="font-size:28px;">⚽</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);">Fútbol</span>
+          </button>
+          <button style="cursor:pointer;border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color 0.15s;" onclick="startFreeSession('Ciclismo','🚴','Cardio · Piernas')">
+            <span style="font-size:28px;">🚴</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);">Ciclismo</span>
+          </button>
+          <button style="cursor:pointer;border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color 0.15s;" onclick="startFreeSession('Natación','🏊','Cardio · Full body')">
+            <span style="font-size:28px;">🏊</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);">Natación</span>
+          </button>
+          <button style="cursor:pointer;border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;transition:border-color 0.15s;" onclick="startFreeSession('Otra actividad','✏️','Actividad libre')">
+            <span style="font-size:28px;">✏️</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);">Otra</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Vista de sesión (oculta hasta seleccionar) -->
+      <div id="reg-session" style="display:none;">
+        <div class="page-header" style="cursor:pointer;" onclick="backToSelector()">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--accent);"><polyline points="15 18 9 12 15 6"/></svg>
+            <span style="font-size:12px;color:var(--accent);font-weight:700;">Cambiar sesión</span>
+          </div>
+          <div class="page-title" id="reg-session-title">Día A — Empuje</div>
+          <div class="page-subtitle" id="reg-session-sub">Pecho · Hombros · Tríceps</div>
+        </div>
+
+        <!-- Sesión libre -->
+        <div id="reg-free-panel" style="display:none;">
+          <div class="card" style="margin-bottom:16px;">
+            <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;margin-bottom:16px;">Registrar actividad</div>
+            <div class="form-group">
+              <label class="form-label">Nombre de la actividad</label>
+              <input type="text" class="form-input" id="free-name" placeholder="Ej: Tenis con amigos, running 5km…">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Duración (min)</label>
+                <input type="number" class="form-input" id="free-duration" placeholder="45">
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Intensidad</label>
+                <select class="form-input" id="free-intensity">
+                  <option>Baja</option>
+                  <option selected>Media</option>
+                  <option>Alta</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:10px;margin-bottom:0;">
+              <label class="form-label">Notas</label>
+              <textarea class="form-input" rows="2" id="free-notes" placeholder="¿Cómo te fue? ¿Algo a destacar?"></textarea>
+            </div>
+          </div>
+          <!-- Timer para actividad libre -->
+          <div class="card card-sm" style="text-align:center;background:linear-gradient(135deg,var(--accent-bg),var(--indigo-bg));border-color:var(--accent);margin-bottom:16px;">
+            <div style="font-size:10px;color:var(--accent-fg);font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;">Cronometro de actividad</div>
+            <div id="workout-display-free" style="font-family:var(--ff-head);font-size:30px;font-weight:800;color:var(--fg);">0:00</div>
+            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+              <button class="btn btn-primary btn-sm" id="workout-btn-free" onclick="toggleWorkoutTimerFree()" style="flex:1;">▶ Iniciar</button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="saveFreeSession()">Guardar actividad</button>
+        </div>
+
+        <!-- Sesión de rutina (tabs) -->
+        <div id="reg-routine-panel">
+          <div class="tab-bar">
+            <button class="tab-btn active" id="rtab-calent" onclick="switchRegTab('calent')">🔥 Calentamiento</button>
+            <button class="tab-btn" id="rtab-work" onclick="switchRegTab('work')">💪 Ejercicios</button>
+            <button class="tab-btn" id="rtab-post" onclick="switchRegTab('post')">🧘 Post-entreno</button>
+          </div>
+
+      <!-- Calentamiento -->
+      <div id="rpanel-calent">
+        <div class="card" style="margin-bottom:12px;">
+          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;margin-bottom:12px;">Calentamiento general · 10 min</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:10px;">
+              <span style="font-size:18px;">🚴</span>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Bicicleta o caminata</div><div style="font-size:12px;color:var(--fg2);">5 minutos · Intensidad baja</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:10px;">
+              <span style="font-size:18px;">🤸</span>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Movilidad de hombros</div><div style="font-size:12px;color:var(--fg2);">10 reps · Rotaciones internas y externas</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:10px;">
+              <span style="font-size:18px;">💪</span>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Press banca con barra vacía</div><div style="font-size:12px;color:var(--fg2);">2 × 15 · Activación y técnica</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" style="margin-top:16px;" onclick="switchRegTab('work')">Listo — Ir a ejercicios →</button>
+        </div>
+      </div>
+
+      <!-- Ejercicios -->
+      <div id="rpanel-work" style="display:none;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <!-- Exercise log card -->
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-family:var(--ff-head);font-size:16px;font-weight:800;">Press banca plano</div>
+                <div style="font-size:12px;color:var(--fg2);">Meta: 4 series × 6-8 reps · 85 kg</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                <span class="badge badge-accent">Serie 1/4</span>
+                <button onclick="openExModal('Press banca plano','4 × 6-8 · 85kg', DIA_EXERCISES[\'Día A — Empuje\'][0].tip, DIA_EXERCISES[\'Día A — Empuje\'][0].equip, DIA_EXERCISES[\'Día A — Empuje\'][0].muscle)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--accent);background:var(--accent-bg);color:var(--accent-fg);font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">?</button>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Peso (kg)</label>
+                <input type="number" class="form-input" placeholder="85" value="85">
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Reps</label>
+                <input type="number" class="form-input" placeholder="8" value="8">
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm" style="flex:1;">+ Agregar serie</button>
+              <button class="btn btn-primary btn-sm" style="flex:1;">✓ Serie completa</button>
+            </div>
+            <!-- Series log -->
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
+              <div style="background:var(--green-bg);color:var(--green-fg);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;">85kg × 8 ✓</div>
+              <div style="background:var(--green-bg);color:var(--green-fg);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;">85kg × 7 ✓</div>
+              <div style="background:var(--bg3);color:var(--fg3);border-radius:8px;padding:5px 10px;font-size:12px;">— × —</div>
+              <div style="background:var(--bg3);color:var(--fg3);border-radius:8px;padding:5px 10px;font-size:12px;">— × —</div>
+            </div>
+          </div>
+          <!-- Timer entrenamiento (cuenta arriba) + Timer descanso (cuenta desde 0) -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <!-- Timer entrenamiento -->
+            <div class="card card-sm" style="text-align:center;background:linear-gradient(135deg,var(--accent-bg),var(--indigo-bg));border-color:var(--accent);">
+              <div style="font-size:10px;color:var(--accent-fg);font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;">⏱ Entrenamiento</div>
+              <div id="workout-display" style="font-family:var(--ff-head);font-size:30px;font-weight:800;color:var(--fg);">0:00</div>
+              <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+                <button class="btn btn-primary btn-sm" id="workout-btn" onclick="toggleWorkoutTimer()" style="flex:1;">▶ Iniciar</button>
+              </div>
+            </div>
+            <!-- Timer descanso (desde 0) -->
+            <div class="card card-sm" style="text-align:center;background:var(--bg2);border-style:dashed;">
+              <div style="font-size:10px;color:var(--fg3);font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;">⏸ Descanso</div>
+              <div id="rest-display" style="font-family:var(--ff-head);font-size:30px;font-weight:800;color:var(--accent);">0:00</div>
+              <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+                <button class="btn btn-secondary btn-sm" id="rest-btn" onclick="toggleRestTimer()" style="flex:1;">▶ Iniciar</button>
+                <button class="btn btn-secondary btn-sm" onclick="resetRestTimer()" style="padding:7px 10px;">↺</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-full" style="margin-top:4px;" onclick="switchRegTab('post')">Terminar ejercicios →</button>
+        </div>
+      </div>
+
+      <!-- Post-entreno -->
+      <div id="rpanel-post" style="display:none;">
+        <div class="card" style="margin-bottom:12px;">
+          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;margin-bottom:12px;">Vuelta a la calma</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:10px;">
+              <span style="font-size:18px;">🧘</span>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Estiramiento de pecho</div><div style="font-size:12px;color:var(--fg2);">30 seg por lado · En marco de puerta</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:10px;">
+              <span style="font-size:18px;">🌊</span>
+              <div style="flex:1;"><div style="font-size:14px;font-weight:600;">Foam roller espalda alta</div><div style="font-size:12px;color:var(--fg2);">2 minutos · Lento y controlado</div></div>
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:12px;">
+          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;margin-bottom:14px;">Sensaciones del entreno</div>
+          <div class="form-group">
+            <label class="form-label">Energía general</label>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm">😴 Baja</button>
+              <button class="btn btn-primary btn-sm">⚡ Normal</button>
+              <button class="btn btn-secondary btn-sm">🔥 Alta</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notas (opcional)</label>
+            <textarea class="form-input" rows="3" placeholder="¿Algo que destacar de la sesión?"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" style="font-size:15px;padding:14px;">✓ Guardar entrenamiento</button>
+      </div>
+        </div><!-- /reg-routine-panel -->
+      </div><!-- /reg-session -->
+    </div><!-- /registrar -->
+
+    <!-- ══ PROGRESO ══ -->
+    <div class="page" id="page-progreso">
+      <div class="page-header">
+        <div class="page-title">Progreso</div>
+        <div class="page-subtitle">Seguimiento de rendimiento y composición</div>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" id="ptab-rendimiento" onclick="switchProgTab('rendimiento')">Rendimiento</button>
+        <button class="tab-btn" id="ptab-cuerpo" onclick="switchProgTab('cuerpo')">Cuerpo</button>
+        <button class="tab-btn" id="ptab-historial" onclick="switchProgTab('historial')">Historial</button>
+      </div>
+
+      <!-- Rendimiento -->
+      <div id="ppanel-rendimiento">
+        <div class="grid-4" style="margin-bottom:24px;">
+          <div class="stat-tile">
+            <div class="stat-label">Volumen total</div>
+            <div class="stat-value">24.6<span>t</span></div>
+            <div class="stat-change up">↑ 18% este mes</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">1RM estimado</div>
+            <div class="stat-value">102<span>kg</span></div>
+            <div class="stat-change up">↑ Banca</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Sesiones</div>
+            <div class="stat-value">24<span>total</span></div>
+            <div class="stat-change up">↑ 12 este mes</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Adherencia</div>
+            <div class="stat-value">91<span>%</span></div>
+            <div class="stat-change up">↑ Excelente</div>
+          </div>
+        </div>
+
+        <div class="section-label">Volumen semanal por ejercicio</div>
+        <div class="card" style="margin-bottom:24px;">
+          <!-- Tabs semana -->
+          <div style="display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;">
+            <button class="btn btn-primary btn-sm" id="vol-week-current" onclick="switchVolWeek('current')" style="white-space:nowrap;">Semana actual</button>
+            <button class="btn btn-secondary btn-sm" id="vol-week-prev" onclick="switchVolWeek('prev')" style="white-space:nowrap;">Semana anterior</button>
+          </div>
+          <!-- Semana actual -->
+          <div id="vol-panel-current">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--accent-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Press banca plano</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día A · 4 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--accent);">2,720 kg</div>
+                  <div style="font-size:10px;color:var(--accent-fg);">85kg × 8 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--accent-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Press inclinado mancuernas</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día A · 3 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--accent);">864 kg</div>
+                  <div style="font-size:10px;color:var(--accent-fg);">24kg × 12 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--accent-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Press militar barra</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día A · 4 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--accent);">1,680 kg</div>
+                  <div style="font-size:10px;color:var(--accent-fg);">60kg × 7 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--indigo-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Remo barra</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día B · 4 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--indigo);">2,400 kg</div>
+                  <div style="font-size:10px;color:var(--indigo-fg);">75kg × 8 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--indigo-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Dominadas lastre</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día B · 3 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--indigo);">510 kg</div>
+                  <div style="font-size:10px;color:var(--indigo-fg);">17kg × 10 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--warm-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Sentadilla libre</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día C · 4 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--warm);">4,320 kg</div>
+                  <div style="font-size:10px;color:var(--warm-fg);">120kg × 9 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--warm-bg);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Peso muerto rumano</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día C · 4 series completadas</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--warm);">3,840 kg</div>
+                  <div style="font-size:10px;color:var(--warm-fg);">80kg × 12 avg</div>
+                </div>
+              </div>
+              <div style="margin-top:4px;padding:10px 12px;background:var(--bg2);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:12px;color:var(--fg2);font-weight:600;">Total semana</span>
+                <span style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--fg);">16,334 kg</span>
+              </div>
+            </div>
+          </div>
+          <!-- Semana anterior (oculto) -->
+          <div id="vol-panel-prev" style="display:none;">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Press banca plano</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día A · 4 series</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg2);">2,560 kg</div>
+                  <div style="font-size:10px;color:var(--fg3);">80kg × 8 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Remo barra</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día B · 4 series</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg2);">2,240 kg</div>
+                  <div style="font-size:10px;color:var(--fg3);">70kg × 8 avg</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:10px;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:700;color:var(--fg);">Sentadilla libre</div>
+                  <div style="font-size:11px;color:var(--fg2);">Día C · 4 series</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg2);">3,960 kg</div>
+                  <div style="font-size:10px;color:var(--fg3);">110kg × 9 avg</div>
+                </div>
+              </div>
+              <div style="margin-top:4px;padding:10px 12px;background:var(--bg2);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:12px;color:var(--fg2);font-weight:600;">Total semana ant.</span>
+                <span style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--fg2);">14,210 kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Récords personales</div>
+        <div class="card">
+          <div class="list-item">
+            <div class="list-item-icon" style="background:var(--accent-bg);font-size:18px;">🏆</div>
+            <div class="list-item-body"><div class="list-item-title">Press banca</div><div class="list-item-sub">Hace 5 días</div></div>
+            <div class="list-item-right"><span style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--accent);">95 kg</span><span class="badge badge-green">+5kg</span></div>
+          </div>
+          <div class="list-item">
+            <div class="list-item-icon" style="background:var(--indigo-bg);font-size:18px;">🏆</div>
+            <div class="list-item-body"><div class="list-item-title">Sentadilla</div><div class="list-item-sub">Hace 12 días</div></div>
+            <div class="list-item-right"><span style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--indigo);">120 kg</span><span class="badge badge-green">+10kg</span></div>
+          </div>
+          <div class="list-item">
+            <div class="list-item-icon" style="background:var(--warm-bg);font-size:18px;">🏆</div>
+            <div class="list-item-body"><div class="list-item-title">Peso muerto</div><div class="list-item-sub">Hace 18 días</div></div>
+            <div class="list-item-right"><span style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--warm);">140 kg</span><span class="badge badge-green">+10kg</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuerpo -->
+      <div id="ppanel-cuerpo" style="display:none;">
+        <div class="grid-2" style="margin-bottom:20px;">
+          <div class="stat-tile">
+            <div class="stat-label">Peso corporal</div>
+            <div class="stat-value">78.4<span>kg</span></div>
+            <div class="stat-change up">↑ +1.2kg este mes</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">% Grasa est.</div>
+            <div class="stat-value">14.2<span>%</span></div>
+            <div class="stat-change down">↓ -0.4% este mes</div>
+          </div>
+        </div>
+
+        <!-- Historial de medidas -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="section-label" style="margin:0;">Medidas antropométricas</div>
+          <button class="btn btn-primary btn-sm" onclick="toggleAddMedidas()">+ Agregar</button>
+        </div>
+        <!-- Formulario agregar medidas (oculto) -->
+        <div id="add-medidas-form" style="display:none;" class="card" style="margin-bottom:16px;">
+          <div style="font-family:var(--ff-head);font-size:14px;font-weight:800;margin-bottom:12px;color:var(--fg);">Nueva medición — llena lo que tengas</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Fecha</label>
+              <input type="date" class="form-input" id="med-fecha">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Peso (kg)</label>
+              <input type="number" class="form-input" id="med-peso" placeholder="78.5" step="0.1">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Pecho (cm)</label>
+              <input type="number" class="form-input" id="med-pecho" placeholder="102">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Brazo flex. (cm)</label>
+              <input type="number" class="form-input" id="med-brazo" placeholder="38">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Cintura (cm)</label>
+              <input type="number" class="form-input" id="med-cintura" placeholder="82">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Cadera (cm)</label>
+              <input type="number" class="form-input" id="med-cadera" placeholder="96">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Muslo (cm)</label>
+              <input type="number" class="form-input" id="med-muslo" placeholder="58">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Pantorrilla (cm)</label>
+              <input type="number" class="form-input" id="med-pantorrilla" placeholder="38">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">% Grasa (nutr.)</label>
+              <input type="number" class="form-input" id="med-grasa" placeholder="14.2" step="0.1">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Masa muscular (kg)</label>
+              <input type="number" class="form-input" id="med-musculo" placeholder="62.4" step="0.1">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notas del nutricionista</label>
+            <textarea class="form-input" rows="2" id="med-notas" placeholder="Observaciones o indicaciones especiales..."></textarea>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-secondary" style="flex:1;" onclick="toggleAddMedidas()">Cancelar</button>
+            <button class="btn btn-primary" style="flex:1;" onclick="saveMedidas()">Guardar</button>
+          </div>
+        </div>
+
+        <!-- Medidas guardadas (historial) -->
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-size:13px;font-weight:700;color:var(--fg2);text-transform:uppercase;letter-spacing:0.4px;">Ultima medicion · Nov 18</div>
+            <span class="badge badge-accent">Nutr. Camila</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Peso corporal</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">78.4 kg</div>
+            <span class="badge badge-green" style="margin-left:8px;">+1.2kg</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">% Grasa corporal</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">14.2 %</div>
+            <span class="badge badge-green" style="margin-left:8px;">-0.4%</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Masa muscular</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">62.4 kg</div>
+            <span class="badge badge-green" style="margin-left:8px;">+0.8kg</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Pecho</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">102 cm</div>
+            <span class="badge badge-green" style="margin-left:8px;">+2cm</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Brazo (flexionado)</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">38 cm</div>
+            <span class="badge badge-green" style="margin-left:8px;">+1cm</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Cintura</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">82 cm</div>
+            <span class="badge badge-accent" style="margin-left:8px;">=</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Cadera</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">96 cm</div>
+            <span class="badge badge-accent" style="margin-left:8px;">=</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;">
+            <div class="list-item-body"><div class="list-item-title">Muslo</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">58 cm</div>
+            <span class="badge badge-green" style="margin-left:8px;">+2cm</span>
+          </div>
+          <div class="list-item" style="padding:8px 0;border:none;">
+            <div class="list-item-body"><div class="list-item-title">Pantorrilla</div></div>
+            <div style="font-family:var(--ff-head);font-weight:700;color:var(--fg);">38 cm</div>
+            <span class="badge badge-green" style="margin-left:8px;">+1cm</span>
+          </div>
+        </div>
+
+        <!-- Medicion anterior resumida -->
+        <div class="card card-sm" style="margin-bottom:16px;opacity:0.7;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--fg);">Medicion anterior · Oct 20</div>
+              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">78.4kg · 14.6% grasa · Nutr. Camila</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="">Ver detalle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historial -->
+      <div id="ppanel-historial" style="display:none;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Sesion expandible A -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;" onclick="toggleHistorial('h1')">
+              <div style="width:40px;height:40px;border-radius:12px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏋️</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;">Día A — Empuje</div>
+                <div style="font-size:12px;color:var(--fg2);">Lunes 18 · 54 min · 7,840 kg total</div>
+              </div>
+              <span class="badge badge-green" style="flex-shrink:0;">Completado</span>
+              <svg id="h1-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--fg3);flex-shrink:0;transition:transform 0.2s;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div id="h1-detail" style="display:none;border-top:1px solid var(--border);padding:12px 16px 14px;">
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Press banca plano</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--accent);">85kg × 8, 85kg × 7, 85kg × 7, 82.5kg × 6</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Press inclinado mancuernas</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--accent);">24kg × 12, 24kg × 11, 22kg × 12</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Press militar barra</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--accent);">60kg × 8, 60kg × 7, 57.5kg × 7, 55kg × 8</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Aperturas mancuernas</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--accent);">14kg × 14, 14kg × 12, 12kg × 15</span>
+                </div>
+                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+                  <span style="font-size:12px;background:var(--green-bg);color:var(--green-fg);border-radius:6px;padding:3px 8px;font-weight:600;">Energia: Alta</span>
+                  <span style="font-size:12px;background:var(--accent-bg);color:var(--accent-fg);border-radius:6px;padding:3px 8px;font-weight:600;">Sem. 3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Sesion expandible B -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;" onclick="toggleHistorial('h2')">
+              <div style="width:40px;height:40px;border-radius:12px;background:var(--indigo-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">💪</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;">Día B — Jalar</div>
+                <div style="font-size:12px;color:var(--fg2);">Martes 19 · 61 min · 8,120 kg total</div>
+              </div>
+              <span class="badge badge-green" style="flex-shrink:0;">Completado</span>
+              <svg id="h2-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--fg3);flex-shrink:0;transition:transform 0.2s;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div id="h2-detail" style="display:none;border-top:1px solid var(--border);padding:12px 16px 14px;">
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Remo barra</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--indigo);">75kg × 8, 75kg × 7, 72.5kg × 8, 70kg × 9</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Dominadas lastre</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--indigo);">17kg × 10, 17kg × 9, 15kg × 11</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Curl barra</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--indigo);">40kg × 10, 40kg × 9, 37.5kg × 10</span>
+                </div>
+                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+                  <span style="font-size:12px;background:var(--green-bg);color:var(--green-fg);border-radius:6px;padding:3px 8px;font-weight:600;">Energia: Normal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Sesion expandible C -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;" onclick="toggleHistorial('h3')">
+              <div style="width:40px;height:40px;border-radius:12px;background:var(--warm-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🦵</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;">Día C — Pierna</div>
+                <div style="font-size:12px;color:var(--fg2);">Miércoles 20 · 68 min · 10,560 kg total</div>
+              </div>
+              <span class="badge badge-green" style="flex-shrink:0;">Completado</span>
+              <svg id="h3-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:var(--fg3);flex-shrink:0;transition:transform 0.2s;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div id="h3-detail" style="display:none;border-top:1px solid var(--border);padding:12px 16px 14px;">
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Sentadilla libre</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--warm);">120kg × 9, 120kg × 8, 115kg × 9, 110kg × 10</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Peso muerto rumano</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--warm);">80kg × 12, 80kg × 11, 77.5kg × 12, 75kg × 12</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg2);border-radius:8px;">
+                  <span style="font-size:13px;color:var(--fg);">Prensa de piernas</span>
+                  <span style="font-size:13px;font-weight:700;color:var(--warm);">150kg × 12, 150kg × 12, 140kg × 15</span>
+                </div>
+                <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+                  <span style="font-size:12px;background:var(--warm-bg);color:var(--warm-fg);border-radius:6px;padding:3px 8px;font-weight:600;">Energia: Alta</span>
+                  <span style="font-size:12px;background:var(--green-bg);color:var(--green-fg);border-radius:6px;padding:3px 8px;font-weight:600;">PR Sentadilla</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /progreso -->
+
+    <!-- ══ ASISTENTE IA ══ -->
+    <div class="page" id="page-asistente" style="padding:0;display:none;flex-direction:column;height:calc(100vh - var(--topbar-h));max-width:100%;">
+      <!-- Chat header -->
+      <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--indigo));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M12 2a10 10 0 110 20A10 10 0 0112 2z"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--fg);">Venthus IA</div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;">● Activo · Conoce tu plan</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--fg3);">Fase 1 · Sem 3/8</div>
+            <div style="font-size:11px;color:var(--fg3);">4 días/sem</div>
+          </div>
+        </div>
+        <!-- Sugerencias rápidas -->
+        <div style="display:flex;gap:6px;margin-top:12px;overflow-x:auto;padding-bottom:2px;" id="chat-suggestions">
+          <button onclick="sendSuggestion(this)" class="chat-sugg" style="white-space:nowrap;">Cambiar mi plan</button>
+          <button onclick="sendSuggestion(this)" class="chat-sugg" style="white-space:nowrap;">Mejorar mi técnica</button>
+          <button onclick="sendSuggestion(this)" class="chat-sugg" style="white-space:nowrap;">Estoy lesionado</button>
+          <button onclick="sendSuggestion(this)" class="chat-sugg" style="white-space:nowrap;">Subir de peso</button>
+          <button onclick="sendSuggestion(this)" class="chat-sugg" style="white-space:nowrap;">Poca energía</button>
+        </div>
+      </div>
+
+      <!-- Mensajes -->
+      <div id="chat-messages" style="flex:1;overflow-y:auto;padding:20px 20px 8px;display:flex;flex-direction:column;gap:14px;">
+        <!-- Mensaje inicial IA -->
+        <div class="chat-msg-ia">
+          <div class="chat-bubble-ia">
+            Hola! Soy tu asistente de entrenamiento. Conozco tu plan completo: estas en la <strong>Semana 3 de la Fase 1</strong>, entrenando 4 dias por semana con foco en fuerza e hipertrofia.<br><br>
+            Puedo ayudarte a modificar ejercicios, ajustar cargas, cambiar de plan, resolver dudas de tecnica o cualquier cosa relacionada con tu entrenamiento. ¿En que te ayudo?
+          </div>
+          <div class="chat-time" id="chat-init-time"></div>
+          <script>var _t=new Date();document.getElementById('chat-init-time').textContent='Hoy, '+_t.getHours()+':'+String(_t.getMinutes()).padStart(2,'0');</script>
+        </div>
+
+
+      </div>
+
+      <!-- Input -->
+      <div id="chat-input-bar" style="padding:12px 16px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0;padding-bottom:max(12px, env(safe-area-inset-bottom,0px));">
+        <div style="display:flex;align-items:flex-end;gap:10px;">
+          <textarea id="chat-input" rows="1" placeholder="Pregunta sobre tu entrenamiento..." style="flex:1;resize:none;border:1.5px solid var(--border);border-radius:14px;padding:11px 14px;font-family:var(--ff-body);font-size:14px;color:var(--fg);background:var(--bg2);outline:none;line-height:1.4;max-height:120px;overflow-y:auto;transition:border-color 0.15s;" oninput="autoResizeChat(this)" onkeydown="chatKeydown(event)"></textarea>
+          <button id="chat-send-btn" onclick="sendChatMessage()" style="width:42px;height:42px;border-radius:12px;border:none;background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div><!-- /asistente -->
+
+    <!-- ══ PERFIL ══ -->
+    <div class="page" id="page-perfil">
+      <div class="page-header">
+        <div class="page-title">Mi Perfil</div>
+      </div>
+
+      <!-- User card -->
+      <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,var(--accent-bg),var(--indigo-bg));">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--indigo));display:flex;align-items:center;justify-content:center;font-family:var(--ff-head);font-size:24px;font-weight:800;color:#fff;flex-shrink:0;">JD</div>
+          <div style="flex:1;">
+            <div id="perfil-name" style="font-family:var(--ff-head);font-size:20px;font-weight:800;color:var(--fg);">—</div>
+            <div id="perfil-email" style="font-size:13px;color:var(--fg2);margin-top:2px;">—</div>
+            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+              <span class="badge badge-accent">Plan Activo</span>
+              <span class="badge badge-indigo">Intermedio</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm">Editar</button>
+        </div>
+      </div>
+
+      <!-- Stats rápidos -->
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="stat-tile" style="text-align:center;">
+          <div class="stat-value" style="text-align:center;">24</div>
+          <div class="stat-label" style="text-align:center;">Sesiones</div>
+        </div>
+        <div class="stat-tile" style="text-align:center;">
+          <div class="stat-value" style="text-align:center;">8<span>sem</span></div>
+          <div class="stat-label" style="text-align:center;">En Venthus</div>
+        </div>
+        <div class="stat-tile" style="text-align:center;">
+          <div class="stat-value" style="text-align:center;">3</div>
+          <div class="stat-label" style="text-align:center;">Récords</div>
+        </div>
+      </div>
+
+      <!-- Configuración -->
+      <div class="section-label">Mi información</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="list-item">
+          <div class="list-item-icon" style="background:var(--bg2);font-size:18px;">🎯</div>
+          <div class="list-item-body"><div class="list-item-title">Objetivo</div><div class="list-item-sub">Hipertrofia muscular</div></div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="list-item">
+          <div class="list-item-icon" style="background:var(--bg2);font-size:18px;">📅</div>
+          <div class="list-item-body"><div class="list-item-title">Días disponibles</div><div class="list-item-sub">4 días por semana</div></div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="list-item">
+          <div class="list-item-icon" style="background:var(--bg2);font-size:18px;">⚡</div>
+          <div class="list-item-body"><div class="list-item-title">Nivel</div><div class="list-item-sub">Intermedio · 2+ años</div></div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+      </div>
+
+      <div class="section-label">Ajustes</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="list-item">
+          <div class="list-item-icon" style="background:var(--bg2);font-size:18px;">🔔</div>
+          <div class="list-item-body"><div class="list-item-title">Notificaciones</div><div class="list-item-sub">Recordatorios de entreno</div></div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="list-item">
+          <div class="list-item-icon" style="background:var(--bg2);font-size:18px;">🎨</div>
+          <div class="list-item-body"><div class="list-item-title">Tema</div><div class="list-item-sub">Sistema (claro / oscuro)</div></div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="btn btn-secondary btn-sm" onclick="setTheme('light')">☀️</button>
+            <button class="btn btn-secondary btn-sm" onclick="setTheme('auto')">Auto</button>
+            <button class="btn btn-secondary btn-sm" onclick="setTheme('dark')">🌙</button>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="list-item-icon" style="background:var(--bg2);font-size:18px;">📊</div>
+          <div class="list-item-body"><div class="list-item-title">Unidades de peso</div><div class="list-item-sub">Kilogramos (kg)</div></div>
+          <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary btn-full" style="color:var(--red);border-color:var(--red-bg);" onclick="doLogout()">Cerrar sesión</button>
+    </div><!-- /perfil -->
+
+  </main>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-item active" id="bnav-inicio" onclick="navTo('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      <span>Inicio</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-plan" onclick="navTo('plan')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Mi Plan</span>
+    </button>
+    <button class="bottom-nav-fab" onclick="navTo('registrar')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <button class="bottom-nav-item" id="bnav-progreso" onclick="navTo('progreso')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Progreso</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-asistente" onclick="navTo('asistente')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span>IA</span>
+    </button>
+    <button class="bottom-nav-item" id="bnav-perfil" onclick="navTo('perfil')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Perfil</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ══ MODAL EJERCICIO ══ -->
+<div class="modal-backdrop" id="modal-ex">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="modal-ex-title" class="modal-title"></div>
+    <div id="modal-ex-sets" class="modal-sub"></div>
+    <div style="background:var(--indigo-bg);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--indigo-fg);margin-bottom:2px;">Músculo principal</div>
+        <div id="modal-ex-muscle" style="font-size:13px;color:var(--fg);font-weight:600;"></div>
+      </div>
+    </div>
+    <div style="background:var(--warm-bg);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">⚙️</span>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--warm-fg);margin-bottom:2px;">Implemento necesario</div>
+        <div id="modal-ex-equip" style="font-size:13px;color:var(--fg);font-weight:500;"></div>
+      </div>
+    </div>
+    <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--fg3);margin-bottom:8px;">📋 Técnica y ejecución</div>
+      <div id="modal-ex-tip" style="font-size:14px;color:var(--fg);line-height:1.6;"></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="document.getElementById('modal-ex').classList.remove('open')">Entendido</button>
+  </div>
+</div>
+
+<!-- ══ MODAL CHECKIN ══ -->
+<div class="modal-backdrop" id="modal-checkin">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Check-in semanal</div>
+    <div class="modal-sub">Semana 3 · Registra tus métricas</div>
+    <div class="form-group">
+      <label class="form-label">Peso corporal (kg)</label>
+      <input type="number" class="form-input" placeholder="78.0">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Energía esta semana</label>
+      <select class="form-input">
+        <option>🔋 Alta — Me sentí con mucha energía</option>
+        <option selected>⚡ Normal — Bien en general</option>
+        <option>😴 Baja — Estuve cansado</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Calidad del sueño</label>
+      <select class="form-input">
+        <option>😴 Excelente</option>
+        <option selected>✅ Buena</option>
+        <option>😐 Regular</option>
+        <option>❌ Mala</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notas</label>
+      <textarea class="form-input" rows="3" placeholder="¿Algo que quieras recordar de esta semana?"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('modal-checkin').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="document.getElementById('modal-checkin').classList.remove('open')">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DÍA ══ -->
+<div class="modal-backdrop" id="modal-dia">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="modal-dia-title" class="modal-title"></div>
+    <div id="modal-dia-sub" class="modal-sub"></div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;" id="modal-dia-exercises"></div>
+    <button class="btn btn-primary btn-full" id="modal-dia-start-btn" onclick="startDiaFromModal()">
+      ▶ Iniciar este entrenamiento
+    </button>
+    <button class="btn btn-secondary btn-full" style="margin-top:8px;" onclick="document.getElementById('modal-dia').classList.remove('open')">Cerrar</button>
+  </div>
+</div>
+
+<script>
+// ══ SUPABASE REST CLIENT ══
+var SB_URL = 'https://fvvnsugcwvvnmvrusoqe.supabase.co';
+var SB_KEY = 'sb_publishable_eoqjtU-vBrQHywdsp3sZGA_Yqvmt56z';
+var currentUser = null;
+var currentProfile = null;
+var sbToken = null;
+
+function sbHeaders(withAuth) {
+  var h = { 'Content-Type': 'application/json', 'apikey': SB_KEY };
+  if (withAuth && sbToken) h['Authorization'] = 'Bearer ' + sbToken;
+  return h;
+}
+
+async function sbPost(path, body) {
+  var r = await fetch(SB_URL + path, { method:'POST', headers: sbHeaders(false), body: JSON.stringify(body) });
+  return r.json();
+}
+
+async function sbGet(path) {
+  var r = await fetch(SB_URL + path, { method:'GET', headers: sbHeaders(true) });
+  return r.json();
+}
+
+function saveSession(data) {
+  sbToken = data.access_token;
+  currentUser = data.user;
+  try { localStorage.setItem('venthus_session', JSON.stringify({ token: sbToken, user: currentUser })); } catch(e) {}
+}
+
+function clearSession() {
+  sbToken = null; currentUser = null; currentProfile = null;
+  try { localStorage.removeItem('venthus_session'); } catch(e) {}
+}
+
+// Inicializar auth
+async function initAuth() {
+  // Intentar restaurar sesión guardada
+  try {
+    var saved = localStorage.getItem('venthus_session');
+    if (saved) {
+      var s = JSON.parse(saved);
+      sbToken = s.token;
+      currentUser = s.user;
+      // Verificar que el token sigue válido
+      var profile = await sbGet('/rest/v1/profiles?id=eq.' + currentUser.id + '&select=*');
+      if (profile && !profile.message) {
+        currentProfile = profile[0] || null;
+        showApp();
+        return;
+      } else {
+        clearSession();
+      }
+    }
+  } catch(e) { clearSession(); }
+  showAuthScreen();
+}
+
+function showAuthScreen() {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app-shell').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-shell').style.display = 'flex';
+  updateProfileUI();
+}
+
+async function loadProfile() {
+  if (!currentUser) return;
+  var data = await sbGet('/rest/v1/profiles?id=eq.' + currentUser.id + '&select=*');
+  if (data && data[0]) currentProfile = data[0];
+}
+
+function updateProfileUI() {
+  if (!currentUser) return;
+  var name = (currentProfile && currentProfile.full_name) || currentUser.email.split('@')[0];
+  var email = currentUser.email;
+  var initials = name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+  var sn = document.getElementById('sidebar-user-name');
+  var se = document.getElementById('sidebar-user-email');
+  var sa = document.getElementById('sidebar-user-avatar');
+  if (sn) sn.textContent = name;
+  if (se) se.textContent = email;
+  if (sa) sa.textContent = initials;
+  var pn = document.getElementById('perfil-name');
+  var pe = document.getElementById('perfil-email');
+  if (pn) pn.textContent = name;
+  if (pe) pe.textContent = email;
+}
+
+function switchAuthTab(tab) {
+  var isLogin = tab === 'login';
+  document.getElementById('auth-form-login').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('auth-form-register').style.display = isLogin ? 'none' : 'block';
+  document.getElementById('auth-tab-login').style.background = isLogin ? 'var(--card)' : 'transparent';
+  document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--fg)' : 'var(--fg2)';
+  document.getElementById('auth-tab-login').style.boxShadow = isLogin ? '0 1px 3px var(--shadow)' : 'none';
+  document.getElementById('auth-tab-register').style.background = isLogin ? 'transparent' : 'var(--card)';
+  document.getElementById('auth-tab-register').style.color = isLogin ? 'var(--fg2)' : 'var(--fg)';
+  document.getElementById('auth-tab-register').style.boxShadow = isLogin ? 'none' : '0 1px 3px var(--shadow)';
+}
+
+async function doLogin() {
+  var email = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+  var errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  if (!email || !password) { errEl.textContent = 'Completa todos los campos.'; errEl.style.display = 'block'; return; }
+  try {
+    var data = await sbPost('/auth/v1/token?grant_type=password', { email: email, password: password });
+    if (data.error || data.error_description) {
+      errEl.textContent = 'Correo o contraseña incorrectos.';
+      errEl.style.display = 'block';
+    } else {
+      saveSession(data);
+      await loadProfile();
+      showApp();
+    }
+  } catch(e) {
+    errEl.textContent = 'Error de conexión. Intenta de nuevo.';
+    errEl.style.display = 'block';
+  }
+}
+
+async function doRegister() {
+  var name = document.getElementById('reg-name').value.trim();
+  var email = document.getElementById('reg-email').value.trim();
+  var password = document.getElementById('reg-password').value;
+  var errEl = document.getElementById('reg-error');
+  var okEl = document.getElementById('reg-success');
+  errEl.style.display = 'none'; okEl.style.display = 'none';
+  if (!name || !email || !password) { errEl.textContent = 'Completa todos los campos.'; errEl.style.display = 'block'; return; }
+  if (password.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.style.display = 'block'; return; }
+  try {
+    var data = await sbPost('/auth/v1/signup', { email: email, password: password, data: { full_name: name } });
+    if (data.error || data.error_description) {
+      errEl.textContent = data.error_description || data.error || 'Error al crear cuenta.';
+      errEl.style.display = 'block';
+    } else if (data.id) {
+      // Sin confirmación de email requerida → login directo
+      var login = await sbPost('/auth/v1/token?grant_type=password', { email: email, password: password });
+      if (login.access_token) {
+        saveSession(login);
+        await loadProfile();
+        showApp();
+      } else {
+        okEl.textContent = '¡Cuenta creada! Ahora inicia sesión.';
+        okEl.style.display = 'block';
+        switchAuthTab('login');
+      }
+    } else {
+      okEl.textContent = '¡Cuenta creada! Revisa tu correo para confirmar.';
+      okEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'Error de conexión. Intenta de nuevo.';
+    errEl.style.display = 'block';
+  }
+}
+
+async function doLogout() {
+  clearSession();
+  showAuthScreen();
+}
+
+// ══ NAVIGATION ══
+var PAGES = ['inicio','plan','registrar','progreso','perfil','asistente'];
+
+function navTo(page) {
+  PAGES.forEach(function(p) {
+    var el = document.getElementById('page-'+p);
+    if (el) el.classList.toggle('active', p === page);
+    // sidebar nav
+    var sn = document.getElementById('snav-'+p);
+    if (sn) sn.classList.toggle('active', p === page);
+    // bottom nav
+    var bn = document.getElementById('bnav-'+p);
+    if (bn) bn.classList.toggle('active', p === page);
+  });
+  window.scrollTo(0,0);
+}
+
+// ══ REGISTRAR SELECTOR ══
+function startRegSession(title, emoji, sub) {
+  document.getElementById('reg-selector').style.display = 'none';
+  document.getElementById('reg-session').style.display = '';
+  document.getElementById('reg-free-panel').style.display = 'none';
+  document.getElementById('reg-routine-panel').style.display = '';
+  document.getElementById('reg-session-title').textContent = title;
+  document.getElementById('reg-session-sub').textContent = sub;
+  switchRegTab('calent');
+}
+
+function startFreeSession(title, emoji, sub) {
+  document.getElementById('reg-selector').style.display = 'none';
+  document.getElementById('reg-session').style.display = '';
+  document.getElementById('reg-free-panel').style.display = '';
+  document.getElementById('reg-routine-panel').style.display = 'none';
+  document.getElementById('reg-session-title').textContent = title;
+  document.getElementById('reg-session-sub').textContent = sub;
+  document.getElementById('free-name').value = title !== 'Otra actividad' ? title : '';
+}
+
+function backToSelector() {
+  document.getElementById('reg-selector').style.display = '';
+  document.getElementById('reg-session').style.display = 'none';
+  workoutFreeRunning = false;
+  clearInterval(workoutFreeInterval);
+  workoutFreeSecs = 0;
+}
+
+function saveFreeSession() {
+  backToSelector();
+  workoutFreeSecs = 0;
+  document.getElementById('workout-display-free').textContent = '0:00';
+  document.getElementById('workout-btn-free').textContent = '▶ Iniciar';
+  workoutFreeRunning = false;
+}
+
+// ══ REGISTRAR TABS ══
+function switchRegTab(tab) {
+  ['calent','work','post'].forEach(function(t) {
+    document.getElementById('rtab-'+t).classList.toggle('active', t === tab);
+    document.getElementById('rpanel-'+t).style.display = t === tab ? '' : 'none';
+  });
+}
+
+// ══ PROGRESO TABS ══
+function switchProgTab(tab) {
+  ['rendimiento','cuerpo','historial'].forEach(function(t) {
+    document.getElementById('ptab-'+t).classList.toggle('active', t === tab);
+    document.getElementById('ppanel-'+t).style.display = t === tab ? '' : 'none';
+  });
+}
+
+// ══ VOLUMEN SEMANA ══
+function switchVolWeek(w) {
+  document.getElementById('vol-panel-current').style.display = w === 'current' ? '' : 'none';
+  document.getElementById('vol-panel-prev').style.display = w === 'prev' ? '' : 'none';
+  document.getElementById('vol-week-current').className = 'btn btn-sm ' + (w === 'current' ? 'btn-primary' : 'btn-secondary');
+  document.getElementById('vol-week-prev').className = 'btn btn-sm ' + (w === 'prev' ? 'btn-primary' : 'btn-secondary');
+}
+
+// ══ HISTORIAL EXPANDIBLE ══
+function toggleHistorial(id) {
+  var detail = document.getElementById(id+'-detail');
+  var chevron = document.getElementById(id+'-chevron');
+  var open = detail.style.display !== 'none';
+  detail.style.display = open ? 'none' : '';
+  chevron.style.transform = open ? '' : 'rotate(90deg)';
+}
+
+// ══ MEDIDAS NUTRI ══
+function toggleAddMedidas() {
+  var form = document.getElementById('add-medidas-form');
+  form.style.display = form.style.display === 'none' ? '' : 'none';
+  if (form.style.display !== 'none') {
+    var today = new Date().toISOString().split('T')[0];
+    var fechaInput = document.getElementById('med-fecha');
+    if (fechaInput) fechaInput.value = today;
+  }
+}
+function saveMedidas() {
+  toggleAddMedidas();
+  // En la version real esto guardaría en localStorage/backend
+}
+
+// ══ CHAT ASISTENTE ══
+var chatResponses = {
+  cambiar: [
+    "Entiendo que quieres cambiar tu plan aunque estés en la Fase 1 · Semana 3/8. Antes de hacerlo, te cuento los pasos:\n\n1️⃣ <strong>Evaluar el motivo</strong> — ¿Es por lesión, falta de progreso o preferencia?\n2️⃣ <strong>Terminar la semana actual</strong> — Recomendamos completar al menos esta semana para no perder adaptaciones.\n3️⃣ <strong>Elegir el nuevo plan</strong> — Puedo mostrarte opciones según tu objetivo.\n\n¿Cuál es el motivo principal del cambio?",
+    "¡Perfecto! Basándome en tu historial, tengo 3 opciones para ti:\n\n🔵 <strong>Fuerza Máxima 3D</strong> — 3 días/sem, cargas altas (3-5 reps)\n🟢 <strong>Hipertrofia Avanzada</strong> — 4 días/sem, volumen moderado\n🟡 <strong>PowerBuilding</strong> — Mix de fuerza + hipertrofia, 4 días/sem\n\n¿Quieres ver el detalle de alguno o activar uno directamente?"
+  ],
+  lesion: [
+    "Lo siento 😔 Una lesión es importante manejarlo bien. Dime:\n\n• ¿Qué zona está afectada?\n• ¿Es dolor agudo o molestia crónica?\n• ¿Tienes diagnóstico médico o es una estimación?\n\nCon eso puedo sugerirte modificaciones específicas o si necesitás hacer una pausa completa.",
+  ],
+  peso: [
+    "Para subir de peso muscular de manera efectiva, hay 3 pilares:\n\n🍽️ <strong>Superávit calórico</strong> — +200 a 300 kcal sobre tu mantenimiento\n💪 <strong>Sobrecarga progresiva</strong> — Aumentar peso o reps semana a semana\n😴 <strong>Descanso adecuado</strong> — 7-9 horas; ahí se produce el crecimiento\n\n¿Querés que revisemos tus cargas actuales para optimizar el progreso?",
+  ],
+  energia: [
+    "La falta de energía puede tener varias causas. Revisemos:\n\n⚡ <strong>Alimentación pre-entrenamiento</strong> — ¿Comés 1-2h antes?\n💧 <strong>Hidratación</strong> — ¿Tomás suficiente agua durante el día?\n😴 <strong>Sueño</strong> — ¿Cómo están tus horas de descanso?\n📅 <strong>Acumulación de fatiga</strong> — Llevas 3 semanas entrenando; puede ser normal\n\n¿Qué área creés que podría estar fallando?",
+  ],
+  tecnica: [
+    "Mejorar la técnica es lo más importante para progresar sin lesiones. ¿En qué ejercicio específico tenés dudas?\n\nPuedo darte:\n📹 Indicaciones paso a paso\n⚠️ Errores comunes a evitar\n🎯 Señales de que lo estás haciendo bien",
+  ],
+  default: [
+    "Entendido! Estoy analizando tu consulta sobre el plan Fase 1 · Sem 3/8...",
+    "Es una muy buena pregunta. Basándome en tu historial y el plan actual, te recomiendo enfocarte en la progresión gradual. ¿Querés que profundice en algún aspecto específico?",
+  ]
+};
+
+var chatTypingDelay = 1200;
+var chatLastKeyword = 'default';
+
+function sendSuggestion(btn) {
+  var text = btn.textContent.trim();
+  var lower = text.toLowerCase();
+  if (lower.includes('cambiar')) chatLastKeyword = 'cambiar';
+  else if (lower.includes('lesion') || lower.includes('lesionado')) chatLastKeyword = 'lesion';
+  else if (lower.includes('peso')) chatLastKeyword = 'peso';
+  else if (lower.includes('energía') || lower.includes('energia')) chatLastKeyword = 'energia';
+  else if (lower.includes('técnica') || lower.includes('tecnica')) chatLastKeyword = 'tecnica';
+  else chatLastKeyword = 'default';
+  appendUserMsg(text);
+  btn.disabled = true;
+  showTyping();
+  setTimeout(function() { appendIAMsg(chatResponses[chatLastKeyword][0]); }, chatTypingDelay);
+}
+
+function sendChatMessage() {
+  var ta = document.getElementById('chat-input');
+  var text = (ta.value || '').trim();
+  if (!text) return;
+  ta.value = '';
+  ta.style.height = '40px';
+  var lower = text.toLowerCase();
+  if (lower.includes('cambiar') || lower.includes('plan')) chatLastKeyword = 'cambiar';
+  else if (lower.includes('lesion')) chatLastKeyword = 'lesion';
+  else if (lower.includes('peso') || lower.includes('músculo') || lower.includes('musculo')) chatLastKeyword = 'peso';
+  else if (lower.includes('energía') || lower.includes('energia') || lower.includes('cansado')) chatLastKeyword = 'energia';
+  else if (lower.includes('técnica') || lower.includes('tecnica') || lower.includes('ejercicio')) chatLastKeyword = 'tecnica';
+  else chatLastKeyword = 'default';
+  appendUserMsg(text);
+  showTyping();
+  var responses = chatResponses[chatLastKeyword];
+  var resp = responses[Math.floor(Math.random() * responses.length)];
+  setTimeout(function() { appendIAMsg(resp); }, chatTypingDelay);
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+}
+
+function autoResizeChat(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+}
+
+function chatAction(action) {
+  if (action === 'activate') {
+    appendUserMsg('Sí, quiero activar el plan de Fuerza Máxima 3D');
+    showTyping();
+    setTimeout(function() {
+      appendIAMsg('✅ <strong>¡Plan activado!</strong> He configurado <em>Fuerza Máxima 3D</em> para comenzar desde la próxima semana.\n\n📋 <strong>Resumen del nuevo plan:</strong>\n• Lunes: Sentadilla + Peso muerto\n• Miércoles: Press banca + Remo\n• Viernes: Press militar + Jalón\n\nTu plan anterior quedó guardado en el historial. ¿Querés que te explique cómo funciona la progresión de este programa?');
+    }, chatTypingDelay);
+  } else if (action === 'preview') {
+    appendUserMsg('Quiero ver el preview primero');
+    showTyping();
+    setTimeout(function() {
+      appendIAMsg('Aquí el resumen del plan <strong>Fuerza Máxima 3D</strong>:\n\n<strong>Semana tipo:</strong>\n• Día 1 — Sentadilla 5×3, Peso muerto 4×3, Prensa 3×5\n• Día 2 — Press banca 5×3, Remo 4×5, Fondos 3×6\n• Día 3 — Press militar 5×3, Jalón 4×5, Curl 3×8\n\n📈 <strong>Progresión:</strong> +2.5kg por semana en los básicos\n⏱️ <strong>Duración:</strong> 8 semanas\n\n¿Lo activamos?');
+    }, chatTypingDelay);
+  }
+}
+
+function appendUserMsg(text) {
+  var msgs = document.getElementById('chat-messages');
+  var now = new Date();
+  var time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  var div = document.createElement('div');
+  div.style.cssText = 'display:flex;justify-content:flex-end;';
+  div.innerHTML = '<div class="chat-msg-user"><div class="chat-bubble-user">' + escapeHtml(text) + '</div><div class="chat-time" style="text-align:right;">' + time + '</div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function appendIAMsg(html) {
+  var msgs = document.getElementById('chat-messages');
+  var typing = document.getElementById('chat-typing-indicator');
+  if (typing) typing.remove();
+  var now = new Date();
+  var time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  var div = document.createElement('div');
+  div.innerHTML = '<div class="chat-msg-ia"><div class="chat-bubble-ia">' + html.replace(/\n/g,'<br>') + '</div><div class="chat-time">' + time + '</div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  var msgs = document.getElementById('chat-messages');
+  var old = document.getElementById('chat-typing-indicator');
+  if (old) old.remove();
+  var div = document.createElement('div');
+  div.id = 'chat-typing-indicator';
+  div.innerHTML = '<div class="chat-msg-ia"><div class="chat-typing"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ══ MODALS ══
+function openExModal(name, sets, tip, equip, muscle) {
+  document.getElementById('modal-ex-title').textContent = name;
+  document.getElementById('modal-ex-sets').textContent = sets;
+  document.getElementById('modal-ex-tip').textContent = tip || '';
+  document.getElementById('modal-ex-equip').textContent = equip || '';
+  document.getElementById('modal-ex-muscle').textContent = muscle || '';
+  document.getElementById('modal-ex').classList.add('open');
+}
+
+function openCheckin() {
+  document.getElementById('modal-checkin').classList.add('open');
+}
+
+var DIA_INFO = {
+  'Día A — Empuje': {
+    emoji: '💪', muscles: 'Pecho · Hombros · Tríceps',
+    calentamiento: [
+      {name:'5 min caminata o bicicleta estática', how:'Camina a paso ligero o pedalea suave. El objetivo es elevar la temperatura corporal y el ritmo cardíaco de forma progresiva, no cansarte. Intensidad: puedes hablar con facilidad.'},
+      {name:'2 × 15 rotaciones de hombro', how:'De pie, brazos estirados a los lados. Traza círculos grandes hacia adelante (15 veces) y luego hacia atrás (15 veces). Movimiento lento y controlado. Afloja la articulación del hombro antes de cargar peso.'},
+      {name:'2 × 10 push-ups lentos', how:'En el suelo, manos al ancho de hombros. Baja lentamente en 3 segundos, pausa abajo 1 segundo, sube. No importa la rapidez sino el control. Activa el pecho, hombros y tríceps con peso propio antes de usar barra.'},
+      {name:'2 × 12 elevaciones frontales ligeras', how:'Con mancuernas de 3-4 kg (o botellas de agua), eleva los brazos al frente hasta la altura del hombro. Baja lento. Activa el deltoides anterior para prepararlo para el press militar.'},
+      {name:'Movilidad de muñecas: 30 seg', how:'Extiende los brazos al frente. Traza círculos con las muñecas, 15 seg hacia un lado y 15 seg al otro. Las muñecas soportan carga en press: movilizarlas previene dolor e incomodidad.'},
+    ],
+    postEntreno: [
+      {name:'Estiramiento pecho en marco de puerta: 2 × 30 seg', how:'Apoya el antebrazo en el marco de una puerta, codo a 90°. Gira el cuerpo hacia el lado opuesto hasta sentir el estiramiento en el pecho. Mantén 30 seg cada lado. Deshace la tensión acumulada en el entrenamiento.'},
+      {name:'Estiramiento tríceps: 2 × 30 seg', how:'Lleva un brazo por encima de la cabeza doblando el codo, como si quisieras tocarte la espalda. Con la mano contraria empuja suavemente el codo hacia abajo. Mantén 30 seg cada lado.'},
+      {name:'Estiramiento deltoides: 2 × 30 seg', how:'Cruza un brazo estirado al frente del pecho. Con el otro brazo empuja el codo hacia el pecho. Mantén 30 seg cada lado. Alivia la tensión en el hombro después del trabajo de press.'},
+      {name:'Foam roller espalda torácica: 1-2 min', how:'Siéntate en el suelo, apoya el foam roller detrás de la espalda media. Deja caer el cuerpo sobre él rodando suavemente hacia arriba y abajo. Mejora la movilidad torácica y alivia tensión post-press.'},
+      {name:'Hidratación mínima 500 ml post-sesión', how:'Bebe al menos medio litro de agua en los 30 minutos después de terminar. Si sudaste mucho, considera agua con electrolitos. La rehidratación acelera la recuperación muscular.'},
+    ],
+  },
+  'Día B — Jalar': {
+    emoji: '🏋️', muscles: 'Espalda · Bíceps · Romboides',
+    calentamiento: [
+      {name:'5 min remo ligero o cuerda de saltar', how:'Usa la máquina de remo a resistencia muy baja, o salta la cuerda suave. El objetivo es activar la cadena posterior (espalda, glúteos, isquios) de forma global antes de jalar peso.'},
+      {name:'2 × 15 círculos de hombro hacia atrás', how:'De pie, brazos relajados a los lados. Traza círculos grandes hacia atrás. Este movimiento activa los músculos de la parte posterior del hombro y los romboides, clave en los ejercicios de jalar.'},
+      {name:'2 × 10 jalones con banda elástica', how:'Ancla una banda elástica arriba (o usa una puerta). Jala hacia abajo y hacia ti imitando el movimiento del jalón o dominada. Peso muy liviano, busca sentir el dorsal activarse antes de la máquina.'},
+      {name:'2 × 12 retracciones escapulares', how:'De pie o sentado. Lleva los hombros hacia atrás apretando los omóplatos como si quisieras que se toquen. Mantén 2 seg, suelta. Activa los romboides y mejora la postura escapular para los movimientos de remo.'},
+      {name:'Estiramiento cadena posterior: 30 seg', how:'De pie, dobla el torso hacia adelante con rodillas levemente flexionadas, dejando caer los brazos. Deja que la espalda y los isquios se estiren con el peso del cuerpo. Prepara la musculatura para los remos.'},
+    ],
+    postEntreno: [
+      {name:'Colgar de barra: 20-30 seg × 2', how:'Cuelga de una barra de dominadas con los brazos estirados, dejando que el peso del cuerpo estire el dorsal y la columna. Afloja la compresión que genera el trabajo de remo. Relajate y respira.'},
+      {name:'Estiramiento bíceps contra pared: 2 × 30 seg', how:'Apoya la palma abierta en la pared con el brazo estirado a la altura del hombro. Gira el cuerpo hacia el lado opuesto hasta sentir el estiramiento en el bíceps. Mantén 30 seg cada lado.'},
+      {name:'Foam roller zona dorsal: 1-2 min', how:'Igual que el día A pero enfocado en la zona dorsal. Rueda lento sobre la musculatura paravertebral, evitando la columna directa. Alivia la tensión post-remo y jalón.'},
+      {name:'Estiramiento cuello lateral: 2 × 20 seg', how:'Inclina la cabeza hacia un hombro, llevando la oreja hacia él. Con la mano del mismo lado puedes añadir una leve presión. Mantén 20 seg cada lado. El trabajo de jalón genera tensión en el trapecio superior.'},
+      {name:'Hidratación mínima 500 ml post-sesión', how:'Bebe al menos medio litro de agua en los 30 minutos después de terminar. Si sudaste mucho, considera agua con electrolitos o una fruta. La rehidratación acelera la recuperación muscular.'},
+    ],
+  },
+  'Día C — Pierna': {
+    emoji: '🦵', muscles: 'Cuádriceps · Isquios · Glúteos · Gemelos',
+    calentamiento: [
+      {name:'5 min bicicleta estática o caminata inclinada', how:'Pedalea a ritmo suave o camina en cinta con 5-8% de inclinación. Activa de forma global toda la musculatura de las piernas y caderas antes de agregar carga. Intensidad conversacional.'},
+      {name:'2 × 10 sentadillas a peso corporal', how:'Pies al ancho de hombros o algo más. Desciende lento como si fueras a sentarte, muslos paralelos al suelo. Sube empujando el suelo. Busca sentir los cuádriceps y glúteos activarse antes de poner barra.'},
+      {name:'2 × 12 hip hinge con palo o barra vacía', how:'De pie con un palo en la espalda (en contacto con cabeza, zona dorsal y glúteos). Flexiona el torso hacia adelante doblando solo las caderas, sin redondear la espalda. Siente el estiramiento en los isquios. Enseña el patrón correcto.'},
+      {name:'2 × 15 lateral band walks', how:'Coloca una banda elástica en las rodillas o tobillos. Pies al ancho de hombros, leve flexión de rodillas. Da pasos laterales manteniendo la tensión en la banda, 15 pasos a cada lado. Activa los glúteos medios para estabilizar.'},
+      {name:'Movilidad cadera: 30 seg cada lado', how:'De pie, apoya una mano en la pared. Traza círculos grandes con la cadera, 15 seg hacia un lado y 15 seg al otro. Suelta la articulación de la cadera antes de sentadillas pesadas para moverse mejor y reducir riesgo.'},
+    ],
+    postEntreno: [
+      {name:'Estiramiento cuádriceps: 2 × 30 seg cada pierna', how:'De pie apoyado en la pared. Dobla una rodilla llevando el talón al glúteo. Agarra el tobillo con la mano del mismo lado. Mantén el cuerpo erguido 30 seg. Alivia la tensión post-sentadilla y prensa.'},
+      {name:'Estiramiento isquiotibiales sentado: 2 × 30 seg', how:'Siéntate en el suelo con las piernas extendidas. Inclina el torso hacia adelante con la espalda recta tratando de llegar a los pies. Mantén 30 seg. No rebotes. Deshace la tensión de los trabajos de isquios.'},
+      {name:'Estiramiento piriforme (paloma): 2 × 30 seg', how:'En el suelo, cruza una pierna doblada frente a ti y extiende la otra hacia atrás (postura de paloma de yoga). Inclina el torso hacia adelante. Mantén 30 seg cada lado. Alivia la zona glútea profunda muy trabajada en el hip thrust.'},
+      {name:'Foam roller cuádriceps e isquios: 1-2 min', how:'Acostado boca abajo, apoya el foam roller en la parte anterior del muslo. Rueda desde la cadera hasta la rodilla lentamente. Luego boca arriba para los isquios. Ayuda a drenar la acumulación de tensión muscular post-entrenamiento de pierna.'},
+      {name:'Hidratación mínima 600 ml post-sesión', how:'El día de piernas es el más exigente; aumenta la hidratación. Bebe 600 ml en los 30 min post-sesión. Considera añadir electrolitos si fue una sesión muy intensa. La pierna es el grupo muscular más grande: necesita más recursos para recuperar.'},
+    ],
+  },
+};
+
+var DIA_EXERCISES = {
+  'Día A — Empuje': [
+    {name:'Press banca plano', detail:'4 × 6-8 · 85kg', muscle:'Pecho — porción media', equip:'🏋️ Gym · Barra olímpica + banco plano + rack', tip:'Acuesta en el banco, pies planos en el suelo. Agarra la barra un poco más ancho que el hombro. Baja controlado tocando el pecho, mantén codos a 45°. Empuja explosivo sin rebotar. Escápulas retraídas todo el movimiento.'},
+    {name:'Press inclinado mancuernas', detail:'3 × 10-12 · 24kg', muscle:'Pecho — porción superior', equip:'🏋️ Gym · Mancuernas + banco inclinado', tip:'Banco a 30-45°. Mancuernas alineadas con el pecho, codos a 45°. Sube girando levemente las muñecas hacia adentro al tope. Baja lento (3 seg) para maximizar el estiramiento. Mantén la espalda apoyada todo el tiempo.'},
+    {name:'Press militar barra', detail:'4 × 6-8 · 60kg', muscle:'Deltoides — porción anterior y media', equip:'🏋️ Gym · Barra + rack o Smith Machine', tip:'De pie o sentado con la espalda recta. Barra a la altura de los hombros, agarre algo más ancho. Empuja directo hacia arriba sin arquear la espalda. Baja hasta que codos queden a 90°. Core siempre activado.'},
+    {name:'Elevaciones laterales', detail:'4 × 12-15 · 12kg', muscle:'Deltoides — porción media', equip:'🏋️ Gym o 🏠 Casa · Mancuernas (o botellas de agua llenas)', tip:'Mancuernas a los lados, ligera flexión en codo. Eleva hasta que los brazos queden paralelos al suelo, no más alto. Inclínate levemente hacia adelante. Baja lento (2-3 seg). No uses impulso: si balanceas, baja el peso.'},
+    {name:'Fondos en paralelas', detail:'3 × 8-10 · Peso corporal', muscle:'Pecho inferior · Tríceps · Deltoides anterior', equip:'🏋️ Gym · Barras paralelas  |  🏠 Casa · Dos sillas sólidas o mesas iguales', tip:'Agarra las paralelas con brazos extendidos. Inclínate levemente hacia adelante para enfatizar el pecho. Baja hasta que los codos alcancen los 90°. Empuja hasta extender sin trabar las articulaciones. Ritmo controlado.'},
+    {name:'Extensión triceps cuerda', detail:'3 × 12-15 · 25kg', muscle:'Tríceps — cabeza lateral y larga', equip:'🏋️ Gym · Polea alta + cuerda', tip:'Polea alta, agarra la cuerda con ambas manos. Codos fijos a los lados del torso, no se mueven. Empuja la cuerda hacia abajo separando las puntas al final. Regresa lento sintiendo el estiramiento. No inclines el torso hacia adelante.'},
+  ],
+  'Día B — Jalar': [
+    {name:'Dominadas lastradas', detail:'4 × 6-8 · +10kg', muscle:'Dorsal ancho · Bíceps · Romboides', equip:'🏋️ Gym · Barra de dominadas + cinturón lastrado  |  🏠 Casa · Barra de puerta (sin lastre)', tip:'Cuelga con agarre prono, manos a ancho de hombros o algo más. Activa escápulas bajándolas antes de jalar. Lleva el pecho a la barra doblando los codos. Baja completamente estirando el dorsal. No balancees el cuerpo.'},
+    {name:'Remo barra', detail:'4 × 8-10 · 80kg', muscle:'Dorsal · Romboides · Trapecios medios · Bíceps', equip:'🏋️ Gym · Barra olímpica + discos', tip:'Flexiona el torso a 45° con rodillas semiflexionadas. Barra colgando. Jala hacia el ombligo apretando los omóplatos al llegar. Codos cerca del cuerpo. Baja controlado. Espalda neutral (ni arqueada ni redondeada).'},
+    {name:'Jalón al pecho agarre abierto', detail:'3 × 10-12 · 70kg', muscle:'Dorsal ancho · Redondo mayor · Bíceps', equip:'🏋️ Gym · Polea alta con barra larga', tip:'Agarre prono, más ancho que el hombro. Jala la barra hasta la altura de la clavícula, codos apuntando abajo. Inclínate levemente al final (10°). Regresa lento extendiendo por completo los brazos. Siente el estiramiento del dorsal.'},
+    {name:'Remo mancuerna unilateral', detail:'3 × 10-12 · 32kg', muscle:'Dorsal · Romboides · Trapecio · Bíceps', equip:'🏋️ Gym · Mancuerna + banco  |  🏠 Casa · Mancuerna + superficie sólida', tip:'Rodilla y mano del mismo lado apoyadas en el banco. Espalda paralela al suelo. Jala la mancuerna hacia la cadera, codo pegado al cuerpo. Rota levemente el torso al subir. Baja hasta extender completamente el brazo.'},
+    {name:'Curl barra Z', detail:'3 × 10-12 · 40kg', muscle:'Bíceps braquial · Braquial · Braquiorradial', equip:'🏋️ Gym · Barra Z (EZ Bar) + discos', tip:'De pie, agarre supino en barra Z a ancho de hombros. Codos fijos a los lados, no se alejan del cuerpo. Curla la barra hasta el hombro apretando el bíceps. Baja lento resistiendo la gravedad (2-3 seg). No balancees la cadera.'},
+    {name:'Curl martillo mancuernas', detail:'3 × 12-15 · 20kg', muscle:'Bíceps · Braquial · Braquiorradial (antebrazo)', equip:'🏋️ Gym o 🏠 Casa · Mancuernas', tip:'De pie, agarre neutro (pulgar arriba). Curla alternando brazos o simultáneo. Muñeca neutral todo el tiempo. Lleva la mancuerna al hombro apretando el bíceps. Baja controlado. No gires la muñeca al subir.'},
+  ],
+  'Día C — Pierna': [
+    {name:'Sentadilla barra', detail:'4 × 6-8 · 100kg', muscle:'Cuádriceps · Glúteos · Isquiotibiales · Core', equip:'🏋️ Gym · Barra olímpica + rack + discos', tip:'Barra sobre los trapecios (high bar) o deltoides posteriores (low bar). Pies al ancho de hombros o algo más. Desciende manteniendo el torso lo más vertical posible. Rodillas siguen la dirección de los pies. Profundidad mínima: muslos paralelos. Empuja el suelo al subir.'},
+    {name:'Prensa 45°', detail:'4 × 10-12 · 160kg', muscle:'Cuádriceps · Glúteos · Isquiotibiales', equip:'🏋️ Gym · Máquina de prensa 45°', tip:'Pies al ancho de hombros en la plataforma, zona media-alta. Desciende lento hasta que rodillas lleguen a 90°. No dejes que las rodillas se cierren. Empuja sin extender completamente (deja un ligero doblez). Espalda baja pegada al respaldo todo el tiempo.'},
+    {name:'Extensión cuádriceps', detail:'3 × 12-15 · 60kg', muscle:'Cuádriceps — aislamiento', equip:'🏋️ Gym · Máquina de extensión de pierna', tip:'Siéntate con la espalda pegada al respaldo. Coloca el rodillo justo encima del tobillo. Extiende completamente apretando el cuádriceps al tope. Baja lento (3 seg) sin soltar el peso. No uses impulso. Pausa 1 seg arriba.'},
+    {name:'Curl femoral tumbado', detail:'3 × 12-15 · 50kg', muscle:'Isquiotibiales — aislamiento', equip:'🏋️ Gym · Máquina de curl femoral tumbado', tip:'Tumbado boca abajo, rodillo justo encima del talón. Curla las piernas hacia los glúteos apretando los isquios. No despegues las caderas. Baja controlado (3 seg). Pausa 1 seg al llegar arriba.'},
+    {name:'Hip thrust', detail:'4 × 10-12 · 90kg', muscle:'Glúteos — máximo · Isquiotibiales', equip:'🏋️ Gym · Barra + discos + banco + almohadilla  |  🏠 Casa · Peso corporal apoyado en sofá', tip:'Espalda apoyada en el banco a la altura de las escápulas. Barra en la cadera (usa almohadilla). Pies planos, rodillas a 90° arriba. Empuja la cadera hacia el techo apretando los glúteos. Pausa 1-2 seg arriba. Baja controlado.'},
+    {name:'Pantorrillas de pie', detail:'4 × 15-20 · 80kg', muscle:'Gastrocnemio · Sóleo', equip:'🏋️ Gym · Máquina de pantorrillas o Smith Machine  |  🏠 Casa · Escalón o step + peso corporal', tip:'De pie en el borde de un step o escalón, talones colgando. Sube en puntillas lo más alto posible. Pausa 1 seg arriba. Baja hasta el máximo estiramiento. Ritmo lento (2-1-3). Haz las repeticiones de forma completa, no a medias.'},
+    {name:'Plancha abdominal', detail:'3 × 45 seg', muscle:'Core — transverso · Oblicuos · Recto abdominal', equip:'🏠 Casa o 🏋️ Gym · Solo necesitas el suelo (tapete opcional)', tip:'Apoya antebrazos y puntillas. Cuerpo en línea recta de cabeza a talones. Activa el core como si fuera a darte un golpe. No eleves la cadera ni la dejes caer. Respira normal. Mira el suelo, cuello neutral. Si fallas la forma, termina la serie.'},
+  ],
+};
+
+var currentDiaTitle = '';
+var currentDiaSub = '';
+
+function startDiaFromModal() {
+  document.getElementById('modal-dia').classList.remove('open');
+  navTo('registrar');
+  var info = DIA_INFO[currentDiaTitle] || {};
+  startRegSession(currentDiaTitle, info.emoji || '💪', info.muscles || currentDiaSub);
+}
+
+function openDiaModal(title, sub) {
+  currentDiaTitle = title;
+  currentDiaSub = sub;
+  document.getElementById('modal-dia-title').textContent = title;
+  document.getElementById('modal-dia-sub').textContent = sub;
+  var container = document.getElementById('modal-dia-exercises');
+  container.innerHTML = '';
+  var info = DIA_INFO[title] || {};
+  var exercises = DIA_EXERCISES[title] || [];
+
+  // — Calentamiento —
+  if (info.calentamiento && info.calentamiento.length) {
+    var warmSection = document.createElement('div');
+    warmSection.style.cssText = 'background:var(--warm-bg);border-radius:12px;padding:14px;margin-bottom:4px;';
+    warmSection.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--warm-fg);margin-bottom:8px;">🔥 Calentamiento</div>';
+    var ul = document.createElement('ul');
+    ul.style.cssText = 'padding-left:18px;display:flex;flex-direction:column;gap:4px;';
+    info.calentamiento.forEach(function(item) {
+      var li = document.createElement('li');
+      li.style.cssText = 'list-style:none;padding:0;';
+      var nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-size:13px;color:var(--fg);line-height:1.5;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;';
+      nameEl.innerHTML = '<span style="flex:1;">'+(typeof item==='object'?item.name:item)+'</span>';
+      if (typeof item==='object' && item.how) {
+        var arrow = document.createElement('span');
+        arrow.textContent = '+';
+        arrow.style.cssText = 'width:18px;height:18px;border-radius:50%;background:var(--warm-fg);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.2s;';
+        nameEl.appendChild(arrow);
+        var howEl = document.createElement('div');
+        howEl.style.cssText = 'display:none;font-size:12px;color:var(--fg2);line-height:1.6;padding:6px 10px;background:rgba(0,0,0,0.04);border-radius:8px;margin-top:4px;';
+        howEl.textContent = item.how;
+        nameEl.onclick = function() {
+          var open = howEl.style.display !== 'none';
+          howEl.style.display = open ? 'none' : 'block';
+          arrow.textContent = open ? '+' : '−';
+          arrow.style.transform = open ? '' : 'rotate(0deg)';
+        };
+        li.appendChild(nameEl);
+        li.appendChild(howEl);
+      } else {
+        li.appendChild(nameEl);
+      }
+      ul.appendChild(li);
+    });
+    warmSection.appendChild(ul);
+    container.appendChild(warmSection);
+  }
+
+  // — Desarrollo —
+  var devLabel = document.createElement('div');
+  devLabel.style.cssText = 'font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent-fg);margin:12px 0 6px;';
+  devLabel.textContent = '💪 Desarrollo — Ejercicios';
+  container.appendChild(devLabel);
+
+  exercises.forEach(function(ex, i) {
+    var div = document.createElement('div');
+    div.className = 'exercise-card';
+    div.style.marginBottom = '0';
+    var tipBtn = '<button onclick="openExModal(\''+ex.name.replace(/'/g,"\\'")+'_MODAL\')" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--accent);background:var(--accent-bg);color:var(--accent-fg);font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1;">?</button>';
+    div.innerHTML = '<div class="exercise-num">'+(i+1)+'</div>'
+      +'<div class="exercise-info"><div class="exercise-name">'+ex.name+'</div>'
+      +'<div class="exercise-detail">'+ex.detail+'</div></div>'
+      +tipBtn;
+    // Fix onclick with proper data
+    div.querySelector('button').onclick = (function(e) {
+      return function() { openExModal(e.name, e.detail, e.tip, e.equip, e.muscle); };
+    })(ex);
+    container.appendChild(div);
+  });
+
+  // — Post-entreno —
+  if (info.postEntreno && info.postEntreno.length) {
+    var postSection = document.createElement('div');
+    postSection.style.cssText = 'background:var(--green-bg);border-radius:12px;padding:14px;margin-top:12px;';
+    postSection.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--green-fg);margin-bottom:8px;">✅ Post-entreno</div>';
+    var ulPost = document.createElement('ul');
+    ulPost.style.cssText = 'padding-left:18px;display:flex;flex-direction:column;gap:4px;';
+    info.postEntreno.forEach(function(item) {
+      var li = document.createElement('li');
+      li.style.cssText = 'list-style:none;padding:0;';
+      var nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-size:13px;color:var(--fg);line-height:1.5;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;';
+      nameEl.innerHTML = '<span style="flex:1;">'+(typeof item==='object'?item.name:item)+'</span>';
+      if (typeof item==='object' && item.how) {
+        var arrow2 = document.createElement('span');
+        arrow2.textContent = '+';
+        arrow2.style.cssText = 'width:18px;height:18px;border-radius:50%;background:var(--green-fg);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
+        nameEl.appendChild(arrow2);
+        var howEl2 = document.createElement('div');
+        howEl2.style.cssText = 'display:none;font-size:12px;color:var(--fg2);line-height:1.6;padding:6px 10px;background:rgba(0,0,0,0.04);border-radius:8px;margin-top:4px;';
+        howEl2.textContent = item.how;
+        nameEl.onclick = function() {
+          var open2 = howEl2.style.display !== 'none';
+          howEl2.style.display = open2 ? 'none' : 'block';
+          arrow2.textContent = open2 ? '+' : '−';
+        };
+        li.appendChild(nameEl);
+        li.appendChild(howEl2);
+      } else {
+        li.appendChild(nameEl);
+      }
+      ulPost.appendChild(li);
+    });
+    postSection.appendChild(ulPost);
+    container.appendChild(postSection);
+  }
+
+  document.getElementById('modal-dia').classList.add('open');
+}
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-backdrop').forEach(function(m) {
+  m.addEventListener('click', function(e) {
+    if (e.target === m) m.classList.remove('open');
+  });
+});
+
+// ══ TIMERS ══
+
+// Timer actividad libre
+var workoutFreeInterval = null;
+var workoutFreeSecs = 0;
+var workoutFreeRunning = false;
+
+function toggleWorkoutTimerFree() {
+  if (workoutFreeRunning) {
+    clearInterval(workoutFreeInterval);
+    workoutFreeRunning = false;
+    document.getElementById('workout-btn-free').textContent = '▶ Continuar';
+    document.getElementById('workout-btn-free').className = 'btn btn-secondary btn-sm';
+  } else {
+    workoutFreeRunning = true;
+    document.getElementById('workout-btn-free').textContent = '⏸ Pausar';
+    document.getElementById('workout-btn-free').className = 'btn btn-primary btn-sm';
+    workoutFreeInterval = setInterval(function() {
+      workoutFreeSecs++;
+      var m = Math.floor(workoutFreeSecs / 60);
+      var s = workoutFreeSecs % 60;
+      document.getElementById('workout-display-free').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+  }
+}
+
+// Timer entrenamiento (cuenta hacia arriba, solo pausar)
+var workoutInterval = null;
+var workoutSecs = 0;
+var workoutRunning = false;
+
+function toggleWorkoutTimer() {
+  if (workoutRunning) {
+    clearInterval(workoutInterval);
+    workoutRunning = false;
+    document.getElementById('workout-btn').textContent = '▶ Continuar';
+    document.getElementById('workout-btn').className = 'btn btn-secondary btn-sm';
+  } else {
+    workoutRunning = true;
+    document.getElementById('workout-btn').textContent = '⏸ Pausar';
+    document.getElementById('workout-btn').className = 'btn btn-primary btn-sm';
+    workoutInterval = setInterval(function() {
+      workoutSecs++;
+      var m = Math.floor(workoutSecs / 60);
+      var s = workoutSecs % 60;
+      document.getElementById('workout-display').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+  }
+}
+
+// Timer descanso (desde 0, pausar y reiniciar)
+var restInterval = null;
+var restSecs = 0;
+var restRunning = false;
+
+function toggleRestTimer() {
+  if (restRunning) {
+    clearInterval(restInterval);
+    restRunning = false;
+    document.getElementById('rest-btn').textContent = '▶ Continuar';
+  } else {
+    restRunning = true;
+    document.getElementById('rest-btn').textContent = '⏸ Pausar';
+    restInterval = setInterval(function() {
+      restSecs++;
+      var m = Math.floor(restSecs / 60);
+      var s = restSecs % 60;
+      var display = document.getElementById('rest-display');
+      display.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+      // Cambiar color al llegar a 2 y 3 minutos
+      display.style.color = restSecs >= 180 ? 'var(--red)' : restSecs >= 120 ? 'var(--warm)' : 'var(--accent)';
+    }, 1000);
+  }
+}
+
+function resetRestTimer() {
+  clearInterval(restInterval);
+  restRunning = false;
+  restSecs = 0;
+  document.getElementById('rest-display').textContent = '0:00';
+  document.getElementById('rest-display').style.color = 'var(--accent)';
+  document.getElementById('rest-btn').textContent = '▶ Iniciar';
+}
+
+// ══ THEME ══
+function setTheme(mode) {
+  if (mode === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  else if (mode === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+  try { localStorage.setItem('venthus_theme', mode); } catch(e) {}
+}
+
+// Restore theme
+try {
+  var t = localStorage.getItem('venthus_theme');
+  if (t) setTheme(t);
+} catch(e) {}
+
+// Iniciar auth
+initAuth();
+</script>
