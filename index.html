@@ -700,7 +700,444 @@ select.form-input { cursor: pointer; }
 .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
 .empty-state-title { font-family: var(--ff-head); font-size: 16px; font-weight: 700; color: var(--fg2); margin-bottom: 6px; }
 .empty-state-text { font-size: 13px; line-height: 1.6; }
+
+/* ══ ONBOARDING ══ */
+#onboarding-screen {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.ob-container {
+  width: 100%;
+  max-width: 480px;
+}
+.ob-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+.ob-progress-step {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.ob-progress-step.done { background: var(--accent); }
+.ob-progress-step.active { background: var(--accent2); }
+.ob-step { display: none; }
+.ob-step.active { display: block; }
+.ob-emoji { font-size: 40px; margin-bottom: 12px; }
+.ob-title {
+  font-family: var(--ff-head);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--fg);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.ob-sub {
+  font-size: 14px;
+  color: var(--fg2);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.ob-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.ob-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  width: 100%;
+}
+.ob-option:hover { border-color: var(--accent2); }
+.ob-option.selected { border-color: var(--accent); background: var(--accent-bg); }
+.ob-option-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.ob-option-body {}
+.ob-option-label { font-family: var(--ff-head); font-size: 15px; font-weight: 700; color: var(--fg); }
+.ob-option-desc { font-size: 12px; color: var(--fg2); margin-top: 2px; line-height: 1.4; }
+.ob-option.selected .ob-option-label { color: var(--accent-fg); }
+.ob-custom-box {
+  margin-top: 10px;
+  padding: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+}
+.ob-custom-box textarea {
+  width: 100%;
+  min-height: 80px;
+  border: none;
+  background: transparent;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  color: var(--fg);
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+}
+.ob-custom-box textarea::placeholder { color: var(--fg3); }
+.ob-days-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.ob-day-btn {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  font-family: var(--ff-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--fg2);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.ob-day-btn span { font-size: 10px; font-weight: 500; color: var(--fg3); }
+.ob-day-btn:hover { border-color: var(--accent2); }
+.ob-day-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); }
+.ob-day-btn.selected span { color: var(--accent-fg); opacity: 0.7; }
+.ob-time-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.ob-time-btn {
+  padding: 14px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.ob-time-btn:hover { border-color: var(--accent2); }
+.ob-time-btn.selected { border-color: var(--accent); background: var(--accent-bg); }
+.ob-time-min { font-family: var(--ff-head); font-size: 22px; font-weight: 800; color: var(--fg); }
+.ob-time-label { font-size: 11px; color: var(--fg2); margin-top: 2px; }
+.ob-time-btn.selected .ob-time-min { color: var(--accent-fg); }
+.ob-nav { display: flex; gap: 10px; }
+.ob-btn-back {
+  padding: 14px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--ff-head);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fg2);
+  cursor: pointer;
+}
+.ob-btn-next {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  font-family: var(--ff-head);
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.ob-btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+.ob-generating {
+  text-align: center;
+  padding: 40px 20px;
+}
+.ob-gen-spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.ob-gen-title { font-family: var(--ff-head); font-size: 20px; font-weight: 800; color: var(--fg); margin-bottom: 8px; }
+.ob-gen-sub { font-size: 14px; color: var(--fg2); line-height: 1.6; }
 </style>
+
+<!-- ══ ONBOARDING SCREEN ══ -->
+<div id="onboarding-screen" style="display:none; min-height:100vh; background:var(--bg); align-items:center; justify-content:center; padding:24px;">
+  <div class="ob-container">
+    <!-- Progress bar -->
+    <div class="ob-progress">
+      <div class="ob-progress-step active" id="ob-prog-1"></div>
+      <div class="ob-progress-step" id="ob-prog-2"></div>
+      <div class="ob-progress-step" id="ob-prog-3"></div>
+      <div class="ob-progress-step" id="ob-prog-4"></div>
+      <div class="ob-progress-step" id="ob-prog-5"></div>
+      <div class="ob-progress-step" id="ob-prog-6"></div>
+    </div>
+
+    <!-- PASO 1: Datos personales -->
+    <div class="ob-step active" id="ob-step-1">
+      <div class="ob-emoji">👤</div>
+      <div class="ob-title">Cuéntanos sobre ti</div>
+      <div class="ob-sub">Esta información permite prescribir con precisión fisiológica. Es confidencial y solo la usa tu plan de entrenamiento.</div>
+
+      <div style="display:flex; gap:12px; margin-bottom:14px;">
+        <div style="flex:1;">
+          <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:6px;">Fecha de nacimiento</label>
+          <input id="ob-birth" type="date" style="width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--fg);font-family:var(--ff-body);font-size:14px;outline:none;" oninput="checkObPersonal()">
+        </div>
+        <div style="flex:1;">
+          <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:6px;">Estatura (cm)</label>
+          <input id="ob-height" type="number" placeholder="175" min="100" max="250" style="width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--fg);font-family:var(--ff-body);font-size:14px;outline:none;" oninput="checkObPersonal()">
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:6px;">Peso actual (kg)</label>
+        <input id="ob-weight" type="number" placeholder="75" min="30" max="300" step="0.1" style="width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--fg);font-family:var(--ff-body);font-size:14px;outline:none;" oninput="checkObPersonal()">
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">Sexo biológico</label>
+        <div style="display:flex;gap:8px;">
+          <button class="ob-sex-btn" data-val="masculino" onclick="selectSex(this,'bio')" style="flex:1;padding:11px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:14px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Masculino</button>
+          <button class="ob-sex-btn" data-val="femenino" onclick="selectSex(this,'bio')" style="flex:1;padding:11px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:14px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Femenino</button>
+          <button class="ob-sex-btn" data-val="intersex" onclick="selectSex(this,'bio')" style="flex:1;padding:11px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:14px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Intersex</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">Identidad de género</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button class="ob-gen-btn" data-val="hombre_cis" onclick="selectSex(this,'gen')" style="padding:11px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Hombre cisgénero</button>
+          <button class="ob-gen-btn" data-val="mujer_cis" onclick="selectSex(this,'gen')" style="padding:11px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Mujer cisgénero</button>
+          <button class="ob-gen-btn" data-val="hombre_trans" onclick="selectSex(this,'gen')" style="padding:11px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Hombre transgénero</button>
+          <button class="ob-gen-btn" data-val="mujer_trans" onclick="selectSex(this,'gen')" style="padding:11px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Mujer transgénero</button>
+          <button class="ob-gen-btn" data-val="no_binario" onclick="selectSex(this,'gen')" style="padding:11px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">No binario / Género fluido</button>
+          <button class="ob-gen-btn" data-val="prefiero_no" onclick="selectSex(this,'gen')" style="padding:11px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Prefiero no decir</button>
+        </div>
+      </div>
+
+      <!-- Bloque terapia hormonal — solo visible si identidad es trans/no binario -->
+      <div id="ob-hrt-block" style="display:none; margin-bottom:14px; padding:14px; background:var(--accent-bg); border-radius:12px; border:1px solid var(--accent2);">
+        <div style="font-size:12px;font-weight:700;color:var(--accent-fg);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">🏥 Terapia hormonal</div>
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">¿Estás en terapia hormonal (TRH/THM)?</label>
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <button class="ob-hrt-btn" data-val="si" onclick="selectHRT(this)" style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Sí</button>
+          <button class="ob-hrt-btn" data-val="no" onclick="selectHRT(this)" style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">No</button>
+          <button class="ob-hrt-btn" data-val="prefiero_no" onclick="selectHRT(this)" style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:13px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Prefiero no decir</button>
+        </div>
+        <div id="ob-hrt-time-block" style="display:none;">
+          <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">¿Hace cuánto tiempo?</label>
+          <div style="display:flex;gap:8px;">
+            <button class="ob-hrt-time-btn" data-val="menos_1" onclick="selectHRTTime(this)" style="flex:1;padding:9px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Menos de 1 año</button>
+            <button class="ob-hrt-time-btn" data-val="1_3" onclick="selectHRTTime(this)" style="flex:1;padding:9px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">1 a 3 años</button>
+            <button class="ob-hrt-time-btn" data-val="mas_3" onclick="selectHRTTime(this)" style="flex:1;padding:9px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;transition:all 0.15s;">Más de 3 años</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-nav">
+        <button class="ob-btn-next" id="ob-next-1" onclick="obNext(2)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 2: Objetivo -->
+    <div class="ob-step" id="ob-step-2">
+      <div class="ob-emoji">🎯</div>
+      <div class="ob-title">¿Cuál es tu objetivo?</div>
+      <div class="ob-sub">Sé honesto — no hay respuesta mala. Con esto tu plan se diseña desde cero para ti.</div>
+      <div class="ob-options">
+        <button class="ob-option" data-val="hipertrofia" onclick="selectOb(this,'goal')">
+          <span class="ob-option-icon">💪</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Hipertrofia — Ganar masa muscular</div>
+            <div class="ob-option-desc">Aumentar volumen y tamaño muscular con entrenamiento orientado a la tensión mecánica y el daño muscular.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="fuerza" onclick="selectOb(this,'goal')">
+          <span class="ob-option-icon">🏋️</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Fuerza — Levantar más peso</div>
+            <div class="ob-option-desc">Maximizar la fuerza en patrones de movimiento fundamentales: sentadilla, peso muerto, press.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="definicion" onclick="selectOb(this,'goal')">
+          <span class="ob-option-icon">🔥</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Definición — Reducir grasa y marcar</div>
+            <div class="ob-option-desc">Preservar músculo mientras se reduce el porcentaje de grasa corporal. Requiere déficit calórico + entrenamiento.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="salud" onclick="selectOb(this,'goal')">
+          <span class="ob-option-icon">❤️</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Salud general — Moverme y sentirme bien</div>
+            <div class="ob-option-desc">Mejorar calidad de vida, movilidad, energía y composición corporal sin priorizar un objetivo específico.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="otro" onclick="selectOb(this,'goal')">
+          <span class="ob-option-icon">✏️</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Otro — Descríbelo tú mismo</div>
+            <div class="ob-option-desc">¿No estás seguro o tienes algo específico en mente? Cuéntanos y la IA lo interpreta.</div>
+          </div>
+        </button>
+      </div>
+      <div id="ob-goal-custom" class="ob-custom-box" style="display:none; margin-bottom:24px;">
+        <label style="font-size:12px; font-weight:600; color:var(--fg2); display:block; margin-bottom:6px;">Describe tu objetivo en tus palabras:</label>
+        <textarea id="ob-goal-text" placeholder="Ej: Quiero verme bien en la playa, o quiero poder jugar fútbol sin cansarme..."></textarea>
+      </div>
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(1)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-2" onclick="obNext(3)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 3: Experiencia -->
+    <div class="ob-step" id="ob-step-3">
+      <div class="ob-emoji">📊</div>
+      <div class="ob-title">¿Cuánta experiencia tienes?</div>
+      <div class="ob-sub">Las categorías están basadas en evidencia científica (NSCA / Schoenfeld, 2010). Tu respuesta determina el volumen, intensidad y densidad de tu plan.</div>
+      <div class="ob-options">
+        <button class="ob-option" data-val="principiante" onclick="selectOb(this,'exp')">
+          <span class="ob-option-icon">🌱</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Principiante — Menos de 1 año</div>
+            <div class="ob-option-desc">Responde a casi cualquier estímulo. Prioridad: técnica de movimiento, patrones básicos y consistencia.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="intermedio" onclick="selectOb(this,'exp')">
+          <span class="ob-option-icon">🌿</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Intermedio — 1 a 3 años</div>
+            <div class="ob-option-desc">Ya no gana con estímulos simples. Necesita periodización, progresión planificada y variación de ejercicios.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="avanzado" onclick="selectOb(this,'exp')">
+          <span class="ob-option-icon">🌳</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Avanzado — 3 a 5+ años estructurados</div>
+            <div class="ob-option-desc">Requiere alta especificidad, variación de estímulos, deload programado y volumen alto con técnica depurada.</div>
+          </div>
+        </button>
+        <button class="ob-option" data-val="atleta" onclick="selectOb(this,'exp')">
+          <span class="ob-option-icon">⚡</span>
+          <div class="ob-option-body">
+            <div class="ob-option-label">Atleta / Deportista — Bases previas</div>
+            <div class="ob-option-desc">Viene del deporte (fútbol, natación, artes marciales, etc.). Capacidades físicas desarrolladas que modifican la prescripción desde el inicio.</div>
+          </div>
+        </button>
+      </div>
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(2)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-3" onclick="obNext(4)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 4: Días disponibles -->
+    <div class="ob-step" id="ob-step-4">
+      <div class="ob-emoji">📅</div>
+      <div class="ob-title">¿Cuántos días puedes entrenar?</div>
+      <div class="ob-sub">Sé realista. Es mejor comprometerse con 3 días y cumplirlos que planear 6 y fallar. La IA puede recomendarte menos días de los que indiques si tu nivel o tu objetivo lo justifican.</div>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px; font-weight:600; color:var(--fg2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">¿Cuántos días puedes entrenar por semana?</div>
+        <div class="ob-days-grid" id="ob-days-available">
+          <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'avail')"><span>día</span>1</button>
+          <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'avail')"><span>días</span>2</button>
+          <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'avail')"><span>días</span>3</button>
+          <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'avail')"><span>días</span>4</button>
+          <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'avail')"><span>días</span>5</button>
+          <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'avail')"><span>días</span>6</button>
+          <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'avail')"><span>días</span>7</button>
+        </div>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="font-size:12px; font-weight:600; color:var(--fg2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">¿Cuántos días entrenas actualmente?</div>
+        <div class="ob-days-grid" id="ob-days-current">
+          <button class="ob-day-btn" data-val="0" onclick="selectDay(this,'curr')"><span>ninguno</span>0</button>
+          <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'curr')"><span>día</span>1</button>
+          <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'curr')"><span>días</span>2</button>
+          <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'curr')"><span>días</span>3</button>
+          <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'curr')"><span>días</span>4</button>
+          <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'curr')"><span>días</span>5</button>
+          <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'curr')"><span>días</span>6</button>
+          <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'curr')"><span>días</span>7</button>
+        </div>
+      </div>
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(3)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-4" onclick="obNext(5)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 5: Tiempo por sesión -->
+    <div class="ob-step" id="ob-step-5">
+      <div class="ob-emoji">⏱️</div>
+      <div class="ob-title">¿Cuánto tiempo tienes por sesión?</div>
+      <div class="ob-sub">Tu plan se adaptará a este tiempo real. No es "cuánto quieres" — es cuánto tienes disponible en un día normal de tu semana.</div>
+      <div class="ob-time-grid">
+        <button class="ob-time-btn" data-val="20" onclick="selectTime(this)">
+          <div class="ob-time-min">20'</div>
+          <div class="ob-time-label">Sesión express</div>
+        </button>
+        <button class="ob-time-btn" data-val="30" onclick="selectTime(this)">
+          <div class="ob-time-min">30'</div>
+          <div class="ob-time-label">Sesión corta</div>
+        </button>
+        <button class="ob-time-btn" data-val="45" onclick="selectTime(this)">
+          <div class="ob-time-min">45'</div>
+          <div class="ob-time-label">Sesión estándar</div>
+        </button>
+        <button class="ob-time-btn" data-val="60" onclick="selectTime(this)">
+          <div class="ob-time-min">60'</div>
+          <div class="ob-time-label">Sesión completa</div>
+        </button>
+        <button class="ob-time-btn" data-val="75" onclick="selectTime(this)">
+          <div class="ob-time-min">75'</div>
+          <div class="ob-time-label">Sesión larga</div>
+        </button>
+        <button class="ob-time-btn" data-val="90" onclick="selectTime(this)">
+          <div class="ob-time-min">90'</div>
+          <div class="ob-time-label">Sesión extendida</div>
+        </button>
+      </div>
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(4)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-5" onclick="obGenerate()" disabled>Generar mi plan 🚀</button>
+      </div>
+    </div>
+
+    <!-- PASO 6: Generando -->
+    <div class="ob-step" id="ob-step-6">
+      <div class="ob-generating">
+        <div class="ob-gen-spinner"></div>
+        <div class="ob-gen-title" id="ob-gen-title">Analizando tu perfil...</div>
+        <div class="ob-gen-sub" id="ob-gen-sub">Calculando el volumen óptimo para tu nivel y objetivo según los protocolos de periodización más actualizados.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- ══ AUTH SCREEN ══ -->
 <div id="auth-screen" style="display:none; min-height:100vh; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:24px;">
@@ -2013,7 +2450,11 @@ async function initAuth() {
       var profile = await sbGet('/rest/v1/profiles?id=eq.' + currentUser.id + '&select=*');
       if (profile && !profile.message) {
         currentProfile = profile[0] || null;
-        showApp();
+        if (!currentProfile || !currentProfile.onboarding_done) {
+          showOnboarding();
+        } else {
+          showApp();
+        }
         return;
       } else {
         clearSession();
@@ -2083,7 +2524,11 @@ async function doLogin() {
     } else {
       saveSession(data);
       await loadProfile();
-      showApp();
+      if (!currentProfile || !currentProfile.onboarding_done) {
+        showOnboarding();
+      } else {
+        showApp();
+      }
     }
   } catch(e) {
     errEl.textContent = 'Error de conexión. Intenta de nuevo.';
@@ -2111,7 +2556,11 @@ async function doRegister() {
       if (login.access_token) {
         saveSession(login);
         await loadProfile();
-        showApp();
+        if (!currentProfile || !currentProfile.onboarding_done) {
+          showOnboarding();
+        } else {
+          showApp();
+        }
       } else {
         okEl.textContent = '¡Cuenta creada! Ahora inicia sesión.';
         okEl.style.display = 'block';
@@ -2129,6 +2578,7 @@ async function doRegister() {
 
 async function doLogout() {
   clearSession();
+  obData = { goal: null, goalText: '', exp: null, daysAvail: null, daysCurr: null, time: null };
   showAuthScreen();
 }
 
@@ -2684,5 +3134,322 @@ try {
 } catch(e) {}
 
 // Iniciar auth
+// ══ ONBOARDING ══
+
+var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null };
+
+function showOnboarding() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-shell').style.display = 'none';
+  var ob = document.getElementById('onboarding-screen');
+  ob.style.display = 'flex';
+  obGoTo(1);
+}
+
+function obGoTo(step) {
+  for (var i = 1; i <= 6; i++) {
+    var s = document.getElementById('ob-step-' + i);
+    if (s) s.classList.toggle('active', i === step);
+    var p = document.getElementById('ob-prog-' + i);
+    if (p) {
+      p.classList.remove('done','active');
+      if (i < step) p.classList.add('done');
+      else if (i === step) p.classList.add('active');
+    }
+  }
+  // scroll to top
+  var ob = document.getElementById('onboarding-screen');
+  if (ob) ob.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function obNext(step) { obGoTo(step); }
+function obBack(step) { obGoTo(step); }
+
+// ── Paso 1: Datos personales ──
+function selectSex(btn, type) {
+  var cls = type === 'bio' ? '.ob-sex-btn' : '.ob-gen-btn';
+  document.querySelectorAll(cls).forEach(function(b){
+    b.style.borderColor = 'var(--border)';
+    b.style.background = 'var(--card)';
+    b.style.color = 'var(--fg2)';
+  });
+  btn.style.borderColor = 'var(--accent)';
+  btn.style.background = 'var(--accent-bg)';
+  btn.style.color = 'var(--accent-fg)';
+  var val = btn.getAttribute('data-val');
+  if (type === 'bio') {
+    obData.sexBio = val;
+  } else {
+    obData.gender = val;
+    var isTrans = ['hombre_trans','mujer_trans','no_binario'].includes(val);
+    document.getElementById('ob-hrt-block').style.display = isTrans ? 'block' : 'none';
+    if (!isTrans) { obData.hrt = null; obData.hrtTime = null; }
+  }
+  checkObPersonal();
+}
+
+function selectHRT(btn) {
+  document.querySelectorAll('.ob-hrt-btn').forEach(function(b){
+    b.style.borderColor = 'var(--border)';
+    b.style.background = 'var(--card)';
+    b.style.color = 'var(--fg2)';
+  });
+  btn.style.borderColor = 'var(--accent)';
+  btn.style.background = 'var(--accent-bg)';
+  btn.style.color = 'var(--accent-fg)';
+  obData.hrt = btn.getAttribute('data-val');
+  var showTime = obData.hrt === 'si';
+  document.getElementById('ob-hrt-time-block').style.display = showTime ? 'block' : 'none';
+  if (!showTime) obData.hrtTime = null;
+  checkObPersonal();
+}
+
+function selectHRTTime(btn) {
+  document.querySelectorAll('.ob-hrt-time-btn').forEach(function(b){
+    b.style.borderColor = 'var(--border)';
+    b.style.background = 'var(--card)';
+    b.style.color = 'var(--fg2)';
+  });
+  btn.style.borderColor = 'var(--accent)';
+  btn.style.background = 'var(--accent-bg)';
+  btn.style.color = 'var(--accent-fg)';
+  obData.hrtTime = btn.getAttribute('data-val');
+  checkObPersonal();
+}
+
+function checkObPersonal() {
+  var birth = document.getElementById('ob-birth').value;
+  var height = document.getElementById('ob-height').value;
+  var weight = document.getElementById('ob-weight').value;
+  var hasBio = !!obData.sexBio;
+  var hasGender = !!obData.gender;
+  var isTrans = obData.gender && ['hombre_trans','mujer_trans','no_binario'].includes(obData.gender);
+  var hrtOk = !isTrans || (obData.hrt && (obData.hrt !== 'si' || obData.hrtTime));
+  var ok = birth && height && weight && hasBio && hasGender && hrtOk;
+  document.getElementById('ob-next-1').disabled = !ok;
+}
+
+// ── Paso 2: Objetivo ──
+function selectOb(btn, type) {
+  var parent = btn.parentElement;
+  parent.querySelectorAll('.ob-option').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  var val = btn.getAttribute('data-val');
+  if (type === 'goal') {
+    obData.goal = val;
+    var customBox = document.getElementById('ob-goal-custom');
+    customBox.style.display = val === 'otro' ? 'block' : 'none';
+    document.getElementById('ob-next-2').disabled = false;
+  } else if (type === 'exp') {
+    obData.exp = val;
+    document.getElementById('ob-next-3').disabled = false;
+  }
+}
+
+// ── Paso 4: Días ──
+function selectDay(btn, type) {
+  var containerId = type === 'avail' ? 'ob-days-available' : 'ob-days-current';
+  document.getElementById(containerId).querySelectorAll('.ob-day-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  var val = parseInt(btn.getAttribute('data-val'));
+  if (type === 'avail') obData.daysAvail = val;
+  else obData.daysCurr = val;
+  if (obData.daysAvail !== null && obData.daysCurr !== null) {
+    document.getElementById('ob-next-4').disabled = false;
+  }
+}
+
+// ── Paso 5: Tiempo ──
+function selectTime(btn) {
+  document.querySelectorAll('.ob-time-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  obData.time = parseInt(btn.getAttribute('data-val'));
+  document.getElementById('ob-next-5').disabled = false;
+}
+
+// Lógica científica de prescripción (basada en NSCA, Schoenfeld, Israetel)
+function buildPlanFromOb() {
+  var g = obData.goal;
+  var e = obData.exp;
+  var da = obData.daysAvail;
+  var t = obData.time;
+
+  // Si objetivo es "otro", mapear al más cercano según texto
+  if (g === 'otro') {
+    var txt = (document.getElementById('ob-goal-text').value || '').toLowerCase();
+    if (txt.match(/fuerza|levantar|pesad/)) g = 'fuerza';
+    else if (txt.match(/definir|grasa|bajar|adelgaz|marcar|cortar/)) g = 'definicion';
+    else if (txt.match(/músculo|masa|volum|grande|crecer/)) g = 'hipertrofia';
+    else g = 'salud';
+    obData.goalResolved = g;
+  }
+
+  // Días recomendados por la IA según evidencia (Israetel et al.)
+  var recDays = da;
+  if (e === 'principiante') {
+    if (da > 4) recDays = 3; // principiantes: 3 días óptimo
+    else if (da > 3) recDays = 3;
+  } else if (e === 'intermedio') {
+    if (da > 5) recDays = 4;
+  } else if (e === 'avanzado' || e === 'atleta') {
+    recDays = Math.min(da, 6);
+  }
+  if (g === 'salud') recDays = Math.min(recDays, 3);
+
+  // Splits según días
+  var split = '';
+  var dias = [];
+  if (recDays <= 2) {
+    split = 'Full Body';
+    dias = [{ label: 'Día A', focus: 'Full Body' }, { label: 'Día B', focus: 'Full Body' }].slice(0, recDays);
+  } else if (recDays === 3) {
+    split = 'Full Body 3x';
+    dias = [{ label: 'Día A', focus: 'Full Body' }, { label: 'Día B', focus: 'Full Body' }, { label: 'Día C', focus: 'Full Body' }];
+  } else if (recDays === 4) {
+    split = 'Upper / Lower';
+    dias = [
+      { label: 'Día A', focus: 'Tren Superior — Empuje' },
+      { label: 'Día B', focus: 'Tren Inferior' },
+      { label: 'Día C', focus: 'Tren Superior — Jalar' },
+      { label: 'Día D', focus: 'Tren Inferior' },
+    ];
+  } else {
+    split = 'Push / Pull / Legs';
+    dias = [
+      { label: 'Día A', focus: 'Empuje — Pecho · Hombros · Tríceps' },
+      { label: 'Día B', focus: 'Jalón — Espalda · Bíceps' },
+      { label: 'Día C', focus: 'Piernas — Cuádriceps · Glúteos · Isquios' },
+      { label: 'Día D', focus: 'Empuje — variante' },
+      { label: 'Día E', focus: 'Jalón — variante' },
+      { label: 'Día F', focus: 'Piernas — variante' },
+    ].slice(0, recDays);
+  }
+
+  // Semanas según objetivo y experiencia
+  var weeks = 8;
+  if (g === 'fuerza') weeks = 12;
+  else if (g === 'definicion') weeks = 10;
+  if (e === 'principiante') weeks = Math.min(weeks, 8);
+
+  // Nombre del plan
+  var goalNames = { hipertrofia:'Hipertrofia', fuerza:'Fuerza', definicion:'Definición', salud:'Acondicionamiento' };
+  var planName = 'Fase 1 — ' + (goalNames[g] || 'Base') + ' · ' + split;
+
+  return { planName: planName, split: split, dias: dias, weeks: weeks, recDays: recDays, goal: g, exp: e, time: t, daysAvail: da };
+}
+
+var GEN_MSGS = [
+  ['Analizando tu perfil...', 'Calculando el volumen óptimo para tu nivel y objetivo según los protocolos de periodización más actualizados.'],
+  ['Seleccionando el split ideal...', 'Determinando la distribución de grupos musculares por sesión para maximizar la frecuencia y la recuperación.'],
+  ['Calculando progresiones...', 'Aplicando los principios de sobrecarga progresiva de Schoenfeld y el modelo de Mínimo Volumen Efectivo (MEV) de Israetel.'],
+  ['Ajustando al tiempo disponible...', 'Adaptando el número de ejercicios, series y descansos a tus ' + (obData.time || 60) + ' minutos por sesión.'],
+  ['Generando tu plan de entrenamiento...', 'Tu primera fase está casi lista. Basada en evidencia científica, diseñada para ti.'],
+];
+
+async function obGenerate() {
+  obGoTo(6);
+  // Capturar datos personales del formulario antes de generar
+  obData.birthDate = document.getElementById('ob-birth').value;
+  obData.height = parseFloat(document.getElementById('ob-height').value);
+  obData.weight = parseFloat(document.getElementById('ob-weight').value);
+  var plan = buildPlanFromOb();
+
+  // Animar mensajes
+  var idx = 0;
+  function nextMsg() {
+    if (idx >= GEN_MSGS.length) return;
+    document.getElementById('ob-gen-title').textContent = GEN_MSGS[idx][0];
+    document.getElementById('ob-gen-sub').textContent = GEN_MSGS[idx][1];
+    idx++;
+  }
+  nextMsg();
+  var msgInterval = setInterval(nextMsg, 1200);
+
+  try {
+    // 1. Guardar datos en el perfil
+    var goalFinal = obData.goalResolved || obData.goal;
+    var expMap = { principiante:'principiante', intermedio:'intermedio', avanzado:'avanzado', atleta:'avanzado' };
+    await sbPatch('/rest/v1/profiles?id=eq.' + currentUser.id, {
+      goal: goalFinal,
+      experience: expMap[obData.exp] || 'principiante',
+      onboarding_done: true,
+      onboarding_days_avail: obData.daysAvail,
+      onboarding_days_curr: obData.daysCurr,
+      onboarding_time: obData.time,
+      onboarding_exp_raw: obData.exp,
+      bio_sex: obData.sexBio,
+      gender_identity: obData.gender,
+      hrt: obData.hrt === 'si' ? true : (obData.hrt === 'no' ? false : null),
+      hrt_duration: obData.hrtTime || null,
+      birth_date: obData.birthDate || null,
+      height_cm: obData.height || null,
+      weight_kg: obData.weight || null,
+    });
+
+    // 2. Crear plan en Supabase
+    var planRes = await sbPostAuth('/rest/v1/plans', {
+      user_id: currentUser.id,
+      name: plan.planName,
+      goal: goalFinal,
+      total_weeks: plan.weeks,
+      days_per_week: plan.recDays,
+      is_active: true,
+      started_at: new Date().toISOString().split('T')[0],
+      notes: 'Plan generado automáticamente. Experiencia: ' + obData.exp + '. Split: ' + plan.split + '. Sesión: ' + plan.time + ' min.',
+    });
+
+    // 3. Crear días del plan
+    if (planRes && planRes[0] && planRes[0].id) {
+      var planId = planRes[0].id;
+      for (var i = 0; i < plan.dias.length; i++) {
+        await sbPostAuth('/rest/v1/plan_days', {
+          plan_id: planId,
+          day_label: plan.dias[i].label,
+          focus: plan.dias[i].focus,
+          sort_order: i,
+        });
+      }
+    }
+
+    clearInterval(msgInterval);
+    document.getElementById('ob-gen-title').textContent = '¡Tu plan está listo! 🎉';
+    document.getElementById('ob-gen-sub').textContent = 'Se ha creado "' + plan.planName + '" con ' + plan.recDays + ' días semanales. ¡A entrenar!';
+
+    await loadProfile();
+    setTimeout(function() {
+      document.getElementById('onboarding-screen').style.display = 'none';
+      showApp();
+    }, 2000);
+
+  } catch(err) {
+    clearInterval(msgInterval);
+    document.getElementById('ob-gen-title').textContent = 'Algo salió mal';
+    document.getElementById('ob-gen-sub').textContent = 'No se pudo guardar el plan. Entrando a la app de todas formas...';
+    setTimeout(function() {
+      document.getElementById('onboarding-screen').style.display = 'none';
+      showApp();
+    }, 2000);
+  }
+}
+
+async function sbPatch(path, body) {
+  var r = await fetch(SB_URL + path, {
+    method: 'PATCH',
+    headers: Object.assign({}, sbHeaders(true), { 'Prefer': 'return=minimal' }),
+    body: JSON.stringify(body)
+  });
+  return r.ok ? {} : r.json();
+}
+
+async function sbPostAuth(path, body) {
+  var r = await fetch(SB_URL + path, {
+    method: 'POST',
+    headers: Object.assign({}, sbHeaders(true), { 'Prefer': 'return=representation' }),
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
 initAuth();
 </script>
