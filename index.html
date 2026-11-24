@@ -637,6 +637,10 @@ select.form-input { cursor: pointer; }
 .day-pill .day-dot { width: 5px; height: 5px; border-radius: 50%; background: transparent; margin-top: 4px; }
 .day-pill.done .day-dot { background: var(--accent); }
 .day-pill.today .day-dot { background: rgba(255,255,255,0.7); }
+.day-pill.train-day { border: 1.5px dashed var(--accent); }
+.day-pill.train-day .day-name { color: var(--accent-fg); }
+.day-pill.train-day .day-num { color: var(--accent-fg); }
+.day-pill.train-day .day-dot { background: var(--accent); opacity: 0.4; }
 
 /* ══ NOTIFICATION DOT ══ */
 .notif-dot {
@@ -791,33 +795,124 @@ select.form-input { cursor: pointer; }
   line-height: 1.6;
 }
 .ob-custom-box textarea::placeholder { color: var(--fg3); }
+/* Selector de cantidad de días */
 .ob-days-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 20px;
 }
 .ob-day-btn {
-  aspect-ratio: 1;
+  padding: 12px 4px;
   border: 1.5px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--card);
   font-family: var(--ff-head);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--fg2);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.18s;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3px;
+  min-width: 0;
+}
+.ob-day-btn span { font-size: 9px; font-weight: 600; color: var(--fg3); text-transform: uppercase; letter-spacing: 0.3px; }
+.ob-day-btn:hover { border-color: var(--accent2); transform: translateY(-1px); }
+.ob-day-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.ob-day-btn.selected span { color: var(--accent-fg); opacity: 0.75; }
+
+/* Toggle días fijos / flexibles */
+.ob-fixed-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.ob-fixed-btn {
+  padding: 16px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+  font-family: var(--ff-body);
+}
+.ob-fixed-btn:hover { border-color: var(--accent2); }
+.ob-fixed-btn.selected { border-color: var(--accent); background: var(--accent-bg); }
+.ob-fixed-icon { font-size: 26px; margin-bottom: 6px; }
+.ob-fixed-title { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 2px; }
+.ob-fixed-desc { font-size: 11px; color: var(--fg2); line-height: 1.4; }
+.ob-fixed-btn.selected .ob-fixed-title { color: var(--accent-fg); }
+.ob-fixed-btn.selected .ob-fixed-desc { color: var(--accent-fg); opacity: 0.75; }
+
+/* Selector de días de la semana */
+.ob-weekdays-wrap {
+  display: none;
+  margin-bottom: 20px;
+}
+.ob-weekdays-wrap.visible { display: block; }
+.ob-weekdays-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.ob-weekday-btn {
+  padding: 10px 2px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  font-family: var(--ff-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2px;
 }
-.ob-day-btn span { font-size: 10px; font-weight: 500; color: var(--fg3); }
-.ob-day-btn:hover { border-color: var(--accent2); }
-.ob-day-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); }
-.ob-day-btn.selected span { color: var(--accent-fg); opacity: 0.7; }
+.ob-weekday-btn .wd-short { font-size: 12px; font-weight: 800; }
+.ob-weekday-btn .wd-letter { font-size: 9px; color: var(--fg3); font-weight: 600; text-transform: uppercase; }
+.ob-weekday-btn:hover { border-color: var(--accent2); }
+.ob-weekday-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.ob-weekday-btn.selected .wd-letter { color: var(--accent-fg); opacity: 0.7; }
+.ob-weekdays-hint { font-size: 11px; color: var(--fg3); margin-top: 8px; text-align: center; }
+
+/* Equipamiento rediseñado */
+.ob-equip-grid-new {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ob-equip-card {
+  padding: 14px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-body);
+}
+.ob-equip-card:hover { border-color: var(--accent2); }
+.ob-equip-card.selected { border-color: var(--accent); background: var(--accent-bg); }
+.ob-equip-card .eq-icon { font-size: 22px; flex-shrink: 0; }
+.ob-equip-card .eq-name { font-size: 13px; font-weight: 600; color: var(--fg); line-height: 1.2; }
+.ob-equip-card.selected .eq-name { color: var(--accent-fg); }
+.ob-equip-check { margin-left: auto; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.ob-equip-card.selected .ob-equip-check { background: var(--accent); border-color: var(--accent); }
+.ob-equip-card.selected .ob-equip-check::after { content: '✓'; font-size: 10px; color: #fff; font-weight: 700; }
 .ob-time-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -892,6 +987,7 @@ select.form-input { cursor: pointer; }
       <div class="ob-progress-step" id="ob-prog-4"></div>
       <div class="ob-progress-step" id="ob-prog-5"></div>
       <div class="ob-progress-step" id="ob-prog-6"></div>
+      <div class="ob-progress-step" id="ob-prog-7"></div>
     </div>
 
     <!-- PASO 1: Datos personales -->
@@ -961,8 +1057,59 @@ select.form-input { cursor: pointer; }
       </div>
     </div>
 
-    <!-- PASO 2: Objetivo -->
+    <!-- PASO 2: Lugar de entrenamiento -->
     <div class="ob-step" id="ob-step-2">
+      <div class="ob-emoji">🏋️</div>
+      <div class="ob-title">¿Dónde entrenas?</div>
+      <div class="ob-sub">Esto permite generar ejercicios solo con el equipamiento que realmente tienes disponible.</div>
+
+      <!-- Búsqueda de gimnasio conocido -->
+      <div style="margin-bottom:16px;">
+        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">Busca tu gimnasio</label>
+        <input id="ob-gym-search" type="text" placeholder="Ej: SmartFit, Óptimus, SportLife..." autocomplete="off"
+          style="width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--fg);font-family:var(--ff-body);font-size:14px;outline:none;box-sizing:border-box;"
+          oninput="filterGyms(this.value)">
+        <div id="ob-gym-results" style="display:none;border:1.5px solid var(--border);border-radius:10px;background:var(--card);margin-top:4px;overflow:hidden;"></div>
+      </div>
+
+      <!-- Gym seleccionado -->
+      <div id="ob-gym-selected" style="display:none;padding:12px 14px;background:var(--accent-bg);border:1.5px solid var(--accent2);border-radius:10px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--accent-fg);" id="ob-gym-name-display"></div>
+            <div style="font-size:11px;color:var(--fg2);margin-top:2px;" id="ob-gym-equip-display"></div>
+          </div>
+          <button onclick="clearGym()" style="background:none;border:none;color:var(--fg2);font-size:18px;cursor:pointer;padding:4px;">✕</button>
+        </div>
+      </div>
+
+      <!-- Equipamiento manual (para gym local / casa) -->
+      <div id="ob-equip-manual" style="display:none;">
+        <label style="font-size:12px;font-weight:700;color:var(--fg2);display:block;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Qué equipamiento tienes disponible?</label>
+        <div class="ob-equip-grid-new" id="ob-equip-grid">
+          <button class="ob-equip-card ob-equip-btn" data-val="barra_olimpica" onclick="toggleEquip(this)"><span class="eq-icon">🏋️</span><span class="eq-name">Barra olímpica</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="mancuernas" onclick="toggleEquip(this)"><span class="eq-icon">💪</span><span class="eq-name">Mancuernas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="maquinas" onclick="toggleEquip(this)"><span class="eq-icon">⚙️</span><span class="eq-name">Máquinas guiadas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="poleas" onclick="toggleEquip(this)"><span class="eq-icon">🔁</span><span class="eq-name">Poleas / cables</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="barra_dominadas" onclick="toggleEquip(this)"><span class="eq-icon">🧱</span><span class="eq-name">Barra dominadas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="banco" onclick="toggleEquip(this)"><span class="eq-icon">🛋️</span><span class="eq-name">Banco ajustable</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="rack" onclick="toggleEquip(this)"><span class="eq-icon">🏗️</span><span class="eq-name">Rack / jaula</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="kettlebell" onclick="toggleEquip(this)"><span class="eq-icon">🫙</span><span class="eq-name">Kettlebell</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="trx" onclick="toggleEquip(this)"><span class="eq-icon">🪢</span><span class="eq-name">TRX / suspensión</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="bandas" onclick="toggleEquip(this)"><span class="eq-icon">🎽</span><span class="eq-name">Bandas elásticas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="peso_corporal" onclick="toggleEquip(this)"><span class="eq-icon">🤸</span><span class="eq-name">Solo peso corporal</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="otro_equip" onclick="toggleEquip(this)"><span class="eq-icon">➕</span><span class="eq-name">Otro equipamiento</span><span class="ob-equip-check"></span></button>
+        </div>
+      </div>
+
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(1)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-2" onclick="obNext(3)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 3: Objetivo -->
+    <div class="ob-step" id="ob-step-3">
       <div class="ob-emoji">🎯</div>
       <div class="ob-title">¿Cuál es tu objetivo?</div>
       <div class="ob-sub">Sé honesto — no hay respuesta mala. Con esto tu plan se diseña desde cero para ti.</div>
@@ -1008,13 +1155,13 @@ select.form-input { cursor: pointer; }
         <textarea id="ob-goal-text" placeholder="Ej: Quiero verme bien en la playa, o quiero poder jugar fútbol sin cansarme..."></textarea>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(1)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-2" onclick="obNext(3)" disabled>Continuar →</button>
+        <button class="ob-btn-back" onclick="obBack(2)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-3" onclick="obNext(4)" disabled>Continuar →</button>
       </div>
     </div>
 
-    <!-- PASO 3: Experiencia -->
-    <div class="ob-step" id="ob-step-3">
+    <!-- PASO 4: Experiencia -->
+    <div class="ob-step" id="ob-step-4">
       <div class="ob-emoji">📊</div>
       <div class="ob-title">¿Cuánta experiencia tienes?</div>
       <div class="ob-sub">Las categorías están basadas en evidencia científica (NSCA / Schoenfeld, 2010). Tu respuesta determina el volumen, intensidad y densidad de tu plan.</div>
@@ -1049,86 +1196,105 @@ select.form-input { cursor: pointer; }
         </button>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(2)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-3" onclick="obNext(4)" disabled>Continuar →</button>
-      </div>
-    </div>
-
-    <!-- PASO 4: Días disponibles -->
-    <div class="ob-step" id="ob-step-4">
-      <div class="ob-emoji">📅</div>
-      <div class="ob-title">¿Cuántos días puedes entrenar?</div>
-      <div class="ob-sub">Sé realista. Es mejor comprometerse con 3 días y cumplirlos que planear 6 y fallar. La IA puede recomendarte menos días de los que indiques si tu nivel o tu objetivo lo justifican.</div>
-      <div style="margin-bottom:12px;">
-        <div style="font-size:12px; font-weight:600; color:var(--fg2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">¿Cuántos días puedes entrenar por semana?</div>
-        <div class="ob-days-grid" id="ob-days-available">
-          <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'avail')"><span>día</span>1</button>
-          <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'avail')"><span>días</span>2</button>
-          <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'avail')"><span>días</span>3</button>
-          <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'avail')"><span>días</span>4</button>
-          <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'avail')"><span>días</span>5</button>
-          <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'avail')"><span>días</span>6</button>
-          <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'avail')"><span>días</span>7</button>
-        </div>
-      </div>
-      <div style="margin-bottom:24px;">
-        <div style="font-size:12px; font-weight:600; color:var(--fg2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">¿Cuántos días entrenas actualmente?</div>
-        <div class="ob-days-grid" id="ob-days-current">
-          <button class="ob-day-btn" data-val="0" onclick="selectDay(this,'curr')"><span>ninguno</span>0</button>
-          <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'curr')"><span>día</span>1</button>
-          <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'curr')"><span>días</span>2</button>
-          <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'curr')"><span>días</span>3</button>
-          <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'curr')"><span>días</span>4</button>
-          <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'curr')"><span>días</span>5</button>
-          <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'curr')"><span>días</span>6</button>
-          <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'curr')"><span>días</span>7</button>
-        </div>
-      </div>
-      <div class="ob-nav">
         <button class="ob-btn-back" onclick="obBack(3)">← Atrás</button>
         <button class="ob-btn-next" id="ob-next-4" onclick="obNext(5)" disabled>Continuar →</button>
       </div>
     </div>
 
-    <!-- PASO 5: Tiempo por sesión -->
+    <!-- PASO 5: Días disponibles -->
     <div class="ob-step" id="ob-step-5">
+      <div class="ob-emoji">📅</div>
+      <div class="ob-title">¿Cuántos días puedes entrenar?</div>
+      <div class="ob-sub">Sé realista. Es mejor comprometerse con 3 días y cumplirlos que planear 6 y fallar.</div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Días por semana</div>
+      <div class="ob-days-grid" id="ob-days-available">
+        <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'avail')"><span>día</span>1</button>
+        <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'avail')"><span>días</span>2</button>
+        <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'avail')"><span>días</span>3</button>
+        <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'avail')"><span>días</span>4</button>
+        <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'avail')"><span>días</span>5</button>
+        <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'avail')"><span>días</span>6</button>
+        <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'avail')"><span>días</span>7</button>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Tienes días fijos?</div>
+      <div class="ob-fixed-toggle">
+        <button class="ob-fixed-btn" id="ob-fixed-yes" onclick="selectFixed('yes')">
+          <div class="ob-fixed-icon">📌</div>
+          <div class="ob-fixed-title">Sí, tengo días fijos</div>
+          <div class="ob-fixed-desc">Ej: lunes, miércoles y viernes siempre</div>
+        </button>
+        <button class="ob-fixed-btn" id="ob-fixed-no" onclick="selectFixed('no')">
+          <div class="ob-fixed-icon">🔀</div>
+          <div class="ob-fixed-title">No, los voy variando</div>
+          <div class="ob-fixed-desc">Entreno cuando puedo, sin días fijos</div>
+        </button>
+      </div>
+
+      <div class="ob-weekdays-wrap" id="ob-weekdays-wrap">
+        <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Qué días entrenas?</div>
+        <div class="ob-weekdays-grid">
+          <button class="ob-weekday-btn" data-val="lun" onclick="toggleWeekday(this)"><span class="wd-short">Lun</span><span class="wd-letter">L</span></button>
+          <button class="ob-weekday-btn" data-val="mar" onclick="toggleWeekday(this)"><span class="wd-short">Mar</span><span class="wd-letter">M</span></button>
+          <button class="ob-weekday-btn" data-val="mie" onclick="toggleWeekday(this)"><span class="wd-short">Mié</span><span class="wd-letter">X</span></button>
+          <button class="ob-weekday-btn" data-val="jue" onclick="toggleWeekday(this)"><span class="wd-short">Jue</span><span class="wd-letter">J</span></button>
+          <button class="ob-weekday-btn" data-val="vie" onclick="toggleWeekday(this)"><span class="wd-short">Vie</span><span class="wd-letter">V</span></button>
+          <button class="ob-weekday-btn" data-val="sab" onclick="toggleWeekday(this)"><span class="wd-short">Sáb</span><span class="wd-letter">S</span></button>
+          <button class="ob-weekday-btn" data-val="dom" onclick="toggleWeekday(this)"><span class="wd-short">Dom</span><span class="wd-letter">D</span></button>
+        </div>
+        <div class="ob-weekdays-hint" id="ob-weekdays-hint">Selecciona exactamente <span id="ob-wd-count">0</span> días</div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Cuántos días entrenas actualmente?</div>
+      <div class="ob-days-grid" id="ob-days-current">
+        <button class="ob-day-btn" data-val="0" onclick="selectDay(this,'curr')"><span>ninguno</span>0</button>
+        <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'curr')"><span>día</span>1</button>
+        <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'curr')"><span>días</span>2</button>
+        <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'curr')"><span>días</span>3</button>
+        <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'curr')"><span>días</span>4</button>
+        <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'curr')"><span>días</span>5</button>
+        <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'curr')"><span>días</span>6</button>
+        <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'curr')"><span>días</span>7</button>
+      </div>
+
+      <div class="ob-nav">
+        <button class="ob-btn-back" onclick="obBack(4)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-5" onclick="obNext(6)" disabled>Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 6: Tiempo por sesión -->
+    <div class="ob-step" id="ob-step-6">
       <div class="ob-emoji">⏱️</div>
       <div class="ob-title">¿Cuánto tiempo tienes por sesión?</div>
       <div class="ob-sub">Tu plan se adaptará a este tiempo real. No es "cuánto quieres" — es cuánto tienes disponible en un día normal de tu semana.</div>
       <div class="ob-time-grid">
-        <button class="ob-time-btn" data-val="20" onclick="selectTime(this)">
-          <div class="ob-time-min">20'</div>
+        <button class="ob-time-btn" data-val="38" onclick="selectTime(this)">
+          <div class="ob-time-min">30–45'</div>
           <div class="ob-time-label">Sesión express</div>
         </button>
-        <button class="ob-time-btn" data-val="30" onclick="selectTime(this)">
-          <div class="ob-time-min">30'</div>
-          <div class="ob-time-label">Sesión corta</div>
-        </button>
-        <button class="ob-time-btn" data-val="45" onclick="selectTime(this)">
-          <div class="ob-time-min">45'</div>
+        <button class="ob-time-btn" data-val="52" onclick="selectTime(this)">
+          <div class="ob-time-min">45–60'</div>
           <div class="ob-time-label">Sesión estándar</div>
         </button>
-        <button class="ob-time-btn" data-val="60" onclick="selectTime(this)">
-          <div class="ob-time-min">60'</div>
+        <button class="ob-time-btn" data-val="75" onclick="selectTime(this)">
+          <div class="ob-time-min">60–90'</div>
           <div class="ob-time-label">Sesión completa</div>
         </button>
-        <button class="ob-time-btn" data-val="75" onclick="selectTime(this)">
-          <div class="ob-time-min">75'</div>
-          <div class="ob-time-label">Sesión larga</div>
-        </button>
-        <button class="ob-time-btn" data-val="90" onclick="selectTime(this)">
-          <div class="ob-time-min">90'</div>
+        <button class="ob-time-btn" data-val="100" onclick="selectTime(this)">
+          <div class="ob-time-min">+90'</div>
           <div class="ob-time-label">Sesión extendida</div>
         </button>
       </div>
       <div class="ob-nav">
-        <button class="ob-btn-back" onclick="obBack(4)">← Atrás</button>
-        <button class="ob-btn-next" id="ob-next-5" onclick="obGenerate()" disabled>Generar mi plan 🚀</button>
+        <button class="ob-btn-back" onclick="obBack(5)">← Atrás</button>
+        <button class="ob-btn-next" id="ob-next-6" onclick="obGenerate()" disabled>Generar mi plan 🚀</button>
       </div>
     </div>
 
-    <!-- PASO 6: Generando -->
-    <div class="ob-step" id="ob-step-6">
+    <!-- PASO 7: Generando -->
+    <div class="ob-step" id="ob-step-7">
       <div class="ob-generating">
         <div class="ob-gen-spinner"></div>
         <div class="ob-gen-title" id="ob-gen-title">Analizando tu perfil...</div>
@@ -2406,6 +2572,7 @@ select.form-input { cursor: pointer; }
 // ══ SUPABASE REST CLIENT ══
 var SB_URL = 'https://fvvnsugcwvvnmvrusoqe.supabase.co';
 var SB_KEY = 'sb_publishable_eoqjtU-vBrQHywdsp3sZGA_Yqvmt56z';
+var OPENAI_KEY = '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';
 var currentUser = null;
 var currentProfile = null;
 var sbToken = null;
@@ -2469,10 +2636,141 @@ function showAuthScreen() {
   document.getElementById('app-shell').style.display = 'none';
 }
 
-function showApp() {
+async function showApp() {
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app-shell').style.display = 'flex';
   updateProfileUI();
+  await renderDashboard();
+}
+
+async function renderDashboard() {
+  if (!currentProfile) return;
+  var p = currentProfile;
+
+  // ── Saludo ──
+  var firstName = (p.full_name || (currentUser && currentUser.email.split('@')[0]) || 'Atleta').split(' ')[0];
+  var now = new Date();
+  var hours = now.getHours();
+  var greeting = hours < 12 ? '¡Buenos días' : hours < 20 ? '¡Hola' : '¡Buenas noches';
+  var dayNames = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var monthNames = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var dayStr = dayNames[now.getDay()] + ' ' + now.getDate() + ' ' + monthNames[now.getMonth()];
+
+  var titleEl = document.querySelector('#page-inicio .page-title');
+  var subtitleEl = document.querySelector('#page-inicio .page-subtitle');
+  if (titleEl) titleEl.textContent = greeting + ', ' + firstName + '! 👋';
+
+  // ── Buscar plan activo ──
+  var planData = null;
+  try {
+    var plans = await sbGet('/rest/v1/plans?user_id=eq.' + currentUser.id + '&is_active=eq.true&select=*');
+    if (plans && plans.length) planData = plans[0];
+  } catch(e) {}
+
+  if (subtitleEl) {
+    if (planData) {
+      subtitleEl.textContent = dayStr + ' · Semana ' + (planData.current_week || 1) + ' de tu plan de ' + capitalize(planData.goal || 'entrenamiento');
+    } else {
+      subtitleEl.textContent = dayStr;
+    }
+  }
+
+  // ── Badge semana ──
+  var badgeEl = document.querySelector('#page-inicio .badge-accent');
+  if (badgeEl && planData) {
+    badgeEl.textContent = 'Semana ' + (planData.current_week || 1) + ' de ' + (planData.total_weeks || '?');
+    badgeEl.style.display = '';
+  } else if (badgeEl) {
+    badgeEl.style.display = 'none';
+  }
+
+  // ── Semana visual ──
+  await renderWeekStrip();
+
+  // ── Stats tiles ──
+  renderStatTiles(planData);
+}
+
+async function renderWeekStrip() {
+  var p = currentProfile;
+  var now = new Date();
+  var todayDow = now.getDay(); // 0=dom,1=lun,...6=sab
+  var daysFixed = p && p.days_fixed;
+  var daysSelected = p && p.days_selected ? p.days_selected.split(',') : [];
+  var daysAvail = p && p.onboarding_days_avail || 0;
+
+  // Obtener lunes de esta semana
+  var monday = new Date(now);
+  var diff = now.getDay() === 0 ? -6 : 1 - now.getDay();
+  monday.setDate(now.getDate() + diff);
+  monday.setHours(0,0,0,0);
+
+  // Buscar sesiones de esta semana
+  var weekStart = monday.toISOString().split('T')[0];
+  var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  var weekEnd = sunday.toISOString().split('T')[0];
+  var sessions = [];
+  try {
+    var res = await sbGet('/rest/v1/sessions?user_id=eq.' + currentUser.id + '&date=gte.' + weekStart + '&date=lte.' + weekEnd + '&select=date,completed');
+    if (res && !res.message) sessions = res;
+  } catch(e) {}
+  var sessionDates = sessions.filter(function(s){ return s.completed; }).map(function(s){ return s.date; });
+
+  // Mapeo dow→key y dow→label
+  var dowKeys = ['dom','lun','mar','mie','jue','vie','sab'];
+  var dowLabels = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+  var strip = document.querySelector('#page-inicio .week-strip');
+  if (!strip) return;
+  strip.innerHTML = '';
+
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday); d.setDate(monday.getDate() + i);
+    var dow = d.getDay();
+    var dateStr = d.toISOString().split('T')[0];
+    var dayNum = d.getDate();
+    var label = dowLabels[dow];
+    var key = dowKeys[dow];
+
+    var isToday = dateStr === now.toISOString().split('T')[0];
+    var isDone = sessionDates.indexOf(dateStr) !== -1;
+    var isTrainDay = daysFixed ? daysSelected.indexOf(key) !== -1 : false; // si fijo, marcar el día
+
+    var classes = 'day-pill';
+    if (isDone) classes += ' done';
+    else if (isToday) classes += ' today';
+    else if (isTrainDay) classes += ' train-day'; // día de entreno programado
+
+    var dot = isDone ? '✓' : (isTrainDay ? '·' : '');
+    strip.innerHTML += '<div class="' + classes + '"><span class="day-name">' + label + '</span><span class="day-num">' + dayNum + '</span><span class="day-dot">' + dot + '</span></div>';
+  }
+
+  // Contador semana
+  var countEl = document.querySelector('#page-inicio .stat-tile:nth-child(3) .stat-value');
+  var doneCount = sessionDates.length;
+  var total = daysFixed ? daysSelected.length : daysAvail;
+  if (countEl) countEl.innerHTML = doneCount + '<span>/ ' + (total || '?') + '</span>';
+}
+
+function renderStatTiles(planData) {
+  // Sesiones totales
+  var sesEl = document.querySelector('#page-inicio .stat-tile:nth-child(1) .stat-value');
+  var sesBar = document.querySelector('#page-inicio .stat-tile:nth-child(1) .progress-fill');
+  if (planData && sesEl) {
+    var curr = planData.sessions_done || 0;
+    var total = (planData.total_weeks || 4) * (planData.days_per_week || 3);
+    sesEl.innerHTML = curr + '<span>/ ' + total + '</span>';
+    if (sesBar) sesBar.style.width = Math.round(curr/total*100) + '%';
+  }
+  // Semana
+  var semEl = document.querySelector('#page-inicio .stat-tile:nth-child(2) .stat-value');
+  if (planData && semEl) {
+    semEl.innerHTML = (planData.current_week || 1) + '<span>/ ' + (planData.total_weeks || '?') + '</span>';
+  }
+}
+
+function capitalize(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 }
 
 async function loadProfile() {
@@ -3136,7 +3434,7 @@ try {
 // Iniciar auth
 // ══ ONBOARDING ══
 
-var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null };
+var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, daysFixed: null, daysSelected: [], time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null, gym: null, equip: [] };
 
 function showOnboarding() {
   document.getElementById('auth-screen').style.display = 'none';
@@ -3147,7 +3445,7 @@ function showOnboarding() {
 }
 
 function obGoTo(step) {
-  for (var i = 1; i <= 6; i++) {
+  for (var i = 1; i <= 7; i++) {
     var s = document.getElementById('ob-step-' + i);
     if (s) s.classList.toggle('active', i === step);
     var p = document.getElementById('ob-prog-' + i);
@@ -3230,7 +3528,90 @@ function checkObPersonal() {
   document.getElementById('ob-next-1').disabled = !ok;
 }
 
-// ── Paso 2: Objetivo ──
+// ── Paso 2: Lugar de entrenamiento ──
+var GYMS_CL = [
+  // Cadenas nacionales
+  { name: 'SmartFit', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell','bandas'] },
+  { name: 'Óptimus', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  { name: 'SportLife', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell','trx'] },
+  { name: 'World Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Bodytech', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','trx','kettlebell'] },
+  { name: 'Iron Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Muevete', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco','bandas'] },
+  { name: 'Enjoy Fitness', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Wellness', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco','bandas'] },
+  { name: 'Fit House', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  // Bravo Sport / Body Fit
+  { name: 'Bravo Sport', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  { name: 'Body Fit', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack','kettlebell'] },
+  // Regionales conocidos
+  { name: 'El Pino Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Maximus Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  { name: 'Fitness One', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco'] },
+  { name: 'Orange Fitness', equip: ['mancuernas','maquinas','poleas','barra_dominadas','banco','bandas','trx'] },
+  { name: 'Club Hípico Gym', equip: ['barra_olimpica','mancuernas','maquinas','poleas','barra_dominadas','banco','rack'] },
+  // Opciones especiales
+  { name: 'En casa', equip: null },
+  { name: 'Al aire libre / parque', equip: ['barra_dominadas','peso_corporal','bandas'] },
+  { name: 'Gym local / otro', equip: null },
+];
+
+function filterGyms(val) {
+  var box = document.getElementById('ob-gym-results');
+  var q = val.trim().toLowerCase();
+  if (!q) { box.style.display = 'none'; return; }
+  var matches = GYMS_CL.filter(function(g){ return g.name.toLowerCase().includes(q); });
+  if (!matches.length) { box.style.display = 'none'; return; }
+  box.innerHTML = matches.map(function(g){
+    return '<div onclick="selectGym(\'' + g.name + '\')" style="padding:11px 14px;cursor:pointer;font-size:14px;font-weight:600;color:var(--fg);border-bottom:1px solid var(--border);transition:background 0.1s;" onmouseover="this.style.background=\'var(--accent-bg)\'" onmouseout="this.style.background=\'\'">🏋️ ' + g.name + '</div>';
+  }).join('');
+  box.style.display = 'block';
+}
+
+function selectGym(name) {
+  var gym = GYMS_CL.find(function(g){ return g.name === name; });
+  obData.gym = name;
+  document.getElementById('ob-gym-search').value = name;
+  document.getElementById('ob-gym-results').style.display = 'none';
+  document.getElementById('ob-gym-name-display').textContent = name;
+  var manual = document.getElementById('ob-equip-manual');
+  if (gym && gym.equip) {
+    obData.equip = gym.equip;
+    document.getElementById('ob-gym-equip-display').textContent = gym.equip.length + ' tipos de equipamiento detectados automáticamente';
+    manual.style.display = 'none';
+    document.getElementById('ob-gym-selected').style.display = 'block';
+    document.getElementById('ob-next-2').disabled = false;
+  } else {
+    obData.equip = [];
+    document.getElementById('ob-gym-equip-display').textContent = 'Selecciona el equipamiento disponible';
+    manual.style.display = 'block';
+    document.getElementById('ob-gym-selected').style.display = 'block';
+    document.getElementById('ob-next-2').disabled = true;
+  }
+}
+
+function clearGym() {
+  obData.gym = null; obData.equip = [];
+  document.getElementById('ob-gym-search').value = '';
+  document.getElementById('ob-gym-selected').style.display = 'none';
+  document.getElementById('ob-equip-manual').style.display = 'none';
+  document.getElementById('ob-next-2').disabled = true;
+}
+
+function toggleEquip(btn) {
+  var val = btn.getAttribute('data-val');
+  var isSelected = btn.classList.contains('selected');
+  if (isSelected) {
+    btn.classList.remove('selected');
+    obData.equip = obData.equip.filter(function(e){ return e !== val; });
+  } else {
+    btn.classList.add('selected');
+    if (!obData.equip.includes(val)) obData.equip.push(val);
+  }
+  document.getElementById('ob-next-2').disabled = obData.equip.length === 0;
+}
+
+// ── Paso 3: Objetivo ──
 function selectOb(btn, type) {
   var parent = btn.parentElement;
   parent.querySelectorAll('.ob-option').forEach(function(b){ b.classList.remove('selected'); });
@@ -3240,44 +3621,104 @@ function selectOb(btn, type) {
     obData.goal = val;
     var customBox = document.getElementById('ob-goal-custom');
     customBox.style.display = val === 'otro' ? 'block' : 'none';
-    document.getElementById('ob-next-2').disabled = false;
+    document.getElementById('ob-next-3').disabled = false;
   } else if (type === 'exp') {
     obData.exp = val;
-    document.getElementById('ob-next-3').disabled = false;
+    document.getElementById('ob-next-4').disabled = false; // paso 4 = experiencia
   }
 }
 
-// ── Paso 4: Días ──
+// ── Paso 5: Días ──
 function selectDay(btn, type) {
   var containerId = type === 'avail' ? 'ob-days-available' : 'ob-days-current';
   document.getElementById(containerId).querySelectorAll('.ob-day-btn').forEach(function(b){ b.classList.remove('selected'); });
   btn.classList.add('selected');
   var val = parseInt(btn.getAttribute('data-val'));
-  if (type === 'avail') obData.daysAvail = val;
-  else obData.daysCurr = val;
-  if (obData.daysAvail !== null && obData.daysCurr !== null) {
-    document.getElementById('ob-next-4').disabled = false;
+  if (type === 'avail') {
+    obData.daysAvail = val;
+    // Actualizar hint de días a seleccionar
+    document.getElementById('ob-wd-count').textContent = val;
+    // Resetear días seleccionados si cambia la cantidad
+    obData.daysSelected = [];
+    document.querySelectorAll('.ob-weekday-btn').forEach(function(b){ b.classList.remove('selected'); });
+  } else {
+    obData.daysCurr = val;
+  }
+  checkDaysStep5();
+}
+
+function selectFixed(val) {
+  obData.daysFixed = val;
+  document.getElementById('ob-fixed-yes').classList.toggle('selected', val === 'yes');
+  document.getElementById('ob-fixed-no').classList.toggle('selected', val === 'no');
+  var wrap = document.getElementById('ob-weekdays-wrap');
+  if (val === 'yes') {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    obData.daysSelected = [];
+    document.querySelectorAll('.ob-weekday-btn').forEach(function(b){ b.classList.remove('selected'); });
+  }
+  checkDaysStep5();
+}
+
+function toggleWeekday(btn) {
+  var val = btn.getAttribute('data-val');
+  var idx = obData.daysSelected.indexOf(val);
+  if (idx === -1) {
+    if (obData.daysAvail && obData.daysSelected.length >= obData.daysAvail) return; // no más del límite
+    obData.daysSelected.push(val);
+    btn.classList.add('selected');
+  } else {
+    obData.daysSelected.splice(idx, 1);
+    btn.classList.remove('selected');
+  }
+  checkDaysStep5();
+}
+
+function checkDaysStep5() {
+  var availOk = obData.daysAvail !== null;
+  var currOk = obData.daysCurr !== null;
+  var fixedOk = obData.daysFixed !== null;
+  var weekdaysOk = obData.daysFixed !== 'yes' || (obData.daysSelected.length === obData.daysAvail);
+  document.getElementById('ob-next-5').disabled = !(availOk && currOk && fixedOk && weekdaysOk);
+  // Hint de días seleccionados
+  if (obData.daysFixed === 'yes' && obData.daysAvail) {
+    var remaining = obData.daysAvail - obData.daysSelected.length;
+    var hint = document.getElementById('ob-weekdays-hint');
+    if (remaining === 0) {
+      hint.textContent = '✓ Días seleccionados';
+      hint.style.color = 'var(--accent)';
+    } else {
+      hint.innerHTML = 'Selecciona exactamente <span id="ob-wd-count">' + obData.daysAvail + '</span> días (' + remaining + ' restantes)';
+      hint.style.color = 'var(--fg3)';
+    }
   }
 }
 
-// ── Paso 5: Tiempo ──
+// ── Paso 6: Tiempo ──
 function selectTime(btn) {
   document.querySelectorAll('.ob-time-btn').forEach(function(b){ b.classList.remove('selected'); });
   btn.classList.add('selected');
   obData.time = parseInt(btn.getAttribute('data-val'));
-  document.getElementById('ob-next-5').disabled = false;
+  document.getElementById('ob-next-6').disabled = false;
 }
 
-// Lógica científica de prescripción (basada en NSCA, Schoenfeld, Israetel)
-function buildPlanFromOb() {
+// Llamada a OpenAI para generar plan completo con ejercicios
+async function generatePlanWithAI() {
   var g = obData.goal;
   var e = obData.exp;
   var da = obData.daysAvail;
   var t = obData.time;
+  var equip = obData.equip || [];
+  var gym = obData.gym || '';
+  var weight = obData.weight || null;
+  var height = obData.height || null;
+  var hrt = obData.hrt;
 
-  // Si objetivo es "otro", mapear al más cercano según texto
+  // Resolver objetivo "otro"
   if (g === 'otro') {
-    var txt = (document.getElementById('ob-goal-text').value || '').toLowerCase();
+    var txt = (document.getElementById('ob-goal-text') ? document.getElementById('ob-goal-text').value || '' : '').toLowerCase();
     if (txt.match(/fuerza|levantar|pesad/)) g = 'fuerza';
     else if (txt.match(/definir|grasa|bajar|adelgaz|marcar|cortar/)) g = 'definicion';
     else if (txt.match(/músculo|masa|volum|grande|crecer/)) g = 'hipertrofia';
@@ -3285,58 +3726,85 @@ function buildPlanFromOb() {
     obData.goalResolved = g;
   }
 
-  // Días recomendados por la IA según evidencia (Israetel et al.)
-  var recDays = da;
-  if (e === 'principiante') {
-    if (da > 4) recDays = 3; // principiantes: 3 días óptimo
-    else if (da > 3) recDays = 3;
-  } else if (e === 'intermedio') {
-    if (da > 5) recDays = 4;
-  } else if (e === 'avanzado' || e === 'atleta') {
-    recDays = Math.min(da, 6);
-  }
-  if (g === 'salud') recDays = Math.min(recDays, 3);
+  var equipDesc = equip.length ? equip.join(', ') : 'sin equipo específico';
+  var hrtNote = hrt === 'si' ? ' El usuario está en terapia hormonal (HRT), considerar mayor capacidad de recuperación y potencial de hipertrofia.' : '';
 
-  // Splits según días
-  var split = '';
-  var dias = [];
-  if (recDays <= 2) {
-    split = 'Full Body';
-    dias = [{ label: 'Día A', focus: 'Full Body' }, { label: 'Día B', focus: 'Full Body' }].slice(0, recDays);
-  } else if (recDays === 3) {
-    split = 'Full Body 3x';
-    dias = [{ label: 'Día A', focus: 'Full Body' }, { label: 'Día B', focus: 'Full Body' }, { label: 'Día C', focus: 'Full Body' }];
-  } else if (recDays === 4) {
-    split = 'Upper / Lower';
-    dias = [
-      { label: 'Día A', focus: 'Tren Superior — Empuje' },
-      { label: 'Día B', focus: 'Tren Inferior' },
-      { label: 'Día C', focus: 'Tren Superior — Jalar' },
-      { label: 'Día D', focus: 'Tren Inferior' },
-    ];
-  } else {
-    split = 'Push / Pull / Legs';
-    dias = [
-      { label: 'Día A', focus: 'Empuje — Pecho · Hombros · Tríceps' },
-      { label: 'Día B', focus: 'Jalón — Espalda · Bíceps' },
-      { label: 'Día C', focus: 'Piernas — Cuádriceps · Glúteos · Isquios' },
-      { label: 'Día D', focus: 'Empuje — variante' },
-      { label: 'Día E', focus: 'Jalón — variante' },
-      { label: 'Día F', focus: 'Piernas — variante' },
-    ].slice(0, recDays);
-  }
+  var prompt = `Eres un entrenador personal experto certificado por NSCA. Genera un plan de entrenamiento personalizado en JSON.
 
-  // Semanas según objetivo y experiencia
-  var weeks = 8;
-  if (g === 'fuerza') weeks = 12;
-  else if (g === 'definicion') weeks = 10;
-  if (e === 'principiante') weeks = Math.min(weeks, 8);
+DATOS DEL USUARIO:
+- Objetivo: ${g}
+- Nivel: ${e}
+- Días disponibles por semana: ${da}
+- Tiempo por sesión: ${t} minutos
+- Equipo disponible: ${equipDesc}
+- Gimnasio: ${gym || 'no especificado'}
+${weight ? '- Peso: ' + weight + ' kg' : ''}
+${height ? '- Altura: ' + height + ' cm' : ''}${hrtNote}
 
-  // Nombre del plan
-  var goalNames = { hipertrofia:'Hipertrofia', fuerza:'Fuerza', definicion:'Definición', salud:'Acondicionamiento' };
-  var planName = 'Fase 1 — ' + (goalNames[g] || 'Base') + ' · ' + split;
+INSTRUCCIONES:
+1. Determina los días óptimos de entrenamiento (puede ser menor a días disponibles si el nivel lo requiere)
+2. Selecciona el split más adecuado según días y objetivo
+3. Para CADA día de entrenamiento, genera 5-7 ejercicios con calentamiento específico
+4. Usa SOLO el equipo disponible
+5. Incluye series, reps y peso inicial sugerido (en kg, basado en nivel)
+6. Para principiantes: pesos conservadores, enfocarse en técnica
+7. Para intermedios/avanzados: cargas progresivas con esquemas periodizados
 
-  return { planName: planName, split: split, dias: dias, weeks: weeks, recDays: recDays, goal: g, exp: e, time: t, daysAvail: da };
+Responde ÚNICAMENTE con este JSON (sin markdown, sin explicaciones):
+{
+  "planName": "nombre descriptivo del plan",
+  "split": "nombre del split",
+  "weeks": número de semanas (8-16),
+  "recDays": número de días de entrenamiento,
+  "goal": "${g}",
+  "dias": [
+    {
+      "label": "Día A",
+      "focus": "grupos musculares principales",
+      "emoji": "emoji representativo",
+      "calentamiento": [
+        { "nombre": "ejercicio", "dosis": "5 min / 2×15 reps" }
+      ],
+      "ejercicios": [
+        {
+          "nombre": "nombre del ejercicio",
+          "series": 4,
+          "reps": "6-8",
+          "peso_inicial_kg": 80,
+          "musculo_principal": "pecho",
+          "implemento": "barra olímpica + banco plano + rack",
+          "tecnica": "descripción breve de técnica correcta en 1-2 oraciones"
+        }
+      ],
+      "estiramientos": ["estiramiento 1", "estiramiento 2"]
+    }
+  ],
+  "fases": [
+    { "numero": 1, "nombre": "Base", "semanas": "1-4", "descripcion": "descripción" },
+    { "numero": 2, "nombre": "Intensidad", "semanas": "5-8", "descripcion": "descripción" }
+  ]
+}`;
+
+  var response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + OPENAI_KEY
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.7,
+      max_tokens: 4000
+    })
+  });
+
+  if (!response.ok) throw new Error('OpenAI error: ' + response.status);
+  var data = await response.json();
+  var content = data.choices[0].message.content.trim();
+  // Limpiar posible markdown
+  content = content.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(content);
 }
 
 var GEN_MSGS = [
@@ -3348,12 +3816,11 @@ var GEN_MSGS = [
 ];
 
 async function obGenerate() {
-  obGoTo(6);
+  obGoTo(7);
   // Capturar datos personales del formulario antes de generar
   obData.birthDate = document.getElementById('ob-birth').value;
   obData.height = parseFloat(document.getElementById('ob-height').value);
   obData.weight = parseFloat(document.getElementById('ob-weight').value);
-  var plan = buildPlanFromOb();
 
   // Animar mensajes
   var idx = 0;
@@ -3364,14 +3831,13 @@ async function obGenerate() {
     idx++;
   }
   nextMsg();
-  var msgInterval = setInterval(nextMsg, 1200);
+  var msgInterval = setInterval(nextMsg, 1800);
 
   try {
     // 1. Guardar datos en el perfil
-    var goalFinal = obData.goalResolved || obData.goal;
     var expMap = { principiante:'principiante', intermedio:'intermedio', avanzado:'avanzado', atleta:'avanzado' };
     await sbPatch('/rest/v1/profiles?id=eq.' + currentUser.id, {
-      goal: goalFinal,
+      goal: obData.goal,
       experience: expMap[obData.exp] || 'principiante',
       onboarding_done: true,
       onboarding_days_avail: obData.daysAvail,
@@ -3385,9 +3851,17 @@ async function obGenerate() {
       birth_date: obData.birthDate || null,
       height_cm: obData.height || null,
       weight_kg: obData.weight || null,
+      gym_name: obData.gym || null,
+      equipment: obData.equip.length ? obData.equip.join(',') : null,
+      days_fixed: obData.daysFixed === 'yes' ? true : (obData.daysFixed === 'no' ? false : null),
+      days_selected: obData.daysSelected.length ? obData.daysSelected.join(',') : null,
     });
 
-    // 2. Crear plan en Supabase
+    // 2. Generar plan con OpenAI
+    var plan = await generatePlanWithAI();
+    var goalFinal = obData.goalResolved || obData.goal || plan.goal;
+
+    // 3. Crear plan en Supabase
     var planRes = await sbPostAuth('/rest/v1/plans', {
       user_id: currentUser.id,
       name: plan.planName,
@@ -3395,20 +3869,57 @@ async function obGenerate() {
       total_weeks: plan.weeks,
       days_per_week: plan.recDays,
       is_active: true,
+      current_week: 1,
+      sessions_done: 0,
       started_at: new Date().toISOString().split('T')[0],
-      notes: 'Plan generado automáticamente. Experiencia: ' + obData.exp + '. Split: ' + plan.split + '. Sesión: ' + plan.time + ' min.',
+      notes: 'Plan generado por IA. Experiencia: ' + obData.exp + '. Split: ' + plan.split + '. Sesión: ' + obData.time + ' min.',
     });
 
-    // 3. Crear días del plan
+    // 4. Crear días del plan con ejercicios completos
     if (planRes && planRes[0] && planRes[0].id) {
       var planId = planRes[0].id;
       for (var i = 0; i < plan.dias.length; i++) {
-        await sbPostAuth('/rest/v1/plan_days', {
+        var dia = plan.dias[i];
+        var dayRes = await sbPostAuth('/rest/v1/plan_days', {
           plan_id: planId,
-          day_label: plan.dias[i].label,
-          focus: plan.dias[i].focus,
+          day_label: dia.label,
+          focus: dia.focus,
+          emoji: dia.emoji || null,
           sort_order: i,
+          calentamiento: dia.calentamiento ? JSON.stringify(dia.calentamiento) : null,
+          estiramientos: dia.estiramientos ? JSON.stringify(dia.estiramientos) : null,
         });
+        // 5. Guardar ejercicios de cada día
+        if (dayRes && dayRes[0] && dayRes[0].id && dia.ejercicios) {
+          var dayId = dayRes[0].id;
+          for (var j = 0; j < dia.ejercicios.length; j++) {
+            var ex = dia.ejercicios[j];
+            await sbPostAuth('/rest/v1/plan_exercises', {
+              plan_day_id: dayId,
+              plan_id: planId,
+              nombre: ex.nombre,
+              series: ex.series,
+              reps: ex.reps,
+              peso_inicial_kg: ex.peso_inicial_kg || null,
+              musculo_principal: ex.musculo_principal || null,
+              implemento: ex.implemento || null,
+              tecnica: ex.tecnica || null,
+              sort_order: j,
+            });
+          }
+        }
+      }
+      // 6. Guardar fases del plan
+      if (plan.fases) {
+        for (var f = 0; f < plan.fases.length; f++) {
+          await sbPostAuth('/rest/v1/plan_phases', {
+            plan_id: planId,
+            numero: plan.fases[f].numero,
+            nombre: plan.fases[f].nombre,
+            semanas: plan.fases[f].semanas,
+            descripcion: plan.fases[f].descripcion,
+          });
+        }
       }
     }
 
@@ -3424,12 +3935,13 @@ async function obGenerate() {
 
   } catch(err) {
     clearInterval(msgInterval);
-    document.getElementById('ob-gen-title').textContent = 'Algo salió mal';
-    document.getElementById('ob-gen-sub').textContent = 'No se pudo guardar el plan. Entrando a la app de todas formas...';
+    console.error('Error en generación:', err);
+    document.getElementById('ob-gen-title').textContent = 'Error al generar';
+    document.getElementById('ob-gen-sub').textContent = 'No se pudo conectar con la IA. Revisa tu conexión e intenta de nuevo.';
     setTimeout(function() {
       document.getElementById('onboarding-screen').style.display = 'none';
       showApp();
-    }, 2000);
+    }, 3000);
   }
 }
 
