@@ -791,33 +791,124 @@ select.form-input { cursor: pointer; }
   line-height: 1.6;
 }
 .ob-custom-box textarea::placeholder { color: var(--fg3); }
+/* Selector de cantidad de días */
 .ob-days-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 20px;
 }
 .ob-day-btn {
-  aspect-ratio: 1;
+  padding: 12px 4px;
   border: 1.5px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--card);
   font-family: var(--ff-head);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--fg2);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.18s;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3px;
+  min-width: 0;
+}
+.ob-day-btn span { font-size: 9px; font-weight: 600; color: var(--fg3); text-transform: uppercase; letter-spacing: 0.3px; }
+.ob-day-btn:hover { border-color: var(--accent2); transform: translateY(-1px); }
+.ob-day-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.ob-day-btn.selected span { color: var(--accent-fg); opacity: 0.75; }
+
+/* Toggle días fijos / flexibles */
+.ob-fixed-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.ob-fixed-btn {
+  padding: 16px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+  font-family: var(--ff-body);
+}
+.ob-fixed-btn:hover { border-color: var(--accent2); }
+.ob-fixed-btn.selected { border-color: var(--accent); background: var(--accent-bg); }
+.ob-fixed-icon { font-size: 26px; margin-bottom: 6px; }
+.ob-fixed-title { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 2px; }
+.ob-fixed-desc { font-size: 11px; color: var(--fg2); line-height: 1.4; }
+.ob-fixed-btn.selected .ob-fixed-title { color: var(--accent-fg); }
+.ob-fixed-btn.selected .ob-fixed-desc { color: var(--accent-fg); opacity: 0.75; }
+
+/* Selector de días de la semana */
+.ob-weekdays-wrap {
+  display: none;
+  margin-bottom: 20px;
+}
+.ob-weekdays-wrap.visible { display: block; }
+.ob-weekdays-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.ob-weekday-btn {
+  padding: 10px 2px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  font-family: var(--ff-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2px;
 }
-.ob-day-btn span { font-size: 10px; font-weight: 500; color: var(--fg3); }
-.ob-day-btn:hover { border-color: var(--accent2); }
-.ob-day-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); }
-.ob-day-btn.selected span { color: var(--accent-fg); opacity: 0.7; }
+.ob-weekday-btn .wd-short { font-size: 12px; font-weight: 800; }
+.ob-weekday-btn .wd-letter { font-size: 9px; color: var(--fg3); font-weight: 600; text-transform: uppercase; }
+.ob-weekday-btn:hover { border-color: var(--accent2); }
+.ob-weekday-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-fg); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.ob-weekday-btn.selected .wd-letter { color: var(--accent-fg); opacity: 0.7; }
+.ob-weekdays-hint { font-size: 11px; color: var(--fg3); margin-top: 8px; text-align: center; }
+
+/* Equipamiento rediseñado */
+.ob-equip-grid-new {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ob-equip-card {
+  padding: 14px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-body);
+}
+.ob-equip-card:hover { border-color: var(--accent2); }
+.ob-equip-card.selected { border-color: var(--accent); background: var(--accent-bg); }
+.ob-equip-card .eq-icon { font-size: 22px; flex-shrink: 0; }
+.ob-equip-card .eq-name { font-size: 13px; font-weight: 600; color: var(--fg); line-height: 1.2; }
+.ob-equip-card.selected .eq-name { color: var(--accent-fg); }
+.ob-equip-check { margin-left: auto; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.ob-equip-card.selected .ob-equip-check { background: var(--accent); border-color: var(--accent); }
+.ob-equip-card.selected .ob-equip-check::after { content: '✓'; font-size: 10px; color: #fff; font-weight: 700; }
 .ob-time-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -990,20 +1081,20 @@ select.form-input { cursor: pointer; }
 
       <!-- Equipamiento manual (para gym local / casa) -->
       <div id="ob-equip-manual" style="display:none;">
-        <label style="font-size:12px;font-weight:600;color:var(--fg2);display:block;margin-bottom:8px;">¿Qué equipamiento tienes disponible?</label>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="ob-equip-grid">
-          <button class="ob-equip-btn" data-val="barra_olimpica" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🏋️ Barra olímpica</button>
-          <button class="ob-equip-btn" data-val="mancuernas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">💪 Mancuernas</button>
-          <button class="ob-equip-btn" data-val="maquinas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🔧 Máquinas guiadas</button>
-          <button class="ob-equip-btn" data-val="poleas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🔁 Poleas / cables</button>
-          <button class="ob-equip-btn" data-val="barra_dominadas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🧱 Barra dominadas</button>
-          <button class="ob-equip-btn" data-val="banco" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🛋️ Banco ajustable</button>
-          <button class="ob-equip-btn" data-val="rack" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🏗️ Rack / jaula</button>
-          <button class="ob-equip-btn" data-val="kettlebell" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🫙 Kettlebell</button>
-          <button class="ob-equip-btn" data-val="trx" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🪢 TRX / suspensión</button>
-          <button class="ob-equip-btn" data-val="bandas" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🎽 Bandas elásticas</button>
-          <button class="ob-equip-btn" data-val="peso_corporal" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">🤸 Solo peso corporal</button>
-          <button class="ob-equip-btn" data-val="otro_equip" onclick="toggleEquip(this)" style="padding:10px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);font-family:var(--ff-body);font-size:12px;font-weight:600;color:var(--fg2);cursor:pointer;text-align:left;transition:all 0.15s;">➕ Otro</button>
+        <label style="font-size:12px;font-weight:700;color:var(--fg2);display:block;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Qué equipamiento tienes disponible?</label>
+        <div class="ob-equip-grid-new" id="ob-equip-grid">
+          <button class="ob-equip-card ob-equip-btn" data-val="barra_olimpica" onclick="toggleEquip(this)"><span class="eq-icon">🏋️</span><span class="eq-name">Barra olímpica</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="mancuernas" onclick="toggleEquip(this)"><span class="eq-icon">💪</span><span class="eq-name">Mancuernas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="maquinas" onclick="toggleEquip(this)"><span class="eq-icon">⚙️</span><span class="eq-name">Máquinas guiadas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="poleas" onclick="toggleEquip(this)"><span class="eq-icon">🔁</span><span class="eq-name">Poleas / cables</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="barra_dominadas" onclick="toggleEquip(this)"><span class="eq-icon">🧱</span><span class="eq-name">Barra dominadas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="banco" onclick="toggleEquip(this)"><span class="eq-icon">🛋️</span><span class="eq-name">Banco ajustable</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="rack" onclick="toggleEquip(this)"><span class="eq-icon">🏗️</span><span class="eq-name">Rack / jaula</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="kettlebell" onclick="toggleEquip(this)"><span class="eq-icon">🫙</span><span class="eq-name">Kettlebell</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="trx" onclick="toggleEquip(this)"><span class="eq-icon">🪢</span><span class="eq-name">TRX / suspensión</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="bandas" onclick="toggleEquip(this)"><span class="eq-icon">🎽</span><span class="eq-name">Bandas elásticas</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="peso_corporal" onclick="toggleEquip(this)"><span class="eq-icon">🤸</span><span class="eq-name">Solo peso corporal</span><span class="ob-equip-check"></span></button>
+          <button class="ob-equip-card ob-equip-btn" data-val="otro_equip" onclick="toggleEquip(this)"><span class="eq-icon">➕</span><span class="eq-name">Otro equipamiento</span><span class="ob-equip-check"></span></button>
         </div>
       </div>
 
@@ -1110,32 +1201,59 @@ select.form-input { cursor: pointer; }
     <div class="ob-step" id="ob-step-5">
       <div class="ob-emoji">📅</div>
       <div class="ob-title">¿Cuántos días puedes entrenar?</div>
-      <div class="ob-sub">Sé realista. Es mejor comprometerse con 3 días y cumplirlos que planear 6 y fallar. La IA puede recomendarte menos días de los que indiques si tu nivel o tu objetivo lo justifican.</div>
-      <div style="margin-bottom:12px;">
-        <div style="font-size:12px; font-weight:600; color:var(--fg2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">¿Cuántos días puedes entrenar por semana?</div>
-        <div class="ob-days-grid" id="ob-days-available">
-          <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'avail')"><span>día</span>1</button>
-          <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'avail')"><span>días</span>2</button>
-          <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'avail')"><span>días</span>3</button>
-          <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'avail')"><span>días</span>4</button>
-          <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'avail')"><span>días</span>5</button>
-          <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'avail')"><span>días</span>6</button>
-          <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'avail')"><span>días</span>7</button>
-        </div>
+      <div class="ob-sub">Sé realista. Es mejor comprometerse con 3 días y cumplirlos que planear 6 y fallar.</div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Días por semana</div>
+      <div class="ob-days-grid" id="ob-days-available">
+        <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'avail')"><span>día</span>1</button>
+        <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'avail')"><span>días</span>2</button>
+        <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'avail')"><span>días</span>3</button>
+        <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'avail')"><span>días</span>4</button>
+        <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'avail')"><span>días</span>5</button>
+        <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'avail')"><span>días</span>6</button>
+        <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'avail')"><span>días</span>7</button>
       </div>
-      <div style="margin-bottom:24px;">
-        <div style="font-size:12px; font-weight:600; color:var(--fg2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px;">¿Cuántos días entrenas actualmente?</div>
-        <div class="ob-days-grid" id="ob-days-current">
-          <button class="ob-day-btn" data-val="0" onclick="selectDay(this,'curr')"><span>ninguno</span>0</button>
-          <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'curr')"><span>día</span>1</button>
-          <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'curr')"><span>días</span>2</button>
-          <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'curr')"><span>días</span>3</button>
-          <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'curr')"><span>días</span>4</button>
-          <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'curr')"><span>días</span>5</button>
-          <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'curr')"><span>días</span>6</button>
-          <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'curr')"><span>días</span>7</button>
-        </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Tienes días fijos?</div>
+      <div class="ob-fixed-toggle">
+        <button class="ob-fixed-btn" id="ob-fixed-yes" onclick="selectFixed('yes')">
+          <div class="ob-fixed-icon">📌</div>
+          <div class="ob-fixed-title">Sí, tengo días fijos</div>
+          <div class="ob-fixed-desc">Ej: lunes, miércoles y viernes siempre</div>
+        </button>
+        <button class="ob-fixed-btn" id="ob-fixed-no" onclick="selectFixed('no')">
+          <div class="ob-fixed-icon">🔀</div>
+          <div class="ob-fixed-title">No, los voy variando</div>
+          <div class="ob-fixed-desc">Entreno cuando puedo, sin días fijos</div>
+        </button>
       </div>
+
+      <div class="ob-weekdays-wrap" id="ob-weekdays-wrap">
+        <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Qué días entrenas?</div>
+        <div class="ob-weekdays-grid">
+          <button class="ob-weekday-btn" data-val="lun" onclick="toggleWeekday(this)"><span class="wd-short">Lun</span><span class="wd-letter">L</span></button>
+          <button class="ob-weekday-btn" data-val="mar" onclick="toggleWeekday(this)"><span class="wd-short">Mar</span><span class="wd-letter">M</span></button>
+          <button class="ob-weekday-btn" data-val="mie" onclick="toggleWeekday(this)"><span class="wd-short">Mié</span><span class="wd-letter">X</span></button>
+          <button class="ob-weekday-btn" data-val="jue" onclick="toggleWeekday(this)"><span class="wd-short">Jue</span><span class="wd-letter">J</span></button>
+          <button class="ob-weekday-btn" data-val="vie" onclick="toggleWeekday(this)"><span class="wd-short">Vie</span><span class="wd-letter">V</span></button>
+          <button class="ob-weekday-btn" data-val="sab" onclick="toggleWeekday(this)"><span class="wd-short">Sáb</span><span class="wd-letter">S</span></button>
+          <button class="ob-weekday-btn" data-val="dom" onclick="toggleWeekday(this)"><span class="wd-short">Dom</span><span class="wd-letter">D</span></button>
+        </div>
+        <div class="ob-weekdays-hint" id="ob-weekdays-hint">Selecciona exactamente <span id="ob-wd-count">0</span> días</div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--fg2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">¿Cuántos días entrenas actualmente?</div>
+      <div class="ob-days-grid" id="ob-days-current">
+        <button class="ob-day-btn" data-val="0" onclick="selectDay(this,'curr')"><span>ninguno</span>0</button>
+        <button class="ob-day-btn" data-val="1" onclick="selectDay(this,'curr')"><span>día</span>1</button>
+        <button class="ob-day-btn" data-val="2" onclick="selectDay(this,'curr')"><span>días</span>2</button>
+        <button class="ob-day-btn" data-val="3" onclick="selectDay(this,'curr')"><span>días</span>3</button>
+        <button class="ob-day-btn" data-val="4" onclick="selectDay(this,'curr')"><span>días</span>4</button>
+        <button class="ob-day-btn" data-val="5" onclick="selectDay(this,'curr')"><span>días</span>5</button>
+        <button class="ob-day-btn" data-val="6" onclick="selectDay(this,'curr')"><span>días</span>6</button>
+        <button class="ob-day-btn" data-val="7" onclick="selectDay(this,'curr')"><span>días</span>7</button>
+      </div>
+
       <div class="ob-nav">
         <button class="ob-btn-back" onclick="obBack(4)">← Atrás</button>
         <button class="ob-btn-next" id="ob-next-5" onclick="obNext(6)" disabled>Continuar →</button>
@@ -3180,7 +3298,7 @@ try {
 // Iniciar auth
 // ══ ONBOARDING ══
 
-var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null, gym: null, equip: [] };
+var obData = { goal: null, goalText: '', goalResolved: null, exp: null, daysAvail: null, daysCurr: null, daysFixed: null, daysSelected: [], time: null, sexBio: null, gender: null, hrt: null, hrtTime: null, birthDate: null, height: null, weight: null, gym: null, equip: [] };
 
 function showOnboarding() {
   document.getElementById('auth-screen').style.display = 'none';
@@ -3346,18 +3464,12 @@ function clearGym() {
 
 function toggleEquip(btn) {
   var val = btn.getAttribute('data-val');
-  var active = btn.style.borderColor === 'var(--accent)' || btn.getAttribute('data-active') === '1';
-  if (active) {
-    btn.style.borderColor = 'var(--border)';
-    btn.style.background = 'var(--card)';
-    btn.style.color = 'var(--fg2)';
-    btn.setAttribute('data-active','0');
+  var isSelected = btn.classList.contains('selected');
+  if (isSelected) {
+    btn.classList.remove('selected');
     obData.equip = obData.equip.filter(function(e){ return e !== val; });
   } else {
-    btn.style.borderColor = 'var(--accent)';
-    btn.style.background = 'var(--accent-bg)';
-    btn.style.color = 'var(--accent-fg)';
-    btn.setAttribute('data-active','1');
+    btn.classList.add('selected');
     if (!obData.equip.includes(val)) obData.equip.push(val);
   }
   document.getElementById('ob-next-2').disabled = obData.equip.length === 0;
@@ -3380,16 +3492,71 @@ function selectOb(btn, type) {
   }
 }
 
-// ── Paso 4: Días ──
+// ── Paso 5: Días ──
 function selectDay(btn, type) {
   var containerId = type === 'avail' ? 'ob-days-available' : 'ob-days-current';
   document.getElementById(containerId).querySelectorAll('.ob-day-btn').forEach(function(b){ b.classList.remove('selected'); });
   btn.classList.add('selected');
   var val = parseInt(btn.getAttribute('data-val'));
-  if (type === 'avail') obData.daysAvail = val;
-  else obData.daysCurr = val;
-  if (obData.daysAvail !== null && obData.daysCurr !== null) {
-    document.getElementById('ob-next-5').disabled = false;
+  if (type === 'avail') {
+    obData.daysAvail = val;
+    // Actualizar hint de días a seleccionar
+    document.getElementById('ob-wd-count').textContent = val;
+    // Resetear días seleccionados si cambia la cantidad
+    obData.daysSelected = [];
+    document.querySelectorAll('.ob-weekday-btn').forEach(function(b){ b.classList.remove('selected'); });
+  } else {
+    obData.daysCurr = val;
+  }
+  checkDaysStep5();
+}
+
+function selectFixed(val) {
+  obData.daysFixed = val;
+  document.getElementById('ob-fixed-yes').classList.toggle('selected', val === 'yes');
+  document.getElementById('ob-fixed-no').classList.toggle('selected', val === 'no');
+  var wrap = document.getElementById('ob-weekdays-wrap');
+  if (val === 'yes') {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    obData.daysSelected = [];
+    document.querySelectorAll('.ob-weekday-btn').forEach(function(b){ b.classList.remove('selected'); });
+  }
+  checkDaysStep5();
+}
+
+function toggleWeekday(btn) {
+  var val = btn.getAttribute('data-val');
+  var idx = obData.daysSelected.indexOf(val);
+  if (idx === -1) {
+    if (obData.daysAvail && obData.daysSelected.length >= obData.daysAvail) return; // no más del límite
+    obData.daysSelected.push(val);
+    btn.classList.add('selected');
+  } else {
+    obData.daysSelected.splice(idx, 1);
+    btn.classList.remove('selected');
+  }
+  checkDaysStep5();
+}
+
+function checkDaysStep5() {
+  var availOk = obData.daysAvail !== null;
+  var currOk = obData.daysCurr !== null;
+  var fixedOk = obData.daysFixed !== null;
+  var weekdaysOk = obData.daysFixed !== 'yes' || (obData.daysSelected.length === obData.daysAvail);
+  document.getElementById('ob-next-5').disabled = !(availOk && currOk && fixedOk && weekdaysOk);
+  // Hint de días seleccionados
+  if (obData.daysFixed === 'yes' && obData.daysAvail) {
+    var remaining = obData.daysAvail - obData.daysSelected.length;
+    var hint = document.getElementById('ob-weekdays-hint');
+    if (remaining === 0) {
+      hint.textContent = '✓ Días seleccionados';
+      hint.style.color = 'var(--accent)';
+    } else {
+      hint.innerHTML = 'Selecciona exactamente <span id="ob-wd-count">' + obData.daysAvail + '</span> días (' + remaining + ' restantes)';
+      hint.style.color = 'var(--fg3)';
+    }
   }
 }
 
@@ -3520,6 +3687,8 @@ async function obGenerate() {
       weight_kg: obData.weight || null,
       gym_name: obData.gym || null,
       equipment: obData.equip.length ? obData.equip.join(',') : null,
+      days_fixed: obData.daysFixed === 'yes' ? true : (obData.daysFixed === 'no' ? false : null),
+      days_selected: obData.daysSelected.length ? obData.daysSelected.join(',') : null,
     });
 
     // 2. Crear plan en Supabase
