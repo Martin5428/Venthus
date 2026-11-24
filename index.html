@@ -3826,6 +3826,15 @@ async function obGenerate() {
   var msgInterval = setInterval(nextMsg, 1800);
 
   try {
+    // Verificar que hay sesión activa
+    if (!currentUser || !currentUser.id) {
+      clearInterval(msgInterval);
+      document.getElementById('ob-gen-title').textContent = 'Sesión expirada';
+      document.getElementById('ob-gen-sub').textContent = 'Tu sesión venció. Por favor inicia sesión de nuevo.';
+      setTimeout(function(){ clearSession(); location.reload(); }, 3000);
+      return;
+    }
+
     // 1. Guardar datos en el perfil
     var expMap = { principiante:'principiante', intermedio:'intermedio', avanzado:'avanzado', atleta:'avanzado' };
     await sbPatch('/rest/v1/profiles?id=eq.' + currentUser.id, {
@@ -3844,9 +3853,9 @@ async function obGenerate() {
       height_cm: obData.height || null,
       weight_kg: obData.weight || null,
       gym_name: obData.gym || null,
-      equipment: obData.equip.length ? obData.equip.join(',') : null,
+      equipment: (obData.equip || []).length ? (obData.equip || []).join(',') : null,
       days_fixed: obData.daysFixed === 'yes' ? true : (obData.daysFixed === 'no' ? false : null),
-      days_selected: obData.daysSelected.length ? obData.daysSelected.join(',') : null,
+      days_selected: (obData.daysSelected || []).length ? (obData.daysSelected || []).join(',') : null,
     });
 
     // 2. Generar plan con OpenAI
@@ -3956,4 +3965,4 @@ async function sbPostAuth(path, body) {
 }
 
 initAuth();
-</script> 
+</script>
