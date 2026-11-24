@@ -637,6 +637,10 @@ select.form-input { cursor: pointer; }
 .day-pill .day-dot { width: 5px; height: 5px; border-radius: 50%; background: transparent; margin-top: 4px; }
 .day-pill.done .day-dot { background: var(--accent); }
 .day-pill.today .day-dot { background: rgba(255,255,255,0.7); }
+.day-pill.train-day { border: 1.5px dashed var(--accent); }
+.day-pill.train-day .day-name { color: var(--accent-fg); }
+.day-pill.train-day .day-num { color: var(--accent-fg); }
+.day-pill.train-day .day-dot { background: var(--accent); opacity: 0.4; }
 
 /* ══ NOTIFICATION DOT ══ */
 .notif-dot {
@@ -2631,10 +2635,141 @@ function showAuthScreen() {
   document.getElementById('app-shell').style.display = 'none';
 }
 
-function showApp() {
+async function showApp() {
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app-shell').style.display = 'flex';
   updateProfileUI();
+  await renderDashboard();
+}
+
+async function renderDashboard() {
+  if (!currentProfile) return;
+  var p = currentProfile;
+
+  // ── Saludo ──
+  var firstName = (p.full_name || (currentUser && currentUser.email.split('@')[0]) || 'Atleta').split(' ')[0];
+  var now = new Date();
+  var hours = now.getHours();
+  var greeting = hours < 12 ? '¡Buenos días' : hours < 20 ? '¡Hola' : '¡Buenas noches';
+  var dayNames = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var monthNames = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var dayStr = dayNames[now.getDay()] + ' ' + now.getDate() + ' ' + monthNames[now.getMonth()];
+
+  var titleEl = document.querySelector('#page-inicio .page-title');
+  var subtitleEl = document.querySelector('#page-inicio .page-subtitle');
+  if (titleEl) titleEl.textContent = greeting + ', ' + firstName + '! 👋';
+
+  // ── Buscar plan activo ──
+  var planData = null;
+  try {
+    var plans = await sbGet('/rest/v1/plans?user_id=eq.' + currentUser.id + '&is_active=eq.true&select=*');
+    if (plans && plans.length) planData = plans[0];
+  } catch(e) {}
+
+  if (subtitleEl) {
+    if (planData) {
+      subtitleEl.textContent = dayStr + ' · Semana ' + (planData.current_week || 1) + ' de tu plan de ' + capitalize(planData.goal || 'entrenamiento');
+    } else {
+      subtitleEl.textContent = dayStr;
+    }
+  }
+
+  // ── Badge semana ──
+  var badgeEl = document.querySelector('#page-inicio .badge-accent');
+  if (badgeEl && planData) {
+    badgeEl.textContent = 'Semana ' + (planData.current_week || 1) + ' de ' + (planData.total_weeks || '?');
+    badgeEl.style.display = '';
+  } else if (badgeEl) {
+    badgeEl.style.display = 'none';
+  }
+
+  // ── Semana visual ──
+  await renderWeekStrip();
+
+  // ── Stats tiles ──
+  renderStatTiles(planData);
+}
+
+async function renderWeekStrip() {
+  var p = currentProfile;
+  var now = new Date();
+  var todayDow = now.getDay(); // 0=dom,1=lun,...6=sab
+  var daysFixed = p && p.days_fixed;
+  var daysSelected = p && p.days_selected ? p.days_selected.split(',') : [];
+  var daysAvail = p && p.onboarding_days_avail || 0;
+
+  // Obtener lunes de esta semana
+  var monday = new Date(now);
+  var diff = now.getDay() === 0 ? -6 : 1 - now.getDay();
+  monday.setDate(now.getDate() + diff);
+  monday.setHours(0,0,0,0);
+
+  // Buscar sesiones de esta semana
+  var weekStart = monday.toISOString().split('T')[0];
+  var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  var weekEnd = sunday.toISOString().split('T')[0];
+  var sessions = [];
+  try {
+    var res = await sbGet('/rest/v1/sessions?user_id=eq.' + currentUser.id + '&date=gte.' + weekStart + '&date=lte.' + weekEnd + '&select=date,completed');
+    if (res && !res.message) sessions = res;
+  } catch(e) {}
+  var sessionDates = sessions.filter(function(s){ return s.completed; }).map(function(s){ return s.date; });
+
+  // Mapeo dow→key y dow→label
+  var dowKeys = ['dom','lun','mar','mie','jue','vie','sab'];
+  var dowLabels = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+  var strip = document.querySelector('#page-inicio .week-strip');
+  if (!strip) return;
+  strip.innerHTML = '';
+
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday); d.setDate(monday.getDate() + i);
+    var dow = d.getDay();
+    var dateStr = d.toISOString().split('T')[0];
+    var dayNum = d.getDate();
+    var label = dowLabels[dow];
+    var key = dowKeys[dow];
+
+    var isToday = dateStr === now.toISOString().split('T')[0];
+    var isDone = sessionDates.indexOf(dateStr) !== -1;
+    var isTrainDay = daysFixed ? daysSelected.indexOf(key) !== -1 : false; // si fijo, marcar el día
+
+    var classes = 'day-pill';
+    if (isDone) classes += ' done';
+    else if (isToday) classes += ' today';
+    else if (isTrainDay) classes += ' train-day'; // día de entreno programado
+
+    var dot = isDone ? '✓' : (isTrainDay ? '·' : '');
+    strip.innerHTML += '<div class="' + classes + '"><span class="day-name">' + label + '</span><span class="day-num">' + dayNum + '</span><span class="day-dot">' + dot + '</span></div>';
+  }
+
+  // Contador semana
+  var countEl = document.querySelector('#page-inicio .stat-tile:nth-child(3) .stat-value');
+  var doneCount = sessionDates.length;
+  var total = daysFixed ? daysSelected.length : daysAvail;
+  if (countEl) countEl.innerHTML = doneCount + '<span>/ ' + (total || '?') + '</span>';
+}
+
+function renderStatTiles(planData) {
+  // Sesiones totales
+  var sesEl = document.querySelector('#page-inicio .stat-tile:nth-child(1) .stat-value');
+  var sesBar = document.querySelector('#page-inicio .stat-tile:nth-child(1) .progress-fill');
+  if (planData && sesEl) {
+    var curr = planData.sessions_done || 0;
+    var total = (planData.total_weeks || 4) * (planData.days_per_week || 3);
+    sesEl.innerHTML = curr + '<span>/ ' + total + '</span>';
+    if (sesBar) sesBar.style.width = Math.round(curr/total*100) + '%';
+  }
+  // Semana
+  var semEl = document.querySelector('#page-inicio .stat-tile:nth-child(2) .stat-value');
+  if (planData && semEl) {
+    semEl.innerHTML = (planData.current_week || 1) + '<span>/ ' + (planData.total_weeks || '?') + '</span>';
+  }
+}
+
+function capitalize(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 }
 
 async function loadProfile() {
@@ -3699,6 +3834,8 @@ async function obGenerate() {
       total_weeks: plan.weeks,
       days_per_week: plan.recDays,
       is_active: true,
+      current_week: 1,
+      sessions_done: 0,
       started_at: new Date().toISOString().split('T')[0],
       notes: 'Plan generado automáticamente. Experiencia: ' + obData.exp + '. Split: ' + plan.split + '. Sesión: ' + plan.time + ' min.',
     });
