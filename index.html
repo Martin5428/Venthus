@@ -3829,9 +3829,8 @@ async function obGenerate() {
     // Verificar que hay sesión activa
     if (!currentUser || !currentUser.id) {
       clearInterval(msgInterval);
-      document.getElementById('ob-gen-title').textContent = 'Sesión expirada';
-      document.getElementById('ob-gen-sub').textContent = 'Tu sesión venció. Por favor inicia sesión de nuevo.';
-      setTimeout(function(){ clearSession(); location.reload(); }, 3000);
+      clearSession();
+      showAuthScreen();
       return;
     }
 
