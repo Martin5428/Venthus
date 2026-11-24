@@ -2572,7 +2572,7 @@ select.form-input { cursor: pointer; }
 // ══ SUPABASE REST CLIENT ══
 var SB_URL = 'https://fvvnsugcwvvnmvrusoqe.supabase.co';
 var SB_KEY = 'sb_publishable_eoqjtU-vBrQHywdsp3sZGA_Yqvmt56z';
-var OPENAI_KEY = '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';
+// OpenAI key vive en Vercel env vars — nunca en el código
 var currentUser = null;
 var currentProfile = null;
 var sbToken = null;
@@ -3785,18 +3785,10 @@ Responde ÚNICAMENTE con este JSON (sin markdown, sin explicaciones):
   ]
 }`;
 
-  var response = await fetch('https://api.openai.com/v1/chat/completions', {
+  var response = await fetch('/api/generate-plan', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + OPENAI_KEY
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-      max_tokens: 4000
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: prompt })
   });
 
   if (!response.ok) throw new Error('OpenAI error: ' + response.status);
