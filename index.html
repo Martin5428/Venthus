@@ -1542,97 +1542,10 @@ select.form-input { cursor: pointer; }
     <div class="page" id="page-plan">
       <div class="page-header">
         <div class="page-title">Mi Plan</div>
-        <div class="page-subtitle">Hipertrofia · Intermedio · 4 días/semana</div>
+        <div id="plan-page-subtitle" class="page-subtitle">Cargando...</div>
       </div>
-
-      <!-- Semana info -->
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
-        <span class="badge badge-accent">Semana 3 de 8</span>
-        <span class="badge badge-warm">Microciclo de carga</span>
-        <span class="badge badge-indigo">Fase 1: Base</span>
-      </div>
-
-      <!-- Progreso del plan -->
-      <div class="card" style="margin-bottom:24px;">
-        <div class="card-title">Progreso del mesociclo</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <span style="font-size:13px;color:var(--fg2);">Semana 3 / 8</span>
-          <span style="font-size:13px;font-weight:700;color:var(--accent);">37%</span>
-        </div>
-        <div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:37%"></div></div>
-        <div style="display:flex;justify-content:space-between;margin-top:6px;">
-          <span style="font-size:11px;color:var(--fg3);">Inicio</span>
-          <span style="font-size:11px;color:var(--fg3);">Deload sem. 7</span>
-          <span style="font-size:11px;color:var(--fg3);">Fin</span>
-        </div>
-      </div>
-
-      <!-- Días de entrenamiento -->
-      <div class="section-label">Días de entrenamiento</div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
-        <div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal('Día A — Empuje','Pecho, Hombros & Tríceps')">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:44px;height:44px;border-radius:12px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏋️</div>
-            <div style="flex:1;">
-              <div style="font-size:15px;font-weight:700;color:var(--fg);">Día A — Empuje</div>
-              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Pecho, Hombros & Tríceps · 6 ejercicios</div>
-            </div>
-            <span class="badge badge-green">Lun / Jue</span>
-            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
-          </div>
-        </div>
-        <div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal('Día B — Jalar','Espalda & Bíceps')">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:44px;height:44px;border-radius:12px;background:var(--indigo-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💪</div>
-            <div style="flex:1;">
-              <div style="font-size:15px;font-weight:700;color:var(--fg);">Día B — Jalar</div>
-              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Espalda & Bíceps · 6 ejercicios</div>
-            </div>
-            <span class="badge badge-indigo">Mar / Vie</span>
-            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
-          </div>
-        </div>
-        <div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal('Día C — Pierna','Cuádriceps, Femorales & Glúteos')">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:44px;height:44px;border-radius:12px;background:var(--warm-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🦵</div>
-            <div style="flex:1;">
-              <div style="font-size:15px;font-weight:700;color:var(--fg);">Día C — Pierna</div>
-              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Cuádriceps, Femorales & Glúteos · 7 ejercicios</div>
-            </div>
-            <span class="badge badge-warm">Mié</span>
-            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
-          </div>
-        </div>
-        <div class="card card-sm" style="opacity:0.6;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:44px;height:44px;border-radius:12px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">😴</div>
-            <div style="flex:1;">
-              <div style="font-size:15px;font-weight:700;color:var(--fg);">Días de Descanso</div>
-              <div style="font-size:12px;color:var(--fg2);margin-top:2px;">Recuperación activa · Sáb & Dom</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fases -->
-      <div class="section-label">Fases del plan</div>
-      <div class="grid-3">
-        <div class="card" style="border-left:3px solid var(--accent);">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:8px;">Fase 1</div>
-          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Base</div>
-          <div style="font-size:12px;color:var(--fg2);">Semanas 1-4 · Construir base de volumen e intensidad</div>
-          <div style="margin-top:10px;"><span class="badge badge-accent">Activa</span></div>
-        </div>
-        <div class="card" style="opacity:0.6;border-left:3px solid var(--indigo);">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--indigo);margin-bottom:8px;">Fase 2</div>
-          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Intensidad</div>
-          <div style="font-size:12px;color:var(--fg2);">Semanas 5-6 · Aumentar cargas y reducir reps</div>
-        </div>
-        <div class="card" style="opacity:0.6;border-left:3px solid var(--deload);">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--deload);margin-bottom:8px;">Fase 3</div>
-          <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--fg);margin-bottom:4px;">Deload</div>
-          <div style="font-size:12px;color:var(--fg2);">Semana 7 · Reducir volumen 40% para recuperar</div>
-        </div>
+      <div class="page-content-inner" style="display:flex;align-items:center;justify-content:center;padding:40px 0;">
+        <div style="color:var(--fg2);font-size:14px;">Cargando plan...</div>
       </div>
     </div><!-- /plan -->
 
@@ -2333,9 +2246,8 @@ select.form-input { cursor: pointer; }
             <div style="font-family:var(--ff-head);font-size:16px;font-weight:800;color:var(--fg);">Venthus IA</div>
             <div style="font-size:12px;color:var(--green);font-weight:600;">● Activo · Conoce tu plan</div>
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:11px;color:var(--fg3);">Fase 1 · Sem 3/8</div>
-            <div style="font-size:11px;color:var(--fg3);">4 días/sem</div>
+          <div class="chat-header-info" style="text-align:right;font-size:11px;color:var(--fg3);line-height:1.6;">
+            Cargando...
           </div>
         </div>
         <!-- Sugerencias rápidas -->
@@ -2351,10 +2263,9 @@ select.form-input { cursor: pointer; }
       <!-- Mensajes -->
       <div id="chat-messages" style="flex:1;overflow-y:auto;padding:20px 20px 8px;display:flex;flex-direction:column;gap:14px;">
         <!-- Mensaje inicial IA -->
-        <div class="chat-msg-ia">
-          <div class="chat-bubble-ia">
-            Hola! Soy tu asistente de entrenamiento. Conozco tu plan completo: estas en la <strong>Semana 3 de la Fase 1</strong>, entrenando 4 dias por semana con foco en fuerza e hipertrofia.<br><br>
-            Puedo ayudarte a modificar ejercicios, ajustar cargas, cambiar de plan, resolver dudas de tecnica o cualquier cosa relacionada con tu entrenamiento. ¿En que te ayudo?
+        <div class="chat-msg-ia" id="chat-init-msg">
+          <div class="chat-bubble-ia" id="chat-init-bubble">
+            ¡Hola! Soy <strong>Venthus IA</strong>, tu asistente de entrenamiento personal. Estoy cargando tu plan...
           </div>
           <div class="chat-time" id="chat-init-time"></div>
           <script>var _t=new Date();document.getElementById('chat-init-time').textContent='Hoy, '+_t.getHours()+':'+String(_t.getMinutes()).padStart(2,'0');</script>
@@ -2383,7 +2294,7 @@ select.form-input { cursor: pointer; }
       <!-- User card -->
       <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,var(--accent-bg),var(--indigo-bg));">
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--indigo));display:flex;align-items:center;justify-content:center;font-family:var(--ff-head);font-size:24px;font-weight:800;color:#fff;flex-shrink:0;">JD</div>
+          <div id="perfil-avatar" style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--indigo));display:flex;align-items:center;justify-content:center;font-family:var(--ff-head);font-size:24px;font-weight:800;color:#fff;flex-shrink:0;">—</div>
           <div style="flex:1;">
             <div id="perfil-name" style="font-family:var(--ff-head);font-size:20px;font-weight:800;color:var(--fg);">—</div>
             <div id="perfil-email" style="font-size:13px;color:var(--fg2);margin-top:2px;">—</div>
@@ -2399,16 +2310,16 @@ select.form-input { cursor: pointer; }
       <!-- Stats rápidos -->
       <div class="grid-3" style="margin-bottom:24px;">
         <div class="stat-tile" style="text-align:center;">
-          <div class="stat-value" style="text-align:center;">24</div>
+          <div id="perfil-sessions" class="stat-value" style="text-align:center;">—</div>
           <div class="stat-label" style="text-align:center;">Sesiones</div>
         </div>
         <div class="stat-tile" style="text-align:center;">
-          <div class="stat-value" style="text-align:center;">8<span>sem</span></div>
-          <div class="stat-label" style="text-align:center;">En Venthus</div>
+          <div id="perfil-weeks" class="stat-value" style="text-align:center;">—</div>
+          <div class="stat-label" style="text-align:center;">Semanas</div>
         </div>
         <div class="stat-tile" style="text-align:center;">
-          <div class="stat-value" style="text-align:center;">3</div>
-          <div class="stat-label" style="text-align:center;">Récords</div>
+          <div id="perfil-plan-name" class="stat-value" style="text-align:center;font-size:12px;line-height:1.3;">—</div>
+          <div class="stat-label" style="text-align:center;">Plan activo</div>
         </div>
       </div>
 
@@ -2689,6 +2600,16 @@ async function renderDashboard() {
 
   // ── Stats tiles ──
   renderStatTiles(planData);
+
+  // ── Perfil stats ──
+  renderPerfilStats(planData);
+
+  // ── Mi Plan ──
+  renderPlanPage(planData);
+
+  // ── Asistente IA context ──
+  chatActivePlan = planData;
+  initChatContext();
 }
 
 async function renderWeekStrip() {
@@ -2769,6 +2690,92 @@ function renderStatTiles(planData) {
   }
 }
 
+function renderPerfilStats(planData) {
+  var sesEl = document.getElementById('perfil-sessions');
+  var semEl = document.getElementById('perfil-weeks');
+  var nameEl = document.getElementById('perfil-plan-name');
+  if (planData) {
+    if (sesEl) sesEl.textContent = planData.sessions_done || 0;
+    if (semEl) semEl.innerHTML = (planData.current_week || 1) + '<span>/' + (planData.total_weeks || '?') + '</span>';
+    if (nameEl) nameEl.textContent = planData.name || '—';
+  } else {
+    if (sesEl) sesEl.textContent = '0';
+    if (semEl) semEl.textContent = '—';
+    if (nameEl) nameEl.textContent = 'Sin plan';
+  }
+}
+
+async function renderPlanPage(planData) {
+  var container = document.querySelector('#page-plan .page-content-inner');
+  var subEl = document.getElementById('plan-page-subtitle');
+  if (!container) return;
+  if (!planData) {
+    container.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--fg2);">No hay un plan activo. Completa el onboarding para generarlo.</div>';
+    return;
+  }
+  if (subEl) subEl.textContent = capitalize(planData.goal || '') + ' · ' + (planData.days_per_week || '?') + ' días/sem';
+
+  // Cargar días del plan desde Supabase
+  var dias = [];
+  try {
+    dias = await sbGet('/rest/v1/plan_days?plan_id=eq.' + planData.id + '&select=*&order=sort_order.asc');
+    if (!dias || dias.message) dias = [];
+  } catch(e) {}
+
+  // Cargar ejercicios de cada día
+  for (var i = 0; i < dias.length; i++) {
+    try {
+      var exs = await sbGet('/rest/v1/plan_exercises?plan_day_id=eq.' + dias[i].id + '&select=*&order=sort_order.asc');
+      dias[i].ejercicios = (exs && !exs.message) ? exs : [];
+    } catch(e) { dias[i].ejercicios = []; }
+  }
+
+  // Semana / progreso
+  var semActual = planData.current_week || 1;
+  var semTotal = planData.total_weeks || 8;
+  var pct = Math.round(semActual / semTotal * 100);
+
+  var colors = ['var(--accent)', 'var(--indigo)', 'var(--warm)', 'var(--green)', 'var(--red)'];
+  var bgColors = ['var(--accent-bg)', 'var(--indigo-bg)', 'var(--warm-bg)', 'var(--green-bg)', 'var(--red-bg)'];
+  var badgeClasses = ['badge-accent', 'badge-indigo', 'badge-warm', 'badge-green', 'badge-red'];
+
+  var diasHTML = dias.map(function(d, idx) {
+    var exCount = d.ejercicios ? d.ejercicios.length : 0;
+    var c = colors[idx % colors.length];
+    var bg = bgColors[idx % bgColors.length];
+    var bc = badgeClasses[idx % badgeClasses.length];
+    return '<div class="card card-sm" style="cursor:pointer;" onclick="openDiaModal(\'' + escapeAttr(d.day_label) + '\',\'' + escapeAttr(d.focus) + '\',\'' + (d.id || '') + '\')">' +
+      '<div style="display:flex;align-items:center;gap:14px;">' +
+      '<div style="width:44px;height:44px;border-radius:12px;background:' + bg + ';display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">' + (d.emoji || '🏋️') + '</div>' +
+      '<div style="flex:1;">' +
+      '<div style="font-size:15px;font-weight:700;color:var(--fg);">' + escapeHtml(d.day_label || '') + '</div>' +
+      '<div style="font-size:12px;color:var(--fg2);margin-top:2px;">' + escapeHtml(d.focus || '') + ' · ' + exCount + ' ejercicios</div>' +
+      '</div>' +
+      '<div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>' +
+      '</div></div>';
+  }).join('');
+
+  if (!diasHTML) diasHTML = '<div style="text-align:center;color:var(--fg2);padding:24px;">No hay días cargados en este plan.</div>';
+
+  container.innerHTML =
+    '<div class="card" style="margin-bottom:20px;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">' +
+    '<div><div style="font-family:var(--ff-head);font-size:18px;font-weight:800;color:var(--fg);">' + escapeHtml(planData.name || 'Mi Plan') + '</div>' +
+    '<div style="font-size:13px;color:var(--fg2);margin-top:2px;">' + capitalize(planData.goal || '') + ' · ' + (planData.days_per_week || '?') + ' días/sem</div></div>' +
+    '<span class="badge badge-accent">Activo</span></div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+    '<span style="font-size:12px;color:var(--fg2);">Semana ' + semActual + ' de ' + semTotal + '</span>' +
+    '<span style="font-size:13px;font-weight:700;color:var(--accent);">' + pct + '%</span></div>' +
+    '<div class="progress-bar" style="height:10px;"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>' +
+
+    '<div class="section-label">Días de entrenamiento</div>' +
+    '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">' + diasHTML + '</div>';
+}
+
+function escapeAttr(str) {
+  return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
 function capitalize(str) {
   return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 }
@@ -2792,8 +2799,10 @@ function updateProfileUI() {
   if (sa) sa.textContent = initials;
   var pn = document.getElementById('perfil-name');
   var pe = document.getElementById('perfil-email');
+  var pa = document.getElementById('perfil-avatar');
   if (pn) pn.textContent = name;
   if (pe) pe.textContent = email;
+  if (pa) pa.textContent = initials;
 }
 
 function switchAuthTab(tab) {
@@ -3011,38 +3020,97 @@ var chatLastKeyword = 'default';
 
 function sendSuggestion(btn) {
   var text = btn.textContent.trim();
-  var lower = text.toLowerCase();
-  if (lower.includes('cambiar')) chatLastKeyword = 'cambiar';
-  else if (lower.includes('lesion') || lower.includes('lesionado')) chatLastKeyword = 'lesion';
-  else if (lower.includes('peso')) chatLastKeyword = 'peso';
-  else if (lower.includes('energía') || lower.includes('energia')) chatLastKeyword = 'energia';
-  else if (lower.includes('técnica') || lower.includes('tecnica')) chatLastKeyword = 'tecnica';
-  else chatLastKeyword = 'default';
-  appendUserMsg(text);
   btn.disabled = true;
-  showTyping();
-  setTimeout(function() { appendIAMsg(chatResponses[chatLastKeyword][0]); }, chatTypingDelay);
+  document.getElementById('chat-input').value = text;
+  sendChatMessage();
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
   var ta = document.getElementById('chat-input');
   var text = (ta.value || '').trim();
-  if (!text) return;
+  if (!text || chatIsSending) return;
   ta.value = '';
   ta.style.height = '40px';
-  var lower = text.toLowerCase();
-  if (lower.includes('cambiar') || lower.includes('plan')) chatLastKeyword = 'cambiar';
-  else if (lower.includes('lesion')) chatLastKeyword = 'lesion';
-  else if (lower.includes('peso') || lower.includes('músculo') || lower.includes('musculo')) chatLastKeyword = 'peso';
-  else if (lower.includes('energía') || lower.includes('energia') || lower.includes('cansado')) chatLastKeyword = 'energia';
-  else if (lower.includes('técnica') || lower.includes('tecnica') || lower.includes('ejercicio')) chatLastKeyword = 'tecnica';
-  else chatLastKeyword = 'default';
   appendUserMsg(text);
   showTyping();
-  var responses = chatResponses[chatLastKeyword];
-  var resp = responses[Math.floor(Math.random() * responses.length)];
-  setTimeout(function() { appendIAMsg(resp); }, chatTypingDelay);
+  chatIsSending = true;
+  try {
+    // Construir contexto del plan del usuario
+    var p = currentProfile || {};
+    var planCtx = chatPlanContext || '';
+    var systemMsg = 'Eres Venthus IA, un entrenador personal experto y amigable dentro de la app Venthus. ' +
+      'Respondes SIEMPRE en español. Eres conciso, motivador y basado en evidencia científica. ' +
+      'Contexto del usuario: ' + planCtx + '. ' +
+      'Responde de forma breve (máximo 3-4 párrafos). Usa emojis con moderación.';
+    var chatHistory = buildChatHistory();
+    chatHistory.push({ role: 'user', content: text });
+    var resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'system', content: systemMsg }].concat(chatHistory)
+      })
+    });
+    var data = await resp.json();
+    var reply = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content
+      ? data.choices[0].message.content.trim()
+      : 'Lo siento, no pude procesar tu mensaje. Intenta de nuevo.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    saveChatHistory(chatHistory);
+    appendIAMsg(reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>'));
+  } catch(e) {
+    appendIAMsg('Hubo un error al conectar con el asistente. Verifica tu conexión e intenta de nuevo.');
+  }
+  chatIsSending = false;
 }
+
+var chatIsSending = false;
+var chatPlanContext = '';
+var _chatHistory = [];
+
+function buildChatHistory() {
+  return _chatHistory.slice(-10); // últimos 10 mensajes para contexto
+}
+
+function saveChatHistory(history) {
+  _chatHistory = history.slice(-20);
+}
+
+function initChatContext() {
+  if (!currentProfile) return;
+  var p = currentProfile;
+  chatPlanContext = 'Nombre: ' + (p.full_name || 'Usuario') +
+    '. Objetivo: ' + (p.goal || 'no especificado') +
+    '. Experiencia: ' + (p.experience || 'no especificado') +
+    '. Días disponibles: ' + (p.onboarding_days_avail || '?') +
+    '. Tiempo por sesión: ' + (p.onboarding_time || '?') + ' min.';
+  if (chatActivePlan) {
+    chatPlanContext += ' Plan activo: "' + (chatActivePlan.name || '') + '", semana ' +
+      (chatActivePlan.current_week || 1) + ' de ' + (chatActivePlan.total_weeks || '?') +
+      ', ' + (chatActivePlan.days_per_week || '?') + ' días/sem.';
+  }
+  // Actualizar header del asistente
+  var hdrInfo = document.querySelector('#page-asistente .chat-header-info');
+  if (hdrInfo && chatActivePlan) {
+    hdrInfo.innerHTML = 'Sem ' + (chatActivePlan.current_week || 1) + '/' + (chatActivePlan.total_weeks || '?') +
+      '<br>' + (chatActivePlan.days_per_week || '?') + ' días/sem';
+  }
+  // Actualizar mensaje inicial del chat
+  var bubble = document.getElementById('chat-init-bubble');
+  if (bubble) {
+    var nombre = (currentProfile && currentProfile.full_name || '').split(' ')[0] || 'atleta';
+    if (chatActivePlan) {
+      bubble.innerHTML = '¡Hola, <strong>' + escapeHtml(nombre) + '</strong>! Soy tu asistente de entrenamiento. Conozco tu plan: <strong>' +
+        escapeHtml(chatActivePlan.name || 'tu plan') + '</strong>, semana ' + (chatActivePlan.current_week || 1) + ' de ' +
+        (chatActivePlan.total_weeks || '?') + ', entrenando ' + (chatActivePlan.days_per_week || '?') + ' días por semana.<br><br>' +
+        'Puedo ayudarte a modificar ejercicios, resolver dudas de técnica, ajustar tu plan o cualquier cosa relacionada con tu entrenamiento. ¿En qué te ayudo?';
+    } else {
+      bubble.innerHTML = '¡Hola, <strong>' + escapeHtml(nombre) + '</strong>! Soy tu asistente de entrenamiento. Cuando tengas un plan activo podré darte ayuda personalizada. ¿En qué te ayudo?';
+    }
+  }
+}
+
+var chatActivePlan = null;
 
 function chatKeydown(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
@@ -3742,13 +3810,13 @@ ${weight ? '- Peso: ' + weight + ' kg' : ''}
 ${height ? '- Altura: ' + height + ' cm' : ''}${hrtNote}
 
 INSTRUCCIONES:
-1. Determina los días óptimos de entrenamiento (puede ser menor a días disponibles si el nivel lo requiere)
-2. Selecciona el split más adecuado según días y objetivo
-3. Para CADA día de entrenamiento, genera 5-7 ejercicios con calentamiento específico
-4. Usa SOLO el equipo disponible
-5. Incluye series, reps y peso inicial sugerido (en kg, basado en nivel)
-6. Para principiantes: pesos conservadores, enfocarse en técnica
-7. Para intermedios/avanzados: cargas progresivas con esquemas periodizados
+1. USA EXACTAMENTE ${da} días de entrenamiento. Ni más ni menos. Es obligatorio.
+2. Selecciona el split más adecuado según esos ${da} días y el objetivo
+3. Para CADA día genera 5-7 ejercicios con calentamiento específico
+4. Usa SOLO el equipo disponible: ${equipDesc}
+5. NO incluyas pesos en los ejercicios. El campo "peso_inicial_kg" debe ser siempre null
+6. Incluye series y reps apropiadas al nivel
+7. Para principiantes: enfocarse en técnica y control. Para intermedios/avanzados: esquemas de periodización en las instrucciones de técnica
 
 Responde ÚNICAMENTE con este JSON (sin markdown, sin explicaciones):
 {
@@ -3770,7 +3838,7 @@ Responde ÚNICAMENTE con este JSON (sin markdown, sin explicaciones):
           "nombre": "nombre del ejercicio",
           "series": 4,
           "reps": "6-8",
-          "peso_inicial_kg": 80,
+          "peso_inicial_kg": null,
           "musculo_principal": "pecho",
           "implemento": "barra olímpica + banco plano + rack",
           "tecnica": "descripción breve de técnica correcta en 1-2 oraciones"
